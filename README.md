@@ -1,13 +1,8 @@
 # TaskScheduler
 
-<p>
-  <b>Github Username : UPI</b>
-  <br>
-  lukethompsxn : ltho948 
-  <br>
-  AbhinavBehal : abeh957
-  <br>
-  Z-Qi : zqia153
-  <br>
-  Joelz1 : jclaXXX
-</p>
+| Github Username | UPI       |
+| --------------- | --------- |
+| lukethompson    | `ltho948` |
+| AbhinavBehal    | `abeh957` |
+| Joelz1          | `jcla776` |
+| Z-Qi            | `zqia153` |
