@@ -1,6 +1,6 @@
 package se306.a1.scheduler.algorithm;
 
-public interface Scheduler {
+public abstract class Scheduler {
 
     /**
      * Initialises and executes the algorithm.
@@ -13,10 +13,11 @@ public interface Scheduler {
      * @param hasVisualisation  flag for specifying visualisation (optional)
      * @param output filepath of output .dot file (optional)
      */
-    void init(String input,
+    public void init(String input,
               int numProcessors,
-              Integer numCores,
-              Boolean hasVisualisation,
-              String output
-    );
+              int numCores,
+              boolean hasVisualisation,
+              String output) {
+
+    }
 }
