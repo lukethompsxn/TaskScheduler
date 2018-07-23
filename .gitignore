@@ -24,7 +24,7 @@ hs_err_pid*
 
 # IDEs
 .idea/
-.iml
+*.iml
 .vscode/
 .settings/
 .project
