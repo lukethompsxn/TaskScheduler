@@ -46,3 +46,6 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+# Other misc. files
+*.stackdump
