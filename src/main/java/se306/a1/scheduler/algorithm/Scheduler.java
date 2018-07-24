@@ -1,4 +1,4 @@
-package se306.a1.scheduler.algorithm;
+package main.java.se306.a1.scheduler.algorithm;
 
 public abstract class Scheduler {
 

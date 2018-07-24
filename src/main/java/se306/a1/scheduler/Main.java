@@ -1,4 +1,4 @@
-package se306.a1.scheduler;
+package main.java.se306.a1.scheduler;
 
 public class Main {
     public static void main(String[] args) {

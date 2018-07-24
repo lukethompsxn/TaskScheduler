@@ -32,6 +32,7 @@ hs_err_pid*
 # Builds
 build/
 out/
+bin/
 
 # Gradle
 .gradle
