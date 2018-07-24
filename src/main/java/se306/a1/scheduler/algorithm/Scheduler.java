@@ -1,5 +1,11 @@
-package main.java.se306.a1.scheduler.algorithm;
+package se306.a1.scheduler.algorithm;
 
+/**
+ * This class represents an abstract scheduler.
+ * This contains contracts for implementation specific schedulers and common
+ * helper methods.
+ * @author Luke Thompson
+ * */
 public abstract class Scheduler {
 
     /**
