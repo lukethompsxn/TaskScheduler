@@ -9,6 +9,12 @@ package se306.a1.scheduler.data;
 public interface TaskGraph {
 
     /**
+     * Gets the name of the task graph
+     * @return the name of the graph
+     */
+    public String getName();
+
+    /**
      * Gets the root node task of the task schedule graph.
      * @return the root node of the task schedule
      */

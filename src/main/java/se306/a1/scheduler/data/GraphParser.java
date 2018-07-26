@@ -39,25 +39,25 @@ public class GraphParser {
             } else {
                 throw new ParseException(line);
             }
-            System.out.println("Name: " + name);
+            TaskGraph graph = new TaskScheduleGraph(name);
             while ((line = reader.readLine()) != null) {
                 Matcher nodeMatcher = NODE_REGEX.matcher(line);
                 Matcher edgeMatcher = EDGE_REGEX.matcher(line);
                 if (edgeMatcher.find()) {
-                    String first = edgeMatcher.group(1);
-                    String second = edgeMatcher.group(2);
+                    String parent = edgeMatcher.group(1);
+                    String child = edgeMatcher.group(2);
                     int weight = Integer.parseInt(edgeMatcher.group(3));
-                    System.out.println("Edge " + first + "->" + second + " with weight " + weight);
+                    graph.addEdge(parent, child, weight);
                 } else if (nodeMatcher.find()) {
                     String label = nodeMatcher.group(1);
                     int weight = Integer.parseInt(nodeMatcher.group(2));
-                    System.out.println("Node " + label + " with weight " + weight);
+                    graph.addNode(label, weight);
                 } else if (line.equals("}")) {
                     break;
                 }
             }
+            return graph;
         }
-        return null;
     }
 
     /**

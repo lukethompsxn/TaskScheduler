@@ -4,14 +4,22 @@ import java.util.HashMap;
 
 /**
  * The class used to represent a task schedule.
+ *
  * @author Zhi Qiao
  */
 public class TaskScheduleGraph implements TaskGraph {
+    private String name;
     private HashMap<String, Node> nodes;
 
-    public TaskScheduleGraph() {
+    public TaskScheduleGraph(String name) {
+        this.name = name;
         nodes = new HashMap<>();
         nodes.put("root", new TaskNode("root", 0));
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -31,7 +39,6 @@ public class TaskScheduleGraph implements TaskGraph {
     @Override
     public Node getNode(String name) {
         return nodes.get(name);
-
     }
 
     @Override
