@@ -27,9 +27,9 @@ public class GraphParser {
      * @param inputPath filepath of input .dot file
      * @return parsed object containing nodes, links, costs
      * @throws IOException    if the file cannot be found, or if an IO error occurs while reading
-     * @throws ParseException if the graph cannot be parsed
+     * @throws GraphParseException if the graph cannot be parsed
      */
-    public TaskGraph parseGraph(String inputPath) throws IOException, ParseException {
+    public TaskGraph parseGraph(String inputPath) throws IOException, GraphParseException {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputPath))) {
             String name = "";
             String line = reader.readLine();
@@ -37,7 +37,7 @@ public class GraphParser {
             if (nameMatcher.find()) {
                 name = nameMatcher.group(1);
             } else {
-                throw new ParseException(line);
+                throw new GraphParseException(line);
             }
             TaskGraph graph = new TaskScheduleGraph(name);
             while ((line = reader.readLine()) != null) {
