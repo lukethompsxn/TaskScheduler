@@ -14,6 +14,7 @@ public abstract class Node {
 	private final String name;
 	private final int value;
 
+	private LinkedList<Node> parents;
 	private LinkedList<Node> children;
 	private LinkedList<Integer> links;
 
@@ -25,6 +26,7 @@ public abstract class Node {
 	public Node() {
 		name = "";
 		value = 0;
+		parents = new LinkedList<>();
 		children = new LinkedList<>();
 		links = new LinkedList<>();
 	}
@@ -39,6 +41,7 @@ public abstract class Node {
 	public Node(String name, int value) {
 		this.name = name;
 		this.value = value;
+		parents = new LinkedList<>();
 		children = new LinkedList<>();
 		links = new LinkedList<>();
 	}
@@ -48,14 +51,24 @@ public abstract class Node {
 	 * to be given to construct a Node object.
 	 * @param name string representation. or name, of the task at this node
 	 * @param value integer value representing the cost of the task at this node
-	 * @param children A LinkedList representing all the nodes that are the children of this node
-	 * @param links A LinkedList representing the costs associated with the list of child nodes
+	 * @param parents a LinkedList representing all the nodes that are parents of this node
+	 * @param children a LinkedList representing all the nodes that are the children of this node
+	 * @param links a LinkedList representing the costs associated with the list of child nodes
      */
-	public Node(String name, int value, LinkedList<Node> children, LinkedList<Integer> links) {
+	public Node(String name, int value, LinkedList<Node> parents, LinkedList<Node> children, LinkedList<Integer> links) {
 		this.name = name;
 		this.value = value;
+		this.parents = parents;
 		this.children = children;
 		this.links = links;
+	}
+
+	/**
+	 * Gets the parents of this node object.
+	 * @return a Collection of the parent nodes of this node
+	 */
+	public Collection<Node> getParents() {
+		return parents;
 	}
 
 	/**
@@ -85,6 +98,15 @@ public abstract class Node {
      */
 	public Node getChild(int i) {
 		return children.get(i);
+	}
+
+	/**
+	 * Adds the specified node to the child node (this).
+	 * @param node the parent node to be added
+	 * @return if the parent node was successfully added
+	 */
+	public boolean addParent(Node node) {
+		return parents.add(node);
 	}
 
 	/**

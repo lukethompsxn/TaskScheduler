@@ -9,12 +9,13 @@ import java.util.HashMap;
  */
 public class TaskScheduleGraph implements TaskGraph {
     private String name;
+    private Node rootNode = new TaskNode("root", 0);
     private HashMap<String, Node> nodes;
 
     public TaskScheduleGraph(String name) {
         this.name = name;
         nodes = new HashMap<>();
-        nodes.put("root", new TaskNode("root", 0));
+        nodes.put("root", rootNode);
     }
 
     @Override
@@ -24,7 +25,7 @@ public class TaskScheduleGraph implements TaskGraph {
 
     @Override
     public Node getRootNode() {
-        return nodes.get("root");
+        return rootNode;
     }
 
     @Override
@@ -49,5 +50,21 @@ public class TaskScheduleGraph implements TaskGraph {
             return true;
         } else
             return false;
+    }
+
+    /**
+     * Method that needs to be hooked onto the end of building the graph object.
+     * Attaches the entry nodes of the task schedule to the root node of the
+     * TaskScheduleGraph representation.
+     */
+    public void build() {
+        for (Node node : nodes.values()) {
+            if (node.getParents().size() == 0) {
+                rootNode.addChild(node);
+                rootNode.addLink(0);
+
+                node.addParent(rootNode);
+            }
+        }
     }
 }
