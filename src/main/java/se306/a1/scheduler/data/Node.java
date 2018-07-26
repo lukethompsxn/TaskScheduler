@@ -11,62 +11,69 @@ import java.util.LinkedList;
  * @author Rodger Gu
  */
 public abstract class Node {
-	private int value = 0;
-	
+	private final String name;
+	private final int value;
+
 	private LinkedList<Node> children;
 	private LinkedList<Integer> links;
-	
+
 	/**
 	 * The default constructor for a Node object. This constructor
 	 * instantiates the lists for storing child nodes and the values
 	 * associated with traversal to these child nodes.
      */
 	public Node() {
+		name = "";
+		value = 0;
 		children = new LinkedList<>();
 		links = new LinkedList<>();
 	}
-	
+
 	/**
 	 * The basic constructor for a Node object. This constructor instantiates
 	 * the lists for storing child nodes and the values associated with traversal
-	 * to these child nodes, and also takes in
+	 * to these child nodes, and also takes in the name of the node and its value.
+	 * @param name string representation. or name, of the task at this node
 	 * @param value integer value representing the cost of the task at this node
      */
-	public Node(int value) {
+	public Node(String name, int value) {
+		this.name = name;
 		this.value = value;
 		children = new LinkedList<>();
 		links = new LinkedList<>();
 	}
-	
+
 	/**
 	 * The import constructor for a Node object. This constructor requires all information
 	 * to be given to construct a Node object.
-	 * @param value the integer value that represents the cost of this node.
-	 * @param children A LinkedList representing all the nodes that are the children of this node.
-	 * @param links A LinkedList representing the costs associated with the list of child nodes.
+	 * @param name string representation. or name, of the task at this node
+	 * @param value integer value representing the cost of the task at this node
+	 * @param children A LinkedList representing all the nodes that are the children of this node
+	 * @param links A LinkedList representing the costs associated with the list of child nodes
      */
-	public Node(int value, LinkedList<Node> children, LinkedList<Integer> links) {
+	public Node(String name, int value, LinkedList<Node> children, LinkedList<Integer> links) {
+		this.name = name;
 		this.value = value;
 		this.children = children;
 		this.links = links;
 	}
-	
+
 	/**
 	 * Gets the children of this node object.
-	 * @return a Collection of the child nodes of this node.
+	 * @return a Collection of the child nodes of this node
      */
 	public Collection<Node> getChildren() {
 		return children;
 	}
-	
+
 	/**
 	 * Gets the links of this node object.
-	 * @return a Collection of the link values of this node.
+	 * @return a Collection of the link values of this node
      */
 	public Collection<Integer> getLinks() {
 		return links;
 	}
-	
+
 	/**
 	 * Gets the child number I of the parent. This method should
 	 * be called in conjunction with the {@link #getLink(int) getLink} method
@@ -79,25 +86,69 @@ public abstract class Node {
 	public Node getChild(int i) {
 		return children.get(i);
 	}
-	
+
 	/**
-	 * Gets the link cost I of the parent. This method should
+	 * Adds the specified node to the parent node (this). This method should
+	 * be called in conjunction with the {@link #addLink(Integer) addLink} method
+	 * when populating this node's list of child nodes.
+	 * @param node child node to be added
+	 * @return if the child node was successfully added
+	 */
+	public boolean addChild(Node node) {
+		return children.add(node);
+	}
+
+	/**
+	 * Gets the link cost i from the parent. This method should
 	 * be called in conjunction with the {@link #getChild(int) getChild} method
 	 * when computing the cost of a traversal.
 	 * @param i position number
-	 * @return the link at the position.
+	 * @return the link at the position
 	 * @throws IndexOutOfBoundsException if the value is outside the range
 	 * of children numbers.
      */
 	public int getLink(int i) {
 		return links.get(i);
 	}
-	
+
+	/**
+	 * Adds the specified link cost from the parent node (this). This method should
+	 * be called in conjunction with the {@link #addChild(Node) addChild} method
+	 * when populating this node's list of child nodes.
+	 * @param cost link cost from parent node (this) to child
+	 * @return if the link cost was successfully added
+	 */
+	public boolean addLink(Integer cost) {
+		return links.add(cost);
+	}
+
 	/**
 	 * Gets the value of computing the task represented by this node.
-	 * @return the value of the task at this node.
+	 * @return the value of the task at this node
      */
 	public int getValue() {
 		return value;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+
+		if (this == obj) return true;
+
+		if (obj instanceof Node)
+			return name.equals(((Node)obj).name);
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode();
 	}
 }
