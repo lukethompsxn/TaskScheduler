@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * The purpose of this class is to store the scheduleling information for each
  * node, i.e. the startTime of the task and the processor which the task is
- * allocat
+ * allocated to.
  * @author Luke Thompson
  */
 public class Schedule {
