@@ -109,7 +109,7 @@ public abstract class Node {
 		if (children.containsKey(node)) {
 			return false;
 		}
-		children.put(node, new Integer(cost));
+		children.put(node, cost);
 		return true;
 	}
 

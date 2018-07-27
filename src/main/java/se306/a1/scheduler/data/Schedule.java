@@ -23,7 +23,7 @@ public class Schedule {
      * @param processor the processor which the node (task) is carried out on
      */
     public static void addNodeData(Node node, int startTime, int processor) {
-        nodeData.put(node, new Pair(new Integer(startTime), new Integer(processor)));
+        nodeData.put(node, new Pair(startTime, processor));
     }
 
     /**
