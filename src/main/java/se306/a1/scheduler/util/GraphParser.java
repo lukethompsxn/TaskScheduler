@@ -85,33 +85,36 @@ public class GraphParser {
 
             Queue<Node> nodeQueue = new LinkedList<>();
             Map<Node, Integer> children;
-            Set<Node> printed = new HashSet<>();
+            Set<Node> nodeHistory = new HashSet<>();
+            Set<Node> queueHistory = new HashSet<>();
 
-//            nodeQueue.add(taskGraph.getNode("0"));
             nodeQueue.addAll(taskGraph.getRootNode().getChildren().keySet());
+            queueHistory.addAll(taskGraph.getRootNode().getChildren().keySet());
+
             while (nodeQueue.size() > 0) {
                 Node node = nodeQueue.poll();
 
-                if (!printed.contains(node)) {
+                if (!nodeHistory.contains(node)) {
                     bufferedWriter.newLine();
                     bufferedWriter.write(formatNode(node));
-                    printed.add(node);
+                    nodeHistory.add(node);
                 }
 
                 children = node.getChildren();
                 for (Node child : children.keySet()) {
 
-                    if (!printed.contains(child)) {
+                    if (!nodeHistory.contains(child)) {
                         bufferedWriter.newLine();
                         bufferedWriter.write(formatNode(child));
-                        printed.add(child);
+                        nodeHistory.add(child);
                     }
 
                     bufferedWriter.newLine();
                     bufferedWriter.write(formatLink(node, child, children.get(child)));
 
-                    if (child.getChildren().size() > 0) {
+                    if (child.getChildren().size() > 0 && !queueHistory.contains(child)) {
                         nodeQueue.add(child);
+                        queueHistory.add(child);
                     }
                 }
             }
