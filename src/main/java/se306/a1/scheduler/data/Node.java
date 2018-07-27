@@ -1,7 +1,7 @@
 package se306.a1.scheduler.data;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 /** 
  * This class represents an abstract node object for a graph.
@@ -14,24 +14,22 @@ public abstract class Node {
 	private final String name;
 	private final int value;
 
-	private LinkedList<Node> children;
-	private LinkedList<Integer> links;
+	private Map<Node, Integer> children;
 
 	/**
 	 * The default constructor for a Node object. This constructor
-	 * instantiates the lists for storing child nodes and the values
+	 * instantiates the hashmap for storing child nodes and the values
 	 * associated with traversal to these child nodes.
      */
 	public Node() {
 		name = "";
 		value = 0;
-		children = new LinkedList<>();
-		links = new LinkedList<>();
+		children = new HashMap<>();
 	}
 
 	/**
 	 * The basic constructor for a Node object. This constructor instantiates
-	 * the lists for storing child nodes and the values associated with traversal
+	 * the hashmap for storing child nodes and the values associated with traversal
 	 * to these child nodes, and also takes in the name of the node and its value.
 	 * @param name string representation. or name, of the task at this node
 	 * @param value integer value representing the cost of the task at this node
@@ -39,8 +37,7 @@ public abstract class Node {
 	public Node(String name, int value) {
 		this.name = name;
 		this.value = value;
-		children = new LinkedList<>();
-		links = new LinkedList<>();
+		children = new HashMap<>();
 	}
 
 	/**
@@ -48,79 +45,73 @@ public abstract class Node {
 	 * to be given to construct a Node object.
 	 * @param name string representation. or name, of the task at this node
 	 * @param value integer value representing the cost of the task at this node
-	 * @param children A LinkedList representing all the nodes that are the children of this node
-	 * @param links A LinkedList representing the costs associated with the list of child nodes
+	 * @param children A HashMap representing all the nodes and link costs of this nodes children
      */
-	public Node(String name, int value, LinkedList<Node> children, LinkedList<Integer> links) {
+	public Node(String name, int value, HashMap<Node, Integer> children) {
 		this.name = name;
 		this.value = value;
 		this.children = children;
-		this.links = links;
 	}
 
 	/**
 	 * Gets the children of this node object.
 	 * @return a Collection of the child nodes of this node
      */
-	public Collection<Node> getChildren() {
+	public Map<Node, Integer> getChildren() {
 		return children;
 	}
 
-	/**
-	 * Gets the links of this node object.
-	 * @return a Collection of the link values of this node
-     */
-	public Collection<Integer> getLinks() {
-		return links;
-	}
+//	/**
+//	 * Gets the child number I of the parent. This method should
+//	 * be called in conjunction with the {@link #getLink(int) getLink} method
+//	 * when computing the cost of a traversal.
+//	 * @param i position number
+//	 * @return the child at the position
+//	 * @throws IndexOutOfBoundsException if the value is outside of
+//	 * the range of children numbers.
+//     */
+//	public Node getChild(int i) {
+//		return children.get(i);
+//	}
 
 	/**
-	 * Gets the child number I of the parent. This method should
-	 * be called in conjunction with the {@link #getLink(int) getLink} method
-	 * when computing the cost of a traversal.
-	 * @param i position number
-	 * @return the child at the position
-	 * @throws IndexOutOfBoundsException if the value is outside of
-	 * the range of children numbers.
-     */
-	public Node getChild(int i) {
-		return children.get(i);
-	}
-
-	/**
-	 * Adds the specified node to the parent node (this). This method should
-	 * be called in conjunction with the {@link #addLink(Integer) addLink} method
-	 * when populating this node's list of child nodes.
+	 * Adds the specified node to the parent node (this) along with its cost
+	 * associated with reaching this child.
 	 * @param node child node to be added
+	 * @param cost cost of link to this child node
 	 * @return if the child node was successfully added
 	 */
-	public boolean addChild(Node node) {
-		return children.add(node);
+	public boolean addChild(Node node, int cost) {
+		if (children.containsKey(node)) {
+			return false;
+		}
+		children.put(node, new Integer(cost));
+		return true;
 	}
 
-	/**
-	 * Gets the link cost i from the parent. This method should
-	 * be called in conjunction with the {@link #getChild(int) getChild} method
-	 * when computing the cost of a traversal.
-	 * @param i position number
-	 * @return the link at the position
-	 * @throws IndexOutOfBoundsException if the value is outside the range
-	 * of children numbers.
-     */
-	public int getLink(int i) {
-		return links.get(i);
-	}
-
-	/**
-	 * Adds the specified link cost from the parent node (this). This method should
-	 * be called in conjunction with the {@link #addChild(Node) addChild} method
-	 * when populating this node's list of child nodes.
-	 * @param cost link cost from parent node (this) to child
-	 * @return if the link cost was successfully added
-	 */
-	public boolean addLink(Integer cost) {
-		return links.add(cost);
-	}
+//	/**
+//	 * Gets the link cost i from the parent. This method should
+//	 * be called in conjunction with the {@link #getChild(int) getChild} method
+//	 * when computing the cost of a traversal.
+//	 * @param i position number
+//	 * @return the link at the position
+//	 * @throws IndexOutOfBoundsException if the value is outside the range
+//	 * of children numbers.
+//     */
+//	public int getLink(int i) {
+//		return links.get(i);
+//	}
+//
+//	/**
+//	 * Adds the specified link cost from the parent node (this). This method should
+//	 * be called in conjunction with the {@link #addChild(Node) addChild} method
+//	 * when populating this node's list of child nodes.
+//	 * @param cost link cost from parent node (this) to child
+//	 * @return if the link cost was successfully added
+//	 */
+//	public boolean addLink(Integer cost) {
+//		return links.add(cost);
+//	}
 
 	/**
 	 * Gets the value of computing the task represented by this node.

@@ -44,8 +44,7 @@ public class TaskScheduleGraph implements TaskGraph {
     @Override
     public boolean addEdge(String parentName, String childName, int cost) {
         if (nodes.containsKey(parentName) && nodes.containsKey(childName)) {
-            nodes.get(parentName).addChild(nodes.get(childName));
-            nodes.get(parentName).addLink(cost);
+            nodes.get(parentName).addChild(nodes.get(childName), cost);
             return true;
         } else
             return false;

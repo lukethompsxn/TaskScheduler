@@ -1,6 +1,8 @@
-package se306.a1.scheduler.Input;
+package se306.a1.scheduler.util;
 
 import org.apache.commons.cli.*;
+import org.apache.commons.cli.ParseException;
+
 import java.util.Scanner;
 
 /**
@@ -27,7 +29,7 @@ public class CLIParser {
      * then checks what inputs are present and whether or not they are in
      * the correct format.
      * @param args
-     * @throws ParseException
+     * @throws org.apache.commons.cli.ParseException
      */
     public void parseCLI(String[] args) throws ParseException {
 
