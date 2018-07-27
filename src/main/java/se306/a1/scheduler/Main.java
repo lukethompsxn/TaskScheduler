@@ -1,11 +1,9 @@
 package se306.a1.scheduler;
 
-import org.apache.commons.cli.ParseException;
-import se306.a1.scheduler.util.GraphParser;
-import se306.a1.scheduler.data.Node;
-import se306.a1.scheduler.data.TaskGraph;
-import se306.a1.scheduler.util.CLIParser;
+import se306.a1.scheduler.data.Edge;
+import se306.a1.scheduler.data.Graph;
 import se306.a1.scheduler.util.GraphParseException;
+import se306.a1.scheduler.util.GraphParser;
 
 import java.io.IOException;
 
@@ -17,10 +15,10 @@ public class Main {
         try {
 //            cli.parseCLI(args);
 
-            TaskGraph g = p.parseGraph("example-input-graphs/Nodes_10_Random.dot");
+            Graph g = p.parseGraph("input_graphs/Nodes_10_Random.dot");
             System.out.println(g.getName());
-            for (Node n : g.getRootNode().getChildren().keySet()) {
-                System.out.println(n);
+            for (Edge e : g.getLinks(g.getRootNode())) {
+                System.out.println(e.getParent() + "->" + e.getChild());
             }
 
             p.generateOutput(g, "test1.dot");

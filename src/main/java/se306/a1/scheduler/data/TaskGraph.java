@@ -1,46 +1,72 @@
 package se306.a1.scheduler.data;
 
-/**
- * Specifies the interface for all graphs representing a task schedule.
- * Classes implementing this interface should store the complete task schedule
- * and provide the implementation for the defined contracts.
- * @author Zhi Qiao
- */
-public interface TaskGraph {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    /**
-     * Gets the name of the task graph
-     * @return the name of the graph
-     */
-    public String getName();
+public class TaskGraph implements Graph {
+    private final Map<Node, List<Edge>> children;
+    private final Map<Node, List<Node>> parents;
+    private final Map<String, Node> nodes;
+    private final Node root;
+    private final String name;
 
-    /**
-     * Gets the root node task of the task schedule graph.
-     * @return the root node of the task schedule
-     */
-    public Node getRootNode();
+    public TaskGraph(String name) {
+        children = new HashMap<>();
+        parents = new HashMap<>();
+        nodes = new HashMap<>();
+        root = new Node("root", 0);
+        this.name = name;
+    }
 
-    /**
-     * Adds a Node object to the task schedule graph.
-     * @return if the node was added successfully
-     */
-    public boolean addNode(String name, int value);
+    @Override
+    public String getName() {
+        return name;
+    }
 
-    /**
-     * Gets the Node object represented by its name.
-     * @return Node object represented by its string value
-     */
-    public Node getNode(String name);
+    @Override
+    public void addNode(String label, int cost) {
+        Node node = new Node(label, cost);
+        nodes.put(label, node);
+        children.put(node, new ArrayList<>());
+        parents.put(node, new ArrayList<>());
+    }
 
-    /**
-     * Adds an edge between two nodes, both nodes must be in the graph already.
-     * @return if the edge was added successfully
-     */
-    public boolean addEdge(String parentName, String childName, int cost);
+    @Override
+    public void addEdge(String parent, String child, int cost) {
+        Node parentNode = nodes.get(parent);
+        Node childNode = nodes.get(child);
+        if (parentNode == null || childNode == null) return;
+        children.get(parentNode).add(new Edge(parentNode, childNode, cost));
+        parents.get(childNode).add(parentNode);
+    }
 
-    /**
-     * Method that should be hooked onto the end of building a task graph.
-     * (Necessity TBD)
-     */
-    public void build();
+    @Override
+    public Node getRootNode() {
+        return root;
+    }
+
+    @Override
+    public List<Edge> getLinks(Node node) {
+        return children.get(node);
+    }
+
+    @Override
+    public List<Node> getParents(Node node) {
+        return parents.get(node);
+    }
+
+    @Override
+    public void build() {
+        children.put(root, new ArrayList<>());
+        parents.put(root, new ArrayList<>());
+        for (Node n : nodes.values()) {
+            if (parents.get(n).isEmpty()) {
+                children.get(root).add(new Edge(root, n, 0));
+                parents.get(n).add(root);
+            }
+        }
+        nodes.put(root.getLabel(), root);
+    }
 }

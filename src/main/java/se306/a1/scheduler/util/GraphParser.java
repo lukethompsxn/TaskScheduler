@@ -27,10 +27,10 @@ public class GraphParser {
      *
      * @param inputPath filepath of input .dot file
      * @return parsed object containing nodes, links, costs
-     * @throws IOException    if the file cannot be found, or if an IO error occurs while reading
+     * @throws IOException         if the file cannot be found, or if an IO error occurs while reading
      * @throws GraphParseException if the graph cannot be parsed
      */
-    public TaskGraph parseGraph(String inputPath) throws IOException, GraphParseException {
+    public Graph parseGraph(String inputPath) throws IOException, GraphParseException {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputPath))) {
             String name = "";
             String line = reader.readLine();
@@ -41,7 +41,7 @@ public class GraphParser {
                 throw new GraphParseException(line);
 
             }
-            TaskGraph graph = new TaskScheduleGraph(name);
+            Graph graph = new TaskGraph(name);
             while ((line = reader.readLine()) != null) {
                 Matcher nodeMatcher = NODE_REGEX.matcher(line);
                 Matcher edgeMatcher = EDGE_REGEX.matcher(line);
@@ -69,90 +69,52 @@ public class GraphParser {
      * corresponding .dot output file.
      *
      * @param taskGraph calculated schedule object
-     * @throws IOException
+     * @throws IOException if the output file cannot be created or if an error occurs while writing
      */
-    public void generateOutput(TaskGraph taskGraph, String outputPath) throws IOException {
-        BufferedWriter bufferedWriter = null;
-
-        try {
-            File file = new File(outputPath);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            bufferedWriter = new BufferedWriter(new FileWriter(file));
+    public void generateOutput(Graph taskGraph, String outputPath) throws IOException {
+        File file = new File(outputPath);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             bufferedWriter.write("digraph \"" + taskGraph.getName() + "\" {");
-
-            Queue<Node> nodeQueue = new LinkedList<>();
-            Map<Node, Integer> children;
-            Set<Node> nodeHistory = new HashSet<>();
-            Set<Node> queueHistory = new HashSet<>();
-
-            nodeQueue.addAll(taskGraph.getRootNode().getChildren().keySet());
-            queueHistory.addAll(taskGraph.getRootNode().getChildren().keySet());
-
-            while (nodeQueue.size() > 0) {
-                Node node = nodeQueue.poll();
-
-                if (!nodeHistory.contains(node)) {
+            Queue<Edge> edges = new LinkedList<>();
+            Set<Node> marked = new HashSet<>();
+            edges.addAll(taskGraph.getLinks(taskGraph.getRootNode()));
+            while (!edges.isEmpty()) {
+                Node node = edges.poll().getChild();
+                if (!marked.contains(node)) {
                     bufferedWriter.newLine();
                     bufferedWriter.write(formatNode(node));
-                    nodeHistory.add(node);
+                    marked.add(node);
+                } else {
+                    continue;
                 }
-
-                children = node.getChildren();
-                for (Node child : children.keySet()) {
-
-                    if (!nodeHistory.contains(child)) {
-                        bufferedWriter.newLine();
-                        bufferedWriter.write(formatNode(child));
-                        nodeHistory.add(child);
-                    }
-
+                List<Edge> links = taskGraph.getLinks(node);
+                for (Edge e : links) {
+                    edges.add(e);
                     bufferedWriter.newLine();
-                    bufferedWriter.write(formatLink(node, child, children.get(child)));
-
-                    if (child.getChildren().size() > 0 && !queueHistory.contains(child)) {
-                        nodeQueue.add(child);
-                        queueHistory.add(child);
-                    }
+                    bufferedWriter.write(e.toString());
                 }
             }
             bufferedWriter.newLine();
             bufferedWriter.write("}");
         } catch (ScheduleException e) {
             e.printStackTrace();
-        } finally {
-            if (bufferedWriter != null) {
-                bufferedWriter.close();
-            }
         }
     }
 
     /**
      * This method formats the string for printing a node.
+     *
      * @param node the node which requires formatting for output
      * @return formatted output string for the supplied node
      */
     private String formatNode(Node node) throws ScheduleException {
         return "\t" + node.toString() +
-                "\t[Weight=" + node.getValue() +
+                "\t[Weight=" + node.getCost() +
                 ", Start=" + Schedule.getStartTime(node) +
                 ", Processor=" + Schedule.getProcessor(node) + "];";
-    }
-
-
-    /**
-     * This method formats the string for printing a link.
-     * @param parent the parent node of the link
-     * @param child the child node of the link
-     * @param cost the cost of the link from parent to child
-     * @return formatted output string for supplied link
-     */
-    private String formatLink(Node parent, Node child, Integer cost) {
-        return "\t" + parent.toString() + " -> " + child.toString() +
-                "\t [Weight=" + cost + "];";
-
     }
 }
 
