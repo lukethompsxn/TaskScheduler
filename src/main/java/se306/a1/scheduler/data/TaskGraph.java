@@ -12,6 +12,11 @@ public class TaskGraph implements Graph {
     private final Node root;
     private final String name;
 
+    /**
+     * Creates a TaskGraph with a given name.
+     *
+     * @param name the name of the TaskGraph
+     */
     public TaskGraph(String name) {
         children = new HashMap<>();
         parents = new HashMap<>();

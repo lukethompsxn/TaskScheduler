@@ -1,18 +1,39 @@
 package se306.a1.scheduler.data;
 
+/**
+ * Represents a node in a graph, with a given label and cost.
+ *
+ * @author Abhinav Behal
+ */
 public class Node {
     private final String label;
     private final int cost;
 
+    /**
+     * Creates a node with a given label and cost.
+     *
+     * @param label the label of the node
+     * @param cost  the cost of the node
+     */
     public Node(String label, int cost) {
         this.label = label;
         this.cost = cost;
     }
 
+    /**
+     * Returns the label of the node.
+     *
+     * @return the label of the node
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * Returns the cost of the node.
+     *
+     * @return the cost of the node.
+     */
     public int getCost() {
         return cost;
     }
