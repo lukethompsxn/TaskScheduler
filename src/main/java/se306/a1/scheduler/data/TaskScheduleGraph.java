@@ -9,12 +9,12 @@ import java.util.HashMap;
  */
 public class TaskScheduleGraph implements TaskGraph {
     private String name;
+    private Node rootNode = new TaskNode("root", 0);
     private HashMap<String, Node> nodes;
 
     public TaskScheduleGraph(String name) {
         this.name = name;
         nodes = new HashMap<>();
-        nodes.put("root", new TaskNode("root", 0));
     }
 
     @Override
@@ -24,7 +24,7 @@ public class TaskScheduleGraph implements TaskGraph {
 
     @Override
     public Node getRootNode() {
-        return nodes.get("root");
+        return rootNode;
     }
 
     @Override
@@ -44,9 +44,29 @@ public class TaskScheduleGraph implements TaskGraph {
     @Override
     public boolean addEdge(String parentName, String childName, int cost) {
         if (nodes.containsKey(parentName) && nodes.containsKey(childName)) {
-            nodes.get(parentName).addChild(nodes.get(childName), cost);
+//            nodes.get(parentName).addChild(nodes.get(childName), cost);
+            Node parent = nodes.get(parentName);
+            parent.addChild(nodes.get(childName), cost);
+
+            nodes.get(childName).addParent(parent);
             return true;
         } else
             return false;
+    }
+
+    /**
+     * Method that needs to be hooked onto the end of building the graph object.
+     * Attaches the entry nodes of the task schedule to the root node of the
+     * TaskScheduleGraph representation.
+     */
+    public void build() {
+        for (Node node : nodes.values()) {
+            if (node.getParents().size() == 0) {
+                rootNode.addChild(node, 0);
+
+                node.addParent(rootNode);
+            }
+        }
+        nodes.put("root", rootNode);
     }
 }

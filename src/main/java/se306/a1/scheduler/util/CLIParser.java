@@ -48,7 +48,6 @@ public class CLIParser {
         // Checks if parallel option is set
         if (cmd.hasOption("p")) {
             // set parametrised variable to true
-            System.out.println("Has specified parallel option...");
 
             isParallel = true;
             String stringCores = cmd.getOptionValue("p");
@@ -56,8 +55,8 @@ public class CLIParser {
             // Need to check is valid int
             if (isInteger(stringCores, 10)) {
                 int cores = Integer.parseInt(cmd.getArgs()[1]);
-                System.out.println(cores);
                 numCores = cores;
+                System.out.println("Has specified parallel option: number of cores = " + cores);
             } else {
                 // p value is not and integer
                 System.out.println("P is not an integer");
@@ -66,11 +65,17 @@ public class CLIParser {
             }
         }
 
-        // Checks if if visualization wants to be displayed
+        // Checks if visualization wants to be displayed
         if(cmd.hasOption("v")) {
             // set visualise variable to true
             System.out.println("Has visualise option...");
             doVisualise = true;
+        }
+
+        // Checks if custom output file is desired
+        if (cmd.hasOption("o")) {
+            System.out.println("Custom output file desired:" + " " + cmd.getOptionValue("o"));
+            outPutFile = cmd.getOptionValue("o");
         }
 
         // Checks for file name, and there is only two unnamed CLI (file name + num processors)
@@ -81,12 +86,12 @@ public class CLIParser {
             System.exit(1);
         } else if (cmd.getArgs().length == 2)  { // Has correct number of unnamed inputs
             inputFileName = cmd.getArgs()[0];
-            System.out.println(inputFileName);
+            System.out.println("Specified filename: " + inputFileName);
 
             // Need to check 2nd unnamed input is integer
             if (isInteger(cmd.getArgs()[1], 10)) {
                 numProcessors = Integer.parseInt(cmd.getArgs()[1]);
-                System.out.println(numProcessors);
+                System.out.println("Specified number of processors: " + numProcessors);
             } else {
                 // P is not and integer
                 System.out.println("P is not an integer");
@@ -113,7 +118,7 @@ public class CLIParser {
                 .desc("Use N cores for execution in parallel.")
                 .hasArg(true)
                 .numberOfArgs(1)
-                .required(true)
+                .required(false)
                 .build();
 
         // Creates option to visualise the scheduler

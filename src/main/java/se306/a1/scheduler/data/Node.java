@@ -1,6 +1,8 @@
 package se306.a1.scheduler.data;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /** 
@@ -14,7 +16,8 @@ public abstract class Node {
 	private final String name;
 	private final int value;
 
-	private Map<Node, Integer> children;
+    private LinkedList<Node> parents;
+    private Map<Node, Integer> children;
 
 	/**
 	 * The default constructor for a Node object. This constructor
@@ -24,7 +27,8 @@ public abstract class Node {
 	public Node() {
 		name = "";
 		value = 0;
-		children = new HashMap<>();
+        parents = new LinkedList<>();
+        children = new HashMap<>();
 	}
 
 	/**
@@ -37,7 +41,8 @@ public abstract class Node {
 	public Node(String name, int value) {
 		this.name = name;
 		this.value = value;
-		children = new HashMap<>();
+        parents = new LinkedList<>();
+        children = new HashMap<>();
 	}
 
 	/**
@@ -45,12 +50,22 @@ public abstract class Node {
 	 * to be given to construct a Node object.
 	 * @param name string representation. or name, of the task at this node
 	 * @param value integer value representing the cost of the task at this node
-	 * @param children A HashMap representing all the nodes and link costs of this nodes children
+     * @param parents a LinkedList representing all the nodes that are parents of this node
+     * @param children A HashMap representing all the nodes and link costs of this nodes children
      */
-	public Node(String name, int value, HashMap<Node, Integer> children) {
+	public Node(String name, int value, LinkedList<Node> parents, HashMap<Node, Integer> children) {
 		this.name = name;
 		this.value = value;
+		this.parents = parents;
 		this.children = children;
+	}
+
+	/**
+	 * Gets the parents of this node object.
+	 * @return a Collection of the parent nodes of this node
+	 */
+	public Collection<Node> getParents() {
+		return parents;
 	}
 
 	/**
@@ -74,7 +89,16 @@ public abstract class Node {
 //		return children.get(i);
 //	}
 
-	/**
+    /**
+     * Adds the specified node to the child node (this).
+     * @param node the parent node to be added
+     * @return if the parent node was successfully added
+     */
+    public boolean addParent(Node node) {
+        return parents.add(node);
+    }
+
+    /**
 	 * Adds the specified node to the parent node (this) along with its cost
 	 * associated with reaching this child.
 	 * @param node child node to be added
