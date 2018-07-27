@@ -15,7 +15,6 @@ public class TaskScheduleGraph implements TaskGraph {
     public TaskScheduleGraph(String name) {
         this.name = name;
         nodes = new HashMap<>();
-        nodes.put("root", rootNode);
     }
 
     @Override
@@ -45,8 +44,11 @@ public class TaskScheduleGraph implements TaskGraph {
     @Override
     public boolean addEdge(String parentName, String childName, int cost) {
         if (nodes.containsKey(parentName) && nodes.containsKey(childName)) {
-            nodes.get(parentName).addChild(nodes.get(childName));
-            nodes.get(parentName).addLink(cost);
+            Node parent = nodes.get(parentName);
+            parent.addChild(nodes.get(childName));
+            parent.addLink(cost);
+
+            nodes.get(childName).addParent(parent);
             return true;
         } else
             return false;
@@ -66,5 +68,6 @@ public class TaskScheduleGraph implements TaskGraph {
                 node.addParent(rootNode);
             }
         }
+        nodes.put("root", rootNode);
     }
 }

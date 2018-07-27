@@ -37,4 +37,10 @@ public interface TaskGraph {
      * @return if the edge was added successfully
      */
     public boolean addEdge(String parentName, String childName, int cost);
+
+    /**
+     * Method that should be hooked onto the end of building a task graph.
+     * (Necessity TBD)
+     */
+    public void build();
 }

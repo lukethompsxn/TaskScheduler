@@ -19,7 +19,7 @@ public class Main {
 
             TaskGraph g = p.parseGraph("input_graphs/Nodes_10_Random.dot");
             System.out.println(g.getName());
-            for (Node n : g.getNode("0").getChildren()) {
+            for (Node n : g.getRootNode().getChildren()) {
                 System.out.println(n);
             }
         } catch (IOException | GraphParseException e) {

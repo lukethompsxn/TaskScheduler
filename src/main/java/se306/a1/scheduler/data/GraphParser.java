@@ -56,6 +56,7 @@ public class GraphParser {
                     break;
                 }
             }
+            graph.build();
             return graph;
         }
     }
