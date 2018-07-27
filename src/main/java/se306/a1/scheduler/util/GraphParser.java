@@ -1,9 +1,6 @@
 package se306.a1.scheduler.util;
 
-import se306.a1.scheduler.data.Node;
-import se306.a1.scheduler.data.Schedule;
-import se306.a1.scheduler.data.TaskGraph;
-import se306.a1.scheduler.data.TaskScheduleGraph;
+import se306.a1.scheduler.data.*;
 
 import java.io.*;
 import java.util.*;
@@ -31,9 +28,9 @@ public class GraphParser {
      * @param inputPath filepath of input .dot file
      * @return parsed object containing nodes, links, costs
      * @throws IOException    if the file cannot be found, or if an IO error occurs while reading
-     * @throws ParseException if the graph cannot be parsed
+     * @throws GraphParseException if the graph cannot be parsed
      */
-    public TaskGraph parseGraph(String inputPath) throws IOException, ParseException {
+    public TaskGraph parseGraph(String inputPath) throws IOException, GraphParseException {
         try (BufferedReader reader = new BufferedReader(new FileReader(inputPath))) {
             String name = "";
             String line = reader.readLine();
@@ -41,7 +38,8 @@ public class GraphParser {
             if (nameMatcher.find()) {
                 name = nameMatcher.group(1);
             } else {
-                throw new ParseException(line);
+                throw new GraphParseException(line);
+
             }
             TaskGraph graph = new TaskScheduleGraph(name);
             while ((line = reader.readLine()) != null) {
@@ -60,6 +58,7 @@ public class GraphParser {
                     break;
                 }
             }
+            graph.build();
             return graph;
         }
     }
@@ -88,8 +87,8 @@ public class GraphParser {
             Map<Node, Integer> children;
             Set<Node> printed = new HashSet<>();
 
-            nodeQueue.add(taskGraph.getNode("0"));
-//            nodeQueue.addAll(taskGraph.getRootNode().getChildren().keySet());
+//            nodeQueue.add(taskGraph.getNode("0"));
+            nodeQueue.addAll(taskGraph.getRootNode().getChildren().keySet());
             while (nodeQueue.size() > 0) {
                 Node node = nodeQueue.poll();
 
