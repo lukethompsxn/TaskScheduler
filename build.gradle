@@ -17,6 +17,7 @@ jar {
     manifest {
         attributes 'Main-Class': 'se306.a1.scheduler.Main'
     }
+    from configurations.runtime.collect() { zipTree(it) }
 }
 
 mainClassName = 'se306.a1.scheduler.Main'
