@@ -39,7 +39,7 @@ public class Schedule {
 
         //This is the actual code, requires schedule to be produced though
 //        if (nodeData.get(node) == null || nodeData.get(node).getKey() == null) {
-//            throw new ScheduleException("Start time not defined for node: " + node);
+//            throw new ScheduleException("Start time not defined for task: " + node);
 //        }
 //        return (int) nodeData.get(node).getKey();
     }
