@@ -15,7 +15,7 @@ public class Main {
         GraphParser p = new GraphParser();
 
         try {
-            InputConfig config = CLIParser.getCLIParserInst().parseCLI(args);
+//            InputConfig config = CLIParser.getCLIParserInst().parseCLI(args);
 
             Graph g = p.parseGraph("input_graphs/Nodes_10_Random.dot");
             System.out.println(g.getName());
@@ -27,8 +27,8 @@ public class Main {
 
         } catch (IOException | GraphParseException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        } //catch (ParseException e) {
+//            e.printStackTrace();
+//        }
     }
 }
