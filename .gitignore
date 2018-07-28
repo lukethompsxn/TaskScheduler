@@ -50,3 +50,6 @@ gradle-app.setting
 
 # Other misc. files
 *.stackdump
+
+# Other
+.example-input-graphs/
