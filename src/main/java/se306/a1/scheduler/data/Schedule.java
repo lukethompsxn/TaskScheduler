@@ -1,12 +1,7 @@
 package se306.a1.scheduler.data;
 
-import javafx.util.Pair;
-import se306.a1.scheduler.util.ScheduleException;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The purpose of this class is to store the scheduling information for each
