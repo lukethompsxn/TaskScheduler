@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * This class is responsible for parsing graphs in the .dot file format into
  * TaskGraph objects and vice versa, from a TaskGraph to a valid .dot file.
  *
- * @author Abhinav Behal
+ * @author Abhinav Behal, Luke Thompson
  */
 public class GraphParser {
 
