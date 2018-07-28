@@ -40,15 +40,16 @@ public class GraphParserTests {
             Set<Node> nodes = new HashSet<>();
             Set<Edge> edges = new HashSet<>();
 
-            Queue<Edge> queue = new LinkedList<>();
-            for (Node n : g.getEntryNodes())
-                queue.addAll(g.getEdges(n));
+            Queue<Node> queue = new LinkedList<>();
+            queue.addAll(g.getEntryNodes());
 
             while (!queue.isEmpty()) {
-                Node node = queue.poll().getChild();
+                Node node = queue.poll();
                 nodes.add(node);
                 edges.addAll(g.getEdges(node));
-                queue.addAll(g.getEdges(node));
+                for (Edge edge : g.getEdges(node)) {
+                    queue.add(edge.getChild());
+                }
             }
             assertEquals(nodes.size(), nodeCount);
             assertEquals(edges.size(), edgeCount);

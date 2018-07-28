@@ -43,7 +43,7 @@ public class GraphParser {
             }
 
             Map<String, Node> nodes = new HashMap<>();
-            ArrayList<Edge> edges = new ArrayList();
+            ArrayList<Edge> edges = new ArrayList<>();
 
             while ((line = reader.readLine()) != null) {
                 Matcher nodeMatcher = NODE_REGEX.matcher(line);
@@ -84,15 +84,12 @@ public class GraphParser {
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             bufferedWriter.write("digraph \"" + taskGraph.getName() + "\" {");
-            Queue<Edge> edges = new LinkedList<>();
             Set<Node> marked = new HashSet<>();
+            Queue<Node> nodes = new LinkedList<>();
+            nodes.addAll(taskGraph.getEntryNodes());
 
-            for (Node n : taskGraph.getEntryNodes())
-                edges.addAll(taskGraph.getEdges(n));
-
-            // TODO fix output
-            while (!edges.isEmpty()) {
-                Node node = edges.poll().getChild();
+            while (!nodes.isEmpty()) {
+                Node node = nodes.poll();
                 if (!marked.contains(node)) {
                     bufferedWriter.newLine();
                     bufferedWriter.write(formatNode(node));
@@ -102,7 +99,7 @@ public class GraphParser {
                 }
                 List<Edge> links = taskGraph.getEdges(node);
                 for (Edge e : links) {
-                    edges.add(e);
+                    nodes.add(e.getChild());
                     bufferedWriter.newLine();
                     bufferedWriter.write(e.toString());
                 }
