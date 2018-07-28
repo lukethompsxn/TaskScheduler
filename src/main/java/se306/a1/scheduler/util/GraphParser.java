@@ -118,10 +118,11 @@ public class GraphParser {
      * @return formatted output string for the supplied node
      */
     private String formatNode(Node node) throws ScheduleException {
+        // TODO Get appropriate information from the schedule
         return "\t" + node.toString() +
                 "\t[Weight=" + node.getCost() +
-                ", Start=" + Schedule.getStartTime(node) +
-                ", Processor=" + Schedule.getProcessor(node) + "];";
+                ", Start=" /*+ Schedule.getStartTime(node)*/ +
+                ", Processor=" /*+ Schedule.getProcessor(node)*/ + "];";
     }
 }
 
