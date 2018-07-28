@@ -35,31 +35,36 @@ public class GraphParser {
             String name = "";
             String line = reader.readLine();
             Matcher nameMatcher = NAME_REGEX.matcher(line);
+
             if (nameMatcher.find()) {
                 name = nameMatcher.group(1);
             } else {
                 throw new GraphParseException(line);
-
             }
-            Graph graph = new TaskGraph(name);
+
+            Map<String, Node> nodes = new HashMap<>();
+            ArrayList<Edge> edges = new ArrayList();
+
             while ((line = reader.readLine()) != null) {
                 Matcher nodeMatcher = NODE_REGEX.matcher(line);
                 Matcher edgeMatcher = EDGE_REGEX.matcher(line);
+
                 if (edgeMatcher.find()) {
                     String parent = edgeMatcher.group(1);
                     String child = edgeMatcher.group(2);
                     int weight = Integer.parseInt(edgeMatcher.group(3));
-                    graph.addEdge(parent, child, weight);
+
+                    edges.add(new Edge(nodes.get(parent), nodes.get(child), weight));
                 } else if (nodeMatcher.find()) {
                     String label = nodeMatcher.group(1);
                     int weight = Integer.parseInt(nodeMatcher.group(2));
-                    graph.addNode(label, weight);
+
+                    nodes.put(label, new Node(label, weight));
                 } else if (line.equals("}")) {
                     break;
                 }
             }
-            graph.build();
-            return graph;
+            return new TaskGraph(name, nodes, edges);
         }
     }
 
@@ -76,11 +81,16 @@ public class GraphParser {
         if (!file.exists()) {
             file.createNewFile();
         }
+
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             bufferedWriter.write("digraph \"" + taskGraph.getName() + "\" {");
             Queue<Edge> edges = new LinkedList<>();
             Set<Node> marked = new HashSet<>();
-            edges.addAll(taskGraph.getLinks(taskGraph.getRootNode()));
+
+            for (Node n : taskGraph.getEntryNodes())
+                edges.addAll(taskGraph.getEdges(n));
+
+            // TODO fix output
             while (!edges.isEmpty()) {
                 Node node = edges.poll().getChild();
                 if (!marked.contains(node)) {
@@ -90,7 +100,7 @@ public class GraphParser {
                 } else {
                     continue;
                 }
-                List<Edge> links = taskGraph.getLinks(node);
+                List<Edge> links = taskGraph.getEdges(node);
                 for (Edge e : links) {
                     edges.add(e);
                     bufferedWriter.newLine();

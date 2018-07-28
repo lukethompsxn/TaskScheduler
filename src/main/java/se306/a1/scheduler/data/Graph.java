@@ -19,36 +19,12 @@ public interface Graph {
     String getName();
 
     /**
-     * Adds a Node object to the task schedule graph.
-     *
-     * @param label the label of the node
-     * @param cost  the cost of the node
-     */
-    void addNode(String label, int cost);
-
-    /**
-     * Adds an edge between two nodes, both nodes must be in the graph already.
-     *
-     * @param parent the label of the parent node
-     * @param child  the label of child node
-     * @param cost   the cost of edge
-     */
-    void addEdge(String parent, String child, int cost);
-
-    /**
-     * Gets the root node task of the task schedule graph.
-     *
-     * @return the root node of the task schedule
-     */
-    Node getRootNode();
-
-    /**
      * Gets the outgoing edges from the given node.
      *
      * @param node the node to get the outgoing edges from
      * @return a list of the outgoing edges from the node
      */
-    List<Edge> getLinks(Node node);
+    List<Edge> getEdges(Node node);
 
     /**
      * Gets the parent nodes of the given node.
@@ -59,8 +35,9 @@ public interface Graph {
     List<Node> getParents(Node node);
 
     /**
-     * Method that should be hooked onto the end of building a task graph.
-     * (Necessity TBD)
+     * Gets the entry nodes of the graph
+     *
+     * @return a list of entry nodes into the graph
      */
-    void build();
+    List<Node> getEntryNodes();
 }

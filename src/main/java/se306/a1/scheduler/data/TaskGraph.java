@@ -9,20 +9,22 @@ public class TaskGraph implements Graph {
     private final Map<Node, List<Edge>> children;
     private final Map<Node, List<Node>> parents;
     private final Map<String, Node> nodes;
-    private final Node root;
     private final String name;
 
     /**
-     * Creates a TaskGraph with a given name.
+     * Creates a TaskGraph with a given name, nodes, and associated edges.
      *
-     * @param name the name of the TaskGraph
+     * @param name  the name of the TaskGraph
+     * @param nodes the list of nodes in the TaskGraph
+     * @param edges the list of edges connecting nodes in the TaskGraph
      */
-    public TaskGraph(String name) {
+    public TaskGraph(String name, Map<String, Node> nodes, List<Edge> edges) {
         children = new HashMap<>();
         parents = new HashMap<>();
-        nodes = new HashMap<>();
-        root = new Node("root", 0);
+        this.nodes = nodes;
         this.name = name;
+
+        build(edges);
     }
 
     @Override
@@ -31,29 +33,7 @@ public class TaskGraph implements Graph {
     }
 
     @Override
-    public void addNode(String label, int cost) {
-        Node node = new Node(label, cost);
-        nodes.put(label, node);
-        children.put(node, new ArrayList<>());
-        parents.put(node, new ArrayList<>());
-    }
-
-    @Override
-    public void addEdge(String parent, String child, int cost) {
-        Node parentNode = nodes.get(parent);
-        Node childNode = nodes.get(child);
-        if (parentNode == null || childNode == null) return;
-        children.get(parentNode).add(new Edge(parentNode, childNode, cost));
-        parents.get(childNode).add(parentNode);
-    }
-
-    @Override
-    public Node getRootNode() {
-        return root;
-    }
-
-    @Override
-    public List<Edge> getLinks(Node node) {
+    public List<Edge> getEdges(Node node) {
         return children.get(node);
     }
 
@@ -63,15 +43,35 @@ public class TaskGraph implements Graph {
     }
 
     @Override
-    public void build() {
-        children.put(root, new ArrayList<>());
-        parents.put(root, new ArrayList<>());
+    public List<Node> getEntryNodes() {
+        List<Node> entries = new ArrayList<>();
+
         for (Node n : nodes.values()) {
-            if (parents.get(n).isEmpty()) {
-                children.get(root).add(new Edge(root, n, 0));
-                parents.get(n).add(root);
-            }
+            if (!parents.containsKey(n) || parents.get(n).isEmpty())
+                entries.add(n);
         }
-        nodes.put(root.getLabel(), root);
+
+        return entries;
+    }
+
+    /**
+     * Private helper method used to construct the edges connecting the graph.
+     *
+     * @param edges edges connecting nodes in the TaskGraph
+     */
+    private void build(List<Edge> edges) {
+        for (Node n : nodes.values()) {
+            parents.put(n, new ArrayList<>());
+            children.put(n, new ArrayList<>());
+        }
+        for (Edge e : edges) {
+            Node parentNode = nodes.containsValue(e.getParent()) ? e.getParent() : null;
+            Node childNode = nodes.containsValue(e.getChild()) ? e.getChild() : null;
+
+            if (parentNode == null || childNode == null) return;
+
+            children.get(parentNode).add(e);
+            parents.get(childNode).add(parentNode);
+        }
     }
 }
