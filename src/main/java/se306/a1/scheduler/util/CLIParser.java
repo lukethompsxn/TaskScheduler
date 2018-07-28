@@ -93,8 +93,8 @@ public class CLIParser {
         // Checks if custom output file is desired
         if (cmd.hasOption("o")) {
             //outPutFile = cmd.getOptionValue("o");
-            config.outPutFile = cmd.getOptionValue("o");
-            System.out.println("Custom output file desired:" + " " + config.outPutFile);
+            config.outputFile = cmd.getOptionValue("o");
+            System.out.println("Custom output file desired:" + " " + config.outputFile);
         }
 
         // Checks for file name, and there is only two unnamed CLI (file name + num processors)

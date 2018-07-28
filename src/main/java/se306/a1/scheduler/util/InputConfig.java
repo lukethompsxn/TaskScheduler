@@ -13,5 +13,5 @@ public class InputConfig {
     int numCores = -1;
     boolean isParallel = false;
     boolean doVisualise = false;
-    String outPutFile = null;
+    String outputFile = null;
 }
