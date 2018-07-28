@@ -1,8 +1,12 @@
 package se306.a1.scheduler.util;
 
-import org.apache.commons.cli.*;
 import org.apache.commons.cli.ParseException;
-
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import java.util.Scanner;
 
 /**
@@ -13,15 +17,26 @@ import java.util.Scanner;
  **/
 public class CLIParser {
 
+    private static final CLIParser cliInstance = new CLIParser();
+
     private Options options = new Options();
     private HelpFormatter help = new HelpFormatter();
+    private InputConfig config = new InputConfig();
 
-    private String inputFileName;
-    private int numProcessors = 1;
-    private int numCores;
-    private boolean isParallel;
-    private boolean doVisualise;
-    private String outPutFile;
+//    private String inputFileName;
+//    private int numProcessors = 1;
+//    private int numCores;
+//    private boolean isParallel;
+//    private boolean doVisualise;
+//    private String outPutFile;
+
+    private CLIParser() {
+
+    }
+
+    public static CLIParser getCLIParserInst() {
+        return cliInstance;
+    }
 
     /**
      * Main method which carries out the parsing of the command line inputs.
@@ -29,9 +44,9 @@ public class CLIParser {
      * then checks what inputs are present and whether or not they are in
      * the correct format.
      * @param args
-     * @throws org.apache.commons.cli.ParseException
+     * @throws ParseException
      */
-    public void parseCLI(String[] args) throws ParseException {
+    public InputConfig parseCLI(String[] args) throws ParseException {
 
         // Calls method which creates the CLI options
         addOptions();
@@ -49,14 +64,16 @@ public class CLIParser {
         if (cmd.hasOption("p")) {
             // set parametrised variable to true
 
-            isParallel = true;
+            //isParallel = true;
+            config.isParallel = true;
             String stringCores = cmd.getOptionValue("p");
 
             // Need to check is valid int
             if (isInteger(stringCores, 10)) {
                 int cores = Integer.parseInt(cmd.getArgs()[1]);
-                numCores = cores;
-                System.out.println("Has specified parallel option: number of cores = " + cores);
+                //numCores = cores;
+                config.numCores = cores;
+                System.out.println("Has specified parallel option: number of cores = " + config.numCores);
             } else {
                 // p value is not and integer
                 System.out.println("P is not an integer");
@@ -68,14 +85,16 @@ public class CLIParser {
         // Checks if visualization wants to be displayed
         if(cmd.hasOption("v")) {
             // set visualise variable to true
-            System.out.println("Has visualise option...");
-            doVisualise = true;
+            //doVisualise = true;
+            config.doVisualise = true;
+            System.out.println("Has visualise option: " + config.doVisualise);
         }
 
         // Checks if custom output file is desired
         if (cmd.hasOption("o")) {
-            System.out.println("Custom output file desired:" + " " + cmd.getOptionValue("o"));
-            outPutFile = cmd.getOptionValue("o");
+            //outPutFile = cmd.getOptionValue("o");
+            config.outPutFile = cmd.getOptionValue("o");
+            System.out.println("Custom output file desired:" + " " + config.outPutFile);
         }
 
         // Checks for file name, and there is only two unnamed CLI (file name + num processors)
@@ -85,13 +104,15 @@ public class CLIParser {
             printHelp();
             System.exit(1);
         } else if (cmd.getArgs().length == 2)  { // Has correct number of unnamed inputs
-            inputFileName = cmd.getArgs()[0];
-            System.out.println("Specified filename: " + inputFileName);
+            //inputFileName = cmd.getArgs()[0];
+            config.inputFileName = cmd.getArgs()[0];
+            System.out.println("Specified filename: " + config.inputFileName);
 
             // Need to check 2nd unnamed input is integer
             if (isInteger(cmd.getArgs()[1], 10)) {
-                numProcessors = Integer.parseInt(cmd.getArgs()[1]);
-                System.out.println("Specified number of processors: " + numProcessors);
+                //numProcessors = Integer.parseInt(cmd.getArgs()[1]);
+                config.numProcessors = Integer.parseInt(cmd.getArgs()[1]);
+                System.out.println("Specified number of processors: " + config.numProcessors);
             } else {
                 // P is not and integer
                 System.out.println("P is not an integer");
@@ -103,6 +124,8 @@ public class CLIParser {
             printHelp();
             System.exit(1);
         }
+
+        return config;
     }
 
     /**
@@ -172,4 +195,28 @@ public class CLIParser {
         sc.nextInt(radix);
         return !sc.hasNext();
     }
+
+//    public boolean isDoVisualise() {
+//        return doVisualise;
+//    }
+//
+//    public boolean isParallel() {
+//        return isParallel;
+//    }
+//
+//    public int getNumCores() {
+//        return numCores;
+//    }
+//
+//    public int getNumProcessors() {
+//        return numProcessors;
+//    }
+//
+//    public String getInputFileName() {
+//        return inputFileName;
+//    }
+//
+//    public String getOutPutFile() {
+//        return outPutFile;
+//    }
 }
