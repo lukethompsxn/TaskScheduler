@@ -39,4 +39,13 @@ public class Schedule {
     public Collection<Processor> getProcessors() {
     	return processors;
     }
+    
+    /**
+     * This method returns the given time that a processor is currently at. The largest time value
+     * of all the processors is the max time that the schedule will take to compute.
+     * @param	the processor number to check.
+     * @return	the time value of that processor. */
+    public int getTime(int processor) {
+    	return processors.get(processor).getTime();
+    }
 }
