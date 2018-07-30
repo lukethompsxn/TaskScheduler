@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import se306.a1.scheduler.data.Edge;
 import se306.a1.scheduler.data.Graph;
 import se306.a1.scheduler.data.Node;
+import se306.a1.scheduler.data.Processor;
 import se306.a1.scheduler.data.Schedule;
 
 /**
@@ -39,7 +40,7 @@ public class BasicScheduler extends Scheduler{
 		ArrayList<Node> visibleNodes = new ArrayList<>();
 		
 		Node currentNode = g.getRootNode();
-		Node previousNode = g.getRootNode();
+		
 		while(!visibleNodes.isEmpty() || currentNode.equals(g.getRootNode())) {
 			ArrayList<Edge> links = (ArrayList<Edge>) g.getLinks(currentNode);
 			
@@ -47,15 +48,46 @@ public class BasicScheduler extends Scheduler{
 				visibleNodes.add(e.getChild());
 			}
 			
-			previousNode = currentNode;
-			currentNode = visibleNodes.get(0);
+			currentNode = computeCheapest(visibleNodes, links);
+			
+			visibleNodes.remove(currentNode);
 		}
 	}
 	
 	/**
 	 * This method is given a list of visible tasks, and the costs of those tasks
 	 * and is meant to compute the cheapest possible task. */
-	private void computeCheapest(ArrayList<Node> nodes, ArrayList<Edge> links) {
+	private Node computeCheapest(ArrayList<Node> nodes, ArrayList<Edge> links) {
+		Node cheapest = null;
+		int time = Integer.MAX_VALUE;
+		Processor processor = null;
+		ArrayList<Processor> processors = (ArrayList<Processor>) schedule.getProcessors();
 		
+		//for each given node
+		for(int i = 0; i < nodes.size(); i++) {
+			Node n = nodes.get(i);
+			Edge e = links.get(i);
+			//check each processor to see what the most available time is.
+			for(Processor p : processors) {
+				ArrayList<Node> scheduled = (ArrayList<Node>) p.getTasks();
+				int nodeTime = 0;
+				//check if the link cost needs to be accounted for
+				//TODO this method is currently broken. Add in logic to check if the dependency before it as been run.
+				if(scheduled.contains(e.getParent())) {
+					nodeTime = p.getTime() + n.getCost();
+				} else {
+					nodeTime = p.getTime() + n.getCost() + e.getCost();
+				}
+				
+				if(nodeTime < time) {
+					time = nodeTime;
+					cheapest = n;
+					processor = p;
+				}
+			}
+		}
+		
+		processor.process(cheapest, time);
+		return cheapest;
 	}
 }

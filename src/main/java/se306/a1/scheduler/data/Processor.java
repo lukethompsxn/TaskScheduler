@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class represents a processor, including it's previous tasks and the time at which the previous task
@@ -27,8 +28,8 @@ public class Processor {
 		time = start + n.getCost();
 	}
 	
-	public Map<Integer, Node> getTasks() {
-		return previousTasks;
+	public Collection<Node> getTasks() {
+		return previousTasks.values();
 	}
 	
 	public Collection<Integer> getTimes() {
