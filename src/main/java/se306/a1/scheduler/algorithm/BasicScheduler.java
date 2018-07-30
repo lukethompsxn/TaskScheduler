@@ -73,12 +73,25 @@ public class BasicScheduler extends Scheduler{
 				int nodeTime = 0;
 				//check if the link cost needs to be accounted for
 				//TODO this method is currently broken. Add in logic to check if the dependency before it as been run.
+
+                //Determines whether all the parent tasks have already been scheduled to a processor
+                //Very inefficient, will be better to store an object of scheduledTasks
+				boolean allParentsScheduled = false;
+				for (Processor proc : processors) {
+					if (proc.getTasks().containsAll(g.getParents(n))) {
+						allParentsScheduled = true;
+					}
+				}
+
 				if(scheduled.contains(e.getParent())) {
 					nodeTime = p.getTime() + n.getCost();
 				} else {
 					nodeTime = p.getTime() + n.getCost() + e.getCost();
 				}
-				
+
+				//If all parents are not scheduled, ensure not selected as cheapest
+				if (!allParentsScheduled) { nodeTime = Integer.MAX_VALUE; }
+
 				if(nodeTime < time) {
 					time = nodeTime;
 					cheapest = n;
