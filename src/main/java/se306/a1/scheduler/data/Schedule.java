@@ -10,6 +10,7 @@ import java.util.Map;
  * The purpose of this class is to store the scheduling information for each
  * node, i.e. the startTime of the task and the processor which the task is
  * allocated to.
+ *
  * @author Luke Thompson
  */
 public class Schedule {
@@ -19,18 +20,20 @@ public class Schedule {
     /**
      * Constructor for Schedule which generates a specified number of processors
      * when the object is instantiated.
+     *
      * @param numProcessors the number of processors as specified in command line
      */
     public Schedule(int numProcessors) {
-        for (int i = 0; i < numProcessors; i++) {
-            this.processors.add(new Processor(Integer.toString(i+1)));
+        for (int i = 1; i <= numProcessors; i++) {
+            this.processors.add(new Processor(Integer.toString(i)));
         }
     }
 
     /**
      * This method create a new node (task) to pair (startTime & processor) entry
      * in the map.
-     * @param node the task which the startTime & processor are for
+     *
+     * @param node      the task which the startTime & processor are for
      * @param processor the processor which the node (task) is carried out on
      */
     public void addScheduledTask(Node node, Processor processor) {
@@ -39,6 +42,7 @@ public class Schedule {
 
     /**
      * This method returns the start time of the node (task) which is passed in.
+     *
      * @param node the node (task) that the start time is wanted for
      * @return the start time of the node (task) on a processor
      */
@@ -51,6 +55,7 @@ public class Schedule {
 
     /**
      * This method returns the processor which the node (task) is allocated to.
+     *
      * @param node the node (task) that the processor is wanted for.
      * @return the processor which the node (task) is allocated to
      */
@@ -64,6 +69,7 @@ public class Schedule {
     /**
      * This method returns the processors which are associated with this
      * schedule.
+     *
      * @return list of processors
      */
     public List<Processor> getProcessors() {
@@ -73,6 +79,7 @@ public class Schedule {
     /**
      * This method returns a boolean based on whether the task passed in has
      * already been scheduled on a processor.
+     *
      * @param node the node which is being checked for scheduling status
      * @return a boolean which is true if node has been scheduled, otherwise false
      */
@@ -83,6 +90,7 @@ public class Schedule {
     /**
      * This method returns a boolean based on whether the list of tasks passed
      * in have all been scheduled already on a processor.
+     *
      * @param nodes list of nodes which are being checked for scheduling status
      * @return a boolean which is true if all nodes have already been scheduled,
      * otherwise false
