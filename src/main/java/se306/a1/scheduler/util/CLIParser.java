@@ -23,11 +23,11 @@ public class CLIParser {
     private HelpFormatter help = new HelpFormatter();
     private InputConfig config = new InputConfig();
 
-//    private String inputFileName;
-//    private int numProcessors = 1;
-//    private int numCores;
+//    private String inputPath;
+//    private int processors = 1;
+//    private int cores;
 //    private boolean isParallel;
-//    private boolean doVisualise;
+//    private boolean isVisualised;
 //    private String outPutFile;
 
     private CLIParser() {
@@ -71,9 +71,9 @@ public class CLIParser {
             // Need to check is valid int
             if (isInteger(stringCores, 10)) {
                 int cores = Integer.parseInt(cmd.getArgs()[1]);
-                //numCores = cores;
-                config.numCores = cores;
-                System.out.println("Has specified parallel option: number of cores = " + config.numCores);
+                //cores = cores;
+                config.cores = cores;
+                System.out.println("Has specified parallel option: number of cores = " + config.cores);
             } else {
                 // p value is not and integer
                 System.out.println("P is not an integer");
@@ -85,16 +85,16 @@ public class CLIParser {
         // Checks if visualization wants to be displayed
         if(cmd.hasOption("v")) {
             // set visualise variable to true
-            //doVisualise = true;
-            config.doVisualise = true;
-            System.out.println("Has visualise option: " + config.doVisualise);
+            //isVisualised = true;
+            config.isVisualised = true;
+            System.out.println("Has visualise option: " + config.isVisualised);
         }
 
         // Checks if custom output file is desired
         if (cmd.hasOption("o")) {
             //outPutFile = cmd.getOptionValue("o");
-            config.outputFile = cmd.getOptionValue("o");
-            System.out.println("Custom output file desired:" + " " + config.outputFile);
+            config.outputPath = cmd.getOptionValue("o");
+            System.out.println("Custom output file desired:" + " " + config.outputPath);
         }
 
         // Checks for file name, and there is only two unnamed CLI (file name + num processors)
@@ -104,15 +104,15 @@ public class CLIParser {
             printHelp();
             System.exit(1);
         } else if (cmd.getArgs().length == 2)  { // Has correct number of unnamed inputs
-            //inputFileName = cmd.getArgs()[0];
-            config.inputFileName = cmd.getArgs()[0];
-            System.out.println("Specified filename: " + config.inputFileName);
+            //inputPath = cmd.getArgs()[0];
+            config.inputPath = cmd.getArgs()[0];
+            System.out.println("Specified filename: " + config.inputPath);
 
             // Need to check 2nd unnamed input is integer
             if (isInteger(cmd.getArgs()[1], 10)) {
-                //numProcessors = Integer.parseInt(cmd.getArgs()[1]);
-                config.numProcessors = Integer.parseInt(cmd.getArgs()[1]);
-                System.out.println("Specified number of processors: " + config.numProcessors);
+                //processors = Integer.parseInt(cmd.getArgs()[1]);
+                config.processors = Integer.parseInt(cmd.getArgs()[1]);
+                System.out.println("Specified number of processors: " + config.processors);
             } else {
                 // P is not and integer
                 System.out.println("P is not an integer");
@@ -197,7 +197,7 @@ public class CLIParser {
     }
 
 //    public boolean isDoVisualise() {
-//        return doVisualise;
+//        return isVisualised;
 //    }
 //
 //    public boolean isParallel() {
@@ -205,15 +205,15 @@ public class CLIParser {
 //    }
 //
 //    public int getNumCores() {
-//        return numCores;
+//        return cores;
 //    }
 //
 //    public int getNumProcessors() {
-//        return numProcessors;
+//        return processors;
 //    }
 //
 //    public String getInputFileName() {
-//        return inputFileName;
+//        return inputPath;
 //    }
 //
 //    public String getOutPutFile() {
