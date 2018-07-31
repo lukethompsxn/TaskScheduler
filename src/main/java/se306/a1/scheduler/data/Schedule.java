@@ -13,7 +13,7 @@ import java.util.Map;
  * @author Luke Thompson
  */
 public class Schedule {
-    private static Map<Node, Pair<Integer, Integer>> nodeData = new HashMap<>();
+    private Map<Node, Pair<Integer, Integer>> nodeData = new HashMap<>();
 
     /**
      * This method create a new node (task) to pair (startTime & processor) entry
@@ -22,7 +22,7 @@ public class Schedule {
      * @param startTime the start time of the node (task)
      * @param processor the processor which the node (task) is carried out on
      */
-    public static void addNodeData(Node node, int startTime, int processor) {
+    public void addNodeData(Node node, int startTime, int processor) {
         nodeData.put(node, new Pair(startTime, processor));
     }
 
@@ -31,7 +31,7 @@ public class Schedule {
      * @param node the node (task) that the start time is wanted for
      * @return the start time of the node (task) on a processor
      */
-    public static Integer getStartTime(Node node) throws ScheduleException {
+    public Integer getStartTime(Node node) throws ScheduleException {
         if (nodeData.get(node) != null && nodeData.get(node).getKey() != null) {
             return nodeData.get(node).getKey();
         }
@@ -49,7 +49,7 @@ public class Schedule {
      * @param node the node (task) that the processor is wanted for.
      * @return the processor which the node (task) is allocated to
      */
-    public static Integer getProcessor(Node node) throws ScheduleException {
+    public Integer getProcessor(Node node) throws ScheduleException {
         if (nodeData.get(node) != null && nodeData.get(node).getValue() != null) {
             return nodeData.get(node).getValue();
         }
