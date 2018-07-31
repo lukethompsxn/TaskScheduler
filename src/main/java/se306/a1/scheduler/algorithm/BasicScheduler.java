@@ -1,8 +1,15 @@
 package se306.a1.scheduler.algorithm;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-import se306.a1.scheduler.data.*;
+import se306.a1.scheduler.data.Edge;
+import se306.a1.scheduler.data.Graph;
+import se306.a1.scheduler.data.Node;
+import se306.a1.scheduler.data.Processor;
+import se306.a1.scheduler.data.Schedule;
 import se306.a1.scheduler.util.ScheduleException;
 
 /**
@@ -37,7 +44,7 @@ public class BasicScheduler implements Scheduler {
                 currentNode = computeCheapest(unscheduledNodes);
                 System.out.println(currentNode + " : " + currentNode.getCost());
 
-                for (Edge edge : g.getEdges(currentNode)){
+                for (Edge edge : g.getEdges(currentNode)) {
                     System.out.println(edge);
                     if (!scheduledNodes.contains(edge.getChild())) {
                         unscheduledNodes.add(edge.getChild());
@@ -52,6 +59,10 @@ public class BasicScheduler implements Scheduler {
             } catch (ScheduleException e) {
                 e.printStackTrace();
             }
+        }
+
+        for (Processor processor : schedule.getProcessors()) {
+            System.out.println(processor);
         }
     }
 
@@ -71,16 +82,21 @@ public class BasicScheduler implements Scheduler {
 
             //Determines whether all the parent tasks have already been scheduled to a processor
             //If not then skip this node
-            if (!schedule.isScheduled(g.getParents(node))) continue;
+            if (!schedule.isScheduled(g.getParents(node))) {
+                System.out.println("\tSkipped");
+                continue;
+            }
 
             int earliestStart = Integer.MAX_VALUE;
 
             for (Node parent : g.getParents(node)) {
-                int startTime = schedule.getStartTime(parent) + parent.getCost();
+                int startTime = earliestStart = schedule.getStartTime(parent) + parent.getCost();
 
                 for (Node otherParent : g.getParents(node)) {
                     if (!schedule.getProcessor(otherParent).equals(schedule.getProcessor(parent))) {
-                        int transferTime = schedule.getStartTime(otherParent) + otherParent.getCost() + g.getCost(otherParent, node);
+                        int transferTime = schedule.getStartTime(otherParent)
+                                + otherParent.getCost()
+                                + g.getCost(otherParent, node);
                         startTime = Math.max(transferTime, startTime);
                     } else {
                         startTime = Math.max(schedule.getProcessor(parent).getEarliestStartTime(), startTime);
@@ -94,8 +110,10 @@ public class BasicScheduler implements Scheduler {
                 }
             }
 
-            System.out.println("Earliest: " + earliestStart);
-            if (earliestStart < Integer.MAX_VALUE) continue;
+            if (earliestStart < Integer.MAX_VALUE) {
+                System.out.println("Earliest: " + earliestStart);
+                continue;
+            }
 
             //check each processor to see what the most available time is.
             for (Processor p : processors) {
@@ -104,9 +122,10 @@ public class BasicScheduler implements Scheduler {
 
                 if (p.getEarliestStartTime() < time) {
                     time = p.getEarliestStartTime();
-                    System.out.println("Earliest" + time);
                     cheapest = node;
                     processor = p;
+
+                    System.out.println("Earliest: " + time);
                 }
             }
         }

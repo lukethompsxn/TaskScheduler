@@ -73,6 +73,15 @@ public class Processor {
     }
 
     @Override
+    public String toString() {
+        String string = name + ":\n";
+        for (Map.Entry<Node, Integer> entry : startTimes.entrySet()) {
+            string += entry.getValue() + "\t:\t" + entry.getKey() + "\n";
+        }
+        return string;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null) return false;
         if (o == this) return true;
