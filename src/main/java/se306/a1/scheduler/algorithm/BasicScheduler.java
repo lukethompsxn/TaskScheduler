@@ -15,13 +15,8 @@ public class BasicScheduler implements Scheduler{
 
 	@Override
 	public void init(TaskGraph g, String input, int numProcessors, int numCores, boolean hasVisualisation, String output) {
-		schedule = new Schedule();
+		schedule = new Schedule(numProcessors);
 		this.g = g;
-		
-		//instantiate the processors
-		for(int i = 0; i < numProcessors; i++) {
-			schedule.addProcessor();
-		}
 		
 		createSchedule();
 		
@@ -34,11 +29,13 @@ public class BasicScheduler implements Scheduler{
 	private void createSchedule() {
 		boolean isDone = false;
 		ArrayList<Node> visibleNodes = new ArrayList<>();
+
+		Node currentNode = g.getEntryNodes().get(0);
+		visibleNodes.addAll(g.getEntryNodes());
+		visibleNodes.remove(currentNode);
 		
-		Node currentNode = g.getRootNode();
-		
-		while(!visibleNodes.isEmpty() || currentNode.equals(g.getRootNode())) {
-			ArrayList<Edge> links = (ArrayList<Edge>) g.getLinks(currentNode);
+		while(!visibleNodes.isEmpty() || currentNode.equals(g.getEntryNodes().get(0))) {
+			ArrayList<Edge> links = (ArrayList<Edge>) g.getEdges(currentNode);
 			
 			for(Edge e : links) {
 				visibleNodes.add(e.getChild());
@@ -99,5 +96,5 @@ public class BasicScheduler implements Scheduler{
 		processor.process(cheapest, time);
 		return cheapest;
 	}
-	
+
 }
