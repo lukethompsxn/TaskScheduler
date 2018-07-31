@@ -6,7 +6,7 @@ package se306.a1.scheduler.algorithm;
  * helper methods.
  * @author Luke Thompson
  * */
-public abstract class Scheduler {
+public interface Scheduler {
 
     /**
      * Initialises and executes the algorithm.
@@ -19,11 +19,9 @@ public abstract class Scheduler {
      * @param hasVisualisation  flag for specifying visualisation (optional)
      * @param output filepath of output .dot file (optional)
      */
-    public void init(String input,
+    void init(String input,
               int numProcessors,
               int numCores,
               boolean hasVisualisation,
-              String output) {
-
-    }
+              String output);
 }
