@@ -40,4 +40,13 @@ public interface Graph {
      * @return a list of entry nodes into the graph
      */
     List<Node> getEntryNodes();
+
+    /**
+     * Gets the cost of the link between the two given nodes.
+     *
+     * @param parent the parent node in the link
+     * @param child  the child node in the link
+     * @return the cost of link
+     */
+    Integer getCost(Node parent, Node child);
 }

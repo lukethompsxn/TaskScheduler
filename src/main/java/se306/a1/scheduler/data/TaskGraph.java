@@ -54,6 +54,15 @@ public class TaskGraph implements Graph {
         return entries;
     }
 
+    @Override
+    public Integer getCost(Node parent, Node child) {
+        for (Edge e : children.get(parent)) {
+            if (e.getChild().equals(child))
+                return e.getCost();
+        }
+        return null;
+    }
+
     /**
      * Private helper method used to construct the edges connecting the graph.
      *
