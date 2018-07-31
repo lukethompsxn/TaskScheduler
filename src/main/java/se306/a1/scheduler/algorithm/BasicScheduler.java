@@ -2,23 +2,19 @@ package se306.a1.scheduler.algorithm;
 
 import java.util.ArrayList;
 
-import se306.a1.scheduler.data.Edge;
-import se306.a1.scheduler.data.Graph;
-import se306.a1.scheduler.data.Node;
-import se306.a1.scheduler.data.Processor;
-import se306.a1.scheduler.data.Schedule;
+import se306.a1.scheduler.data.*;
 
 /**
  * This class is a basic implementation of a scheduler, and will produce an unoptimised schedule by greedily
  * assigning the tasks to the processors.
  * @author Rodger Gu
  *  */
-public class BasicScheduler extends Scheduler{
+public class BasicScheduler implements Scheduler{
 	private Schedule schedule;
 	private Graph g;
-	
+
 	@Override
-	public void init(Graph g, int numProcessors, int numCores, boolean hasVisualisation, String output) {
+	public void init(TaskGraph g, String input, int numProcessors, int numCores, boolean hasVisualisation, String output) {
 		schedule = new Schedule();
 		this.g = g;
 		
@@ -103,4 +99,5 @@ public class BasicScheduler extends Scheduler{
 		processor.process(cheapest, time);
 		return cheapest;
 	}
+	
 }
