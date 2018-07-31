@@ -1,12 +1,7 @@
 package se306.a1.scheduler.data;
 
-import javafx.util.Pair;
-import se306.a1.scheduler.util.ScheduleException;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The purpose of this class is to store the scheduling information for each
@@ -43,5 +38,14 @@ public class Schedule {
      *  */
     public Collection<Processor> getProcessors() {
     	return processors;
+    }
+    
+    /**
+     * This method returns the given time that a processor is currently at. The largest time value
+     * of all the processors is the max time that the schedule will take to compute.
+     * @param processor the processor number to check.
+     * @return the time value of that processor. */
+    public int getTime(int processor) {
+    	return processors.get(processor).getTime();
     }
 }
