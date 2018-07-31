@@ -23,7 +23,7 @@ public class Schedule {
      */
     public Schedule(int numProcessors) {
         for (int i = 0; i < numProcessors; i++) {
-            this.processors.add(new Processor(i+1));
+            this.processors.add(new Processor(Integer.toString(i+1)));
         }
     }
 
@@ -46,7 +46,7 @@ public class Schedule {
         if (scheduledTasks.get(node) == null) {
             throw new ScheduleException("Start time not defined for task: " + node);
         }
-        return scheduledTasks.get(node).getTime();
+        return scheduledTasks.get(node).getStartTime(node);
     }
 
     /**
@@ -83,7 +83,7 @@ public class Schedule {
     /**
      * This method returns a boolean based on whether the list of tasks passed
      * in have all been scheduled already on a processor.
-     * @param nodes
+     * @param nodes list of nodes which are being checked for scheduling status
      * @return a boolean which is true if all nodes have already been scheduled,
      * otherwise false
      */
