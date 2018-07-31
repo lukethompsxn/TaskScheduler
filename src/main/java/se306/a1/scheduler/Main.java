@@ -1,6 +1,7 @@
 package se306.a1.scheduler;
 
 import org.apache.commons.cli.ParseException;
+import se306.a1.scheduler.algorithm.BasicScheduler;
 import se306.a1.scheduler.data.Graph;
 import se306.a1.scheduler.data.Node;
 import se306.a1.scheduler.util.CLIParser;
@@ -17,6 +18,7 @@ public class Main {
             InputConfig config = CLIParser.getCLIParserInst().parseCLI(args);
 
             Graph g = p.parseGraph(config.inputPath);
+            new BasicScheduler().init(g, config.processors, config.cores);
 
             System.out.println(g.getName());
             for (Node n : g.getEntryNodes()) {
