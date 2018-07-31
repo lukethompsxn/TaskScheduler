@@ -2,6 +2,7 @@ package se306.a1.scheduler.data;
 
 import se306.a1.scheduler.util.ScheduleException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public class Schedule {
     private Map<Node, Processor> scheduledTasks = new HashMap<>();
-    private List<Processor> processors;
+    private List<Processor> processors = new ArrayList<>();
 
     /**
      * Constructor for Schedule which generates a specified number of processors
@@ -25,26 +26,28 @@ public class Schedule {
      */
     public Schedule(int numProcessors) {
         for (int i = 1; i <= numProcessors; i++) {
-            this.processors.add(new Processor(Integer.toString(i)));
+            processors.add(new Processor("" + i));
         }
     }
 
     /**
      * This method create a new node (task) to pair (startTime & processor) entry
-     * in the map.
+     * in the map. Also adds the task to the specified processor at the given time.
      *
-     * @param node      the task which the startTime & processor are for
-     * @param processor the processor which the node (task) is carried out on
+     * @param node      the task to be scheduled
+     * @param processor the processor which the node (task) is scheduled on
+     * @param startTime the starting time of the task to be added to the processor
      */
-    public void addScheduledTask(Node node, Processor processor) {
+    public void addScheduledTask(Node node, Processor processor, int startTime) {
         scheduledTasks.put(node, processor);
+        processor.schedule(node, startTime);
     }
 
     /**
      * This method returns the start time of the node (task) which is passed in.
      *
      * @param node the node (task) that the start time is wanted for
-     * @return the start time of the node (task) on a processor
+     * @return the start time of the node (task) on its processor
      */
     public Integer getStartTime(Node node) throws ScheduleException {
         if (scheduledTasks.get(node) == null) {

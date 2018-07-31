@@ -31,7 +31,7 @@ public class Processor {
      * @param time the time at which to schedule the task
      */
     void schedule(Node node, int time) {
-        if (!startTimes.containsKey(node))
+        if (startTimes.containsKey(node))
             throw new RuntimeException("Node " + node + " has already been scheduled");
         else if (time < earliestStartTime)
             throw new RuntimeException("Cannot schedule node " + node + " at time " + time);
@@ -55,11 +55,33 @@ public class Processor {
     }
 
     /**
+     * Gets the earliest possible time at which another task can be started on this processor
+     *
+     * @return earliest time for another task to start
+     */
+    public int getEarliestStartTime() {
+        return earliestStartTime;
+    }
+
+    /**
      * Gets the name of this processor.
      *
      * @return the name of this processor
      */
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (!(o instanceof Processor)) return false;
+        return name.equals(((Processor) o).name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 }
