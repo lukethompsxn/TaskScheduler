@@ -25,7 +25,7 @@ public class Main {
                 System.out.println(n);
             }
 
-            p.generateOutput(g, config.outputPath);
+//            p.generateOutput(g, config.outputPath);
 
         } catch (IOException | GraphParseException | ParseException e) {
             e.printStackTrace();
