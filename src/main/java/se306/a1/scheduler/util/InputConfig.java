@@ -8,10 +8,10 @@ package se306.a1.scheduler.util;
  */
 public class InputConfig {
 
-    String inputFileName = null;
-    int numProcessors = 1;
-    int numCores = -1;
-    boolean isParallel = false;
-    boolean doVisualise = false;
-    String outputFile = null;
+    public String inputPath = null;
+    public int processors = 1;
+    public int cores = -1;
+    public boolean isParallel = false;
+    public boolean isVisualised = false;
+    public String outputPath = null;
 }

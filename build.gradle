@@ -20,4 +20,10 @@ jar {
     from configurations.runtime.collect() { zipTree(it) }
 }
 
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
+
 mainClassName = 'se306.a1.scheduler.Main'
