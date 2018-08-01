@@ -6,7 +6,9 @@
         </Console>
     </Appenders>
     <Loggers>
-        <!--Create specific loggers for individual classes-->
+        <!--Create specific loggers for individual classes
+        ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF
+        -->
         <Logger name="se306.a1.scheduler.util.CLIParser" level="off" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>

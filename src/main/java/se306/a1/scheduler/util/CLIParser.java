@@ -48,8 +48,8 @@ public class CLIParser {
      * Takes in the input args a string array containing the inputs, the method
      * then checks what inputs are present and whether or not they are in
      * the correct format.
-     * @param args
-     * @throws ParseException
+     * @param args Input args given by the command line
+     * @throws ParseException Exception thrown when unable to parse inputs
      */
     public InputConfig parseCLI(String[] args) throws ParseException {
 
@@ -75,9 +75,8 @@ public class CLIParser {
 
             // Need to check is valid int
             if (isInteger(stringCores)) {
-                int cores = Integer.parseInt(cmd.getArgs()[1]);
-                //cores = cores;
-                config.cores = cores;
+                //int cores = Integer.parseInt(cmd.getArgs()[1]);
+                config.cores = Integer.parseInt(cmd.getArgs()[1]);
                 //System.out.println("Has specified parallel option: number of cores = " + config.cores);
                 log.info("Has specified parallel option: number of cores = " + config.cores);
             } else {
