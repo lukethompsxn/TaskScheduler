@@ -8,6 +8,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import java.util.Scanner;
+import org.apache.logging.log4j.*;
 
 /**
  * This class deals with the command line inputs.
@@ -17,7 +18,11 @@ import java.util.Scanner;
  **/
 public class CLIParser {
 
+    private static Logger log = LogManager.getLogger(CLIParser.class);
+
     private static final CLIParser cliInstance = new CLIParser();
+
+    public static final int DEFAULT_RADIX = 10;
 
     private Options options = new Options();
     private HelpFormatter help = new HelpFormatter();
@@ -69,14 +74,16 @@ public class CLIParser {
             String stringCores = cmd.getOptionValue("p");
 
             // Need to check is valid int
-            if (isInteger(stringCores, 10)) {
+            if (isInteger(stringCores)) {
                 int cores = Integer.parseInt(cmd.getArgs()[1]);
                 //cores = cores;
                 config.cores = cores;
-                System.out.println("Has specified parallel option: number of cores = " + config.cores);
+                //System.out.println("Has specified parallel option: number of cores = " + config.cores);
+                log.info("Has specified parallel option: number of cores = " + config.cores);
             } else {
                 // p value is not and integer
-                System.out.println("P is not an integer");
+                //System.out.println("P is not an integer");
+                log.error("p is not an integer");
                 printHelp();
                 System.exit(1);
             }
@@ -87,40 +94,47 @@ public class CLIParser {
             // set visualise variable to true
             //isVisualised = true;
             config.isVisualised = true;
-            System.out.println("Has visualise option: " + config.isVisualised);
+            //System.out.println("Has visualise option: " + config.isVisualised);
+            log.info("Has visualise option: " + config.isVisualised);
         }
 
         // Checks if custom output file is desired
         if (cmd.hasOption("o")) {
             //outPutFile = cmd.getOptionValue("o");
             config.outputPath = cmd.getOptionValue("o");
-            System.out.println("Custom output file desired:" + " " + config.outputPath);
+            //System.out.println("Custom output file desired:" + " " + config.outputPath);
+            log.info("Custom output file desired:" + " " + config.outputPath);
         }
 
         // Checks for file name, and there is only two unnamed CLI (file name + num processors)
         if (cmd.getArgs().length > 2) { // Has too many unnamed inputs
             // Too many unnamed args
-            System.out.println("Unknown unnamed inputs found...");
+            //System.out.println("Unknown unnamed inputs found...");
+            log.error("Unknown unnamed inputs found...");
             printHelp();
             System.exit(1);
         } else if (cmd.getArgs().length == 2)  { // Has correct number of unnamed inputs
             //inputPath = cmd.getArgs()[0];
             config.inputPath = cmd.getArgs()[0];
-            System.out.println("Specified filename: " + config.inputPath);
+            //System.out.println("Specified filename: " + config.inputPath);
+            log.info("Specified filename: " + config.inputPath);
 
             // Need to check 2nd unnamed input is integer
-            if (isInteger(cmd.getArgs()[1], 10)) {
+            if (isInteger(cmd.getArgs()[1])) {
                 //processors = Integer.parseInt(cmd.getArgs()[1]);
                 config.processors = Integer.parseInt(cmd.getArgs()[1]);
-                System.out.println("Specified number of processors: " + config.processors);
+                //System.out.println("Specified number of processors: " + config.processors);
+                log.info("Specified number of processors: " + config.processors);
             } else {
                 // P is not and integer
-                System.out.println("P is not an integer");
+                //System.out.println("P is not an integer");
+                log.error("P is not an integer");
                 printHelp();
                 System.exit(1);
             }
         } else { // Does not have required unnamed inputs
-            System.out.println("Required inputs not found...");
+            //System.out.println("Required inputs not found...");
+            log.error("Required inputs not found...");
             printHelp();
             System.exit(1);
         }
@@ -185,14 +199,13 @@ public class CLIParser {
      * takes a second input radix, this is what base of numbering system should
      * be referenced.
      * @param potentialNum
-     * @param radix
      * @return boolean
      */
-    private static boolean isInteger(String potentialNum, int radix) {
+    private static boolean isInteger(String potentialNum) {
         Scanner sc = new Scanner(potentialNum.trim());
-        if(!sc.hasNextInt(radix)) return false;
+        if(!sc.hasNextInt(DEFAULT_RADIX)) return false;
         // Know it starts with a valid int, check rest
-        sc.nextInt(radix);
+        sc.nextInt(DEFAULT_RADIX);
         return !sc.hasNext();
     }
 
