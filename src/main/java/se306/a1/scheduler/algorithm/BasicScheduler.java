@@ -1,6 +1,5 @@
 package se306.a1.scheduler.algorithm;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,23 +15,23 @@ import se306.a1.scheduler.util.ScheduleException;
  * This class is a basic implementation of a scheduler, and will produce an unoptimised schedule by greedily
  * assigning the tasks to the processors.
  *
- * @author Rodger Gu
+ * @author Rodger Gu, Zhi Qiao, Abhinav Behal
  */
 public class BasicScheduler implements Scheduler {
     private Schedule schedule;
     private Graph g;
 
     @Override
-    public void init(Graph g, int numProcessors, int numCores) {
+    public Schedule run(Graph g, int numProcessors, int numCores) {
         schedule = new Schedule(numProcessors);
         this.g = g;
 
         createSchedule();
+        return schedule;
     }
 
     /**
-     * This method traverses the graph and actually creates the schedule. This is then
-     * either output to console or output to a GUI.
+     * This method traverses the graph and creates the schedule.
      */
     private void createSchedule() {
         Set<Node> unscheduledNodes = new HashSet<>(g.getEntryNodes());
@@ -41,7 +40,7 @@ public class BasicScheduler implements Scheduler {
 
         while (!unscheduledNodes.isEmpty()) {
             try {
-                currentNode = computeCheapest(unscheduledNodes);
+                currentNode = computeSubOptimal(unscheduledNodes);
                 System.out.println(currentNode + " : " + currentNode.getCost());
 
                 for (Edge edge : g.getEdges(currentNode)) {
@@ -67,70 +66,37 @@ public class BasicScheduler implements Scheduler {
     }
 
     /**
-     * This method is given a list of visible tasks, and the costs of those tasks
-     * and is meant to compute the cheapest possible task.
+     * This method is given a list of visible tasks and then computes
+     * and schedules the cheapest possible task.
      */
-    private Node computeCheapest(Collection<Node> nodes) throws ScheduleException {
-        int time = Integer.MAX_VALUE;
+    private Node computeSubOptimal(Collection<Node> nodes) throws ScheduleException {
         Node cheapest = null;
         Processor processor = null;
-        ArrayList<Processor> processors = new ArrayList<>(schedule.getProcessors());
+        int minTime = Integer.MAX_VALUE;
 
-        //for each given node
         for (Node node : nodes) {
-            System.out.println("N: " + node);
-
-            //Determines whether all the parent tasks have already been scheduled to a processor
-            //If not then skip this node
-            if (!schedule.isScheduled(g.getParents(node))) {
-                System.out.println("\tSkipped");
+            if (!schedule.isScheduled(g.getParents(node)))
                 continue;
-            }
 
-            int earliestStart = Integer.MAX_VALUE;
+            for (Processor p : schedule.getProcessors()) {
+                int time = p.getEarliestStartTime();
 
-            for (Node parent : g.getParents(node)) {
-                int startTime = earliestStart = schedule.getStartTime(parent) + parent.getCost();
-
-                for (Node otherParent : g.getParents(node)) {
-                    if (!schedule.getProcessor(otherParent).equals(schedule.getProcessor(parent))) {
-                        int transferTime = schedule.getStartTime(otherParent)
-                                + otherParent.getCost()
-                                + g.getCost(otherParent, node);
-                        startTime = Math.max(transferTime, startTime);
-                    } else {
-                        startTime = Math.max(schedule.getProcessor(parent).getEarliestStartTime(), startTime);
+                for (Node parent : g.getParents(node)) {
+                    if (!schedule.getProcessor(parent).equals(p)) {
+                        time = Math.max(time, g.getCost(parent, node) + schedule.getStartTime(parent) + parent.getCost());
                     }
                 }
 
-                if (startTime < time) {
-                    time = earliestStart = startTime;
-                    cheapest = node;
-                    processor = schedule.getProcessor(parent);
-                }
-            }
-
-            if (earliestStart < Integer.MAX_VALUE) {
-                System.out.println("Earliest: " + earliestStart);
-                continue;
-            }
-
-            //check each processor to see what the most available time is.
-            for (Processor p : processors) {
-                System.out.println("P: " + p);
-                System.out.println("\t" + time);
-
-                if (p.getEarliestStartTime() < time) {
-                    time = p.getEarliestStartTime();
-                    cheapest = node;
+                if (time < minTime) {
+                    minTime = time;
                     processor = p;
-
-                    System.out.println("Earliest: " + time);
+                    cheapest = node;
                 }
             }
         }
 
-        schedule.addScheduledTask(cheapest, processor, time);
+        System.out.println("time:\t" + minTime + "\tnode:\t" + cheapest + "\ton " + processor.getName() + " for " + cheapest.getCost());
+        schedule.addScheduledTask(cheapest, processor, minTime);
         return cheapest;
     }
 

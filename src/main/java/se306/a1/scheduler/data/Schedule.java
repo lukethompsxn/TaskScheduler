@@ -15,8 +15,9 @@ import java.util.Map;
  * @author Luke Thompson
  */
 public class Schedule {
-    private Map<Node, Processor> scheduledTasks = new HashMap<>();
-    private List<Processor> processors = new ArrayList<>();
+    private final Map<Node, Processor> scheduledTasks;
+    private final List<Processor> processors;
+    private int length;
 
     /**
      * Constructor for Schedule which generates a specified number of processors
@@ -25,6 +26,10 @@ public class Schedule {
      * @param numProcessors the number of processors as specified in command line
      */
     public Schedule(int numProcessors) {
+        scheduledTasks = new HashMap<>();
+        processors = new ArrayList<>();
+        length = 0;
+
         for (int i = 1; i <= numProcessors; i++) {
             processors.add(new Processor("" + i));
         }
@@ -41,6 +46,7 @@ public class Schedule {
     public void addScheduledTask(Node node, Processor processor, int startTime) {
         scheduledTasks.put(node, processor);
         processor.schedule(node, startTime);
+        length = Math.max(length, startTime + node.getCost());
     }
 
     /**
@@ -50,7 +56,7 @@ public class Schedule {
      * @return the start time of the node (task) on its processor
      */
     public Integer getStartTime(Node node) throws ScheduleException {
-        if (scheduledTasks.get(node) == null) {
+        if (!scheduledTasks.containsKey(node)) {
             throw new ScheduleException("Start time not defined for task: " + node);
         }
         return scheduledTasks.get(node).getStartTime(node);
@@ -63,10 +69,20 @@ public class Schedule {
      * @return the processor which the node (task) is allocated to
      */
     public Processor getProcessor(Node node) throws ScheduleException {
-        if (scheduledTasks.get(node) == null) {
+        if (!scheduledTasks.containsKey(node)) {
             throw new ScheduleException("Processor not defined for task: " + node);
         }
         return scheduledTasks.get(node);
+    }
+
+    /**
+     * This method returns the overall length of the schedule, i.e. the time at which all
+     * scheduled tasks have finished running.
+     *
+     * @return the length of the schedule
+     */
+    public int getLength() {
+        return length;
     }
 
     /**
@@ -87,7 +103,7 @@ public class Schedule {
      * @return a boolean which is true if node has been scheduled, otherwise false
      */
     public boolean isScheduled(Node node) {
-        return scheduledTasks.keySet().contains(node);
+        return scheduledTasks.containsKey(node);
     }
 
     /**
