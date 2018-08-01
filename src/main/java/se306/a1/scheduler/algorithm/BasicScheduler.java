@@ -40,7 +40,7 @@ public class BasicScheduler implements Scheduler {
 
         while (!unscheduledNodes.isEmpty()) {
             try {
-                currentNode = computeSubOptimal(unscheduledNodes);
+                currentNode = computeCheapest(unscheduledNodes);
                 System.out.println(currentNode + " : " + currentNode.getCost());
 
                 for (Edge edge : g.getEdges(currentNode)) {
@@ -69,7 +69,7 @@ public class BasicScheduler implements Scheduler {
      * This method is given a list of visible tasks and then computes
      * and schedules the cheapest possible task.
      */
-    private Node computeSubOptimal(Collection<Node> nodes) throws ScheduleException {
+    private Node computeCheapest(Collection<Node> nodes) throws ScheduleException {
         Node cheapest = null;
         Processor processor = null;
         int minTime = Integer.MAX_VALUE;
