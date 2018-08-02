@@ -1,7 +1,6 @@
 package se306.a1.scheduler.data;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class represents a processor and manages the tasks allocated to it.
@@ -41,13 +40,22 @@ public class Processor {
     }
 
     /**
+     * This method retrieves all the scheduled tasks (nodes) on this processor.
+     *
+     * @return the scheduled tasks
+     */
+    Collection<Node> getScheduledTasks() {
+        return startTimes.keySet();
+    }
+
+    /**
      * Gets the scheduled start time of the given node.
      *
      * @param node the node to get the start time of
      * @return the start time of the node
      * @throws RuntimeException if the node has not been scheduled on this processor
      */
-    public int getStartTime(Node node) {
+    int getStartTime(Node node) {
         if (!startTimes.containsKey(node))
             throw new RuntimeException("Node " + node + " has not been scheduled");
 

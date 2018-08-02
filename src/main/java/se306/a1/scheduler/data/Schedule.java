@@ -2,10 +2,7 @@ package se306.a1.scheduler.data;
 
 import se306.a1.scheduler.util.ScheduleException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The purpose of this class is to store the scheduling information for each
@@ -93,6 +90,16 @@ public class Schedule {
      */
     public List<Processor> getProcessors() {
         return processors;
+    }
+
+    /**
+     * This method retrieves the nodes (tasks) scheduled on the given processor.
+     *
+     * @param p the processor
+     * @return the tasks scheduled on the processor
+     */
+    public Collection<Node> getTasks(Processor p) {
+        return p.getScheduledTasks();
     }
 
     /**
