@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se306.a1.scheduler.data.Edge;
 import se306.a1.scheduler.data.Graph;
 import se306.a1.scheduler.data.Node;
@@ -18,6 +20,9 @@ import se306.a1.scheduler.util.ScheduleException;
  * @author Rodger Gu, Zhi Qiao, Abhinav Behal
  */
 public class BasicScheduler implements Scheduler {
+
+    private static Logger logger = LogManager.getLogger(BasicScheduler.class);
+
     private Schedule schedule;
     private Graph g;
 
