@@ -19,7 +19,6 @@ import static junit.framework.TestCase.assertEquals;
 
 public class GraphParserTests {
     private static final Map<String, Pair<Integer, Integer>> answers = new HashMap<>();
-    private static final GraphParser parser = new GraphParser();
 
     @BeforeClass
     public static void setUp() {
@@ -31,12 +30,12 @@ public class GraphParserTests {
     }
 
     @Test
-    public void testGraphParsing() throws IOException, GraphParseException {
+    public void testGraphParsing() throws IOException {
         for (Map.Entry<String, Pair<Integer, Integer>> e : answers.entrySet()) {
             int nodeCount = e.getValue().getKey();
             int edgeCount = e.getValue().getValue();
 
-            Graph g = parser.parseGraph(e.getKey());
+            Graph g = GraphParser.parse(e.getKey());
             Set<Node> nodes = new HashSet<>();
             Set<Edge> edges = new HashSet<>();
 

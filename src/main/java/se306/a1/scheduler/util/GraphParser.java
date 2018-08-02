@@ -1,11 +1,14 @@
 package se306.a1.scheduler.util;
 
-import se306.a1.scheduler.data.*;
+import com.paypal.digraph.parser.GraphEdge;
+import com.paypal.digraph.parser.GraphNode;
+import se306.a1.scheduler.data.Edge;
+import se306.a1.scheduler.data.Graph;
+import se306.a1.scheduler.data.Node;
+import se306.a1.scheduler.data.TaskGraph;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class is responsible for parsing graphs in the .dot file format into
@@ -15,10 +18,6 @@ import java.util.regex.Pattern;
  */
 public class GraphParser {
 
-    private final static Pattern NAME_REGEX = Pattern.compile("\"([^\"]+)\"");
-    private final static Pattern NODE_REGEX = Pattern.compile("\\W*([\\w\\d]+)\\W*\\[Weight=(\\d+)");
-    private final static Pattern EDGE_REGEX = Pattern.compile("\\W*([\\w\\d]+)\\W*\\->\\W*([\\w\\d]+)\\W*\\[Weight=(\\d+)");
-
     /**
      * Parses the input .dot file into an TaskGraph object.
      * This method will take the input filepath and parse directed acyclic graph
@@ -27,45 +26,32 @@ public class GraphParser {
      *
      * @param inputPath filepath of input .dot file
      * @return parsed object containing nodes, links, costs
-     * @throws IOException         if the file cannot be found, or if an IO error occurs while reading
-     * @throws GraphParseException if the graph cannot be parsed
+     * @throws IOException if the file cannot be found, or if an IO error occurs while reading
      */
-    public Graph parseGraph(String inputPath) throws IOException, GraphParseException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputPath))) {
-            String name = "";
-            String line = reader.readLine();
-            Matcher nameMatcher = NAME_REGEX.matcher(line);
+    public static Graph parse(String inputPath) throws IOException {
+        com.paypal.digraph.parser.GraphParser parser =
+                new com.paypal.digraph.parser.GraphParser(new FileInputStream(inputPath));
+        Map<String, GraphNode> parsedNodes = parser.getNodes();
+        Map<String, GraphEdge> parsedEdges = parser.getEdges();
 
-            if (nameMatcher.find()) {
-                name = nameMatcher.group(1);
-            } else {
-                throw new GraphParseException(line);
-            }
+        Map<String, Node> nodes = new HashMap<>();
+        List<Edge> edges = new ArrayList<>();
 
-            Map<String, Node> nodes = new HashMap<>();
-            ArrayList<Edge> edges = new ArrayList<>();
+        for (GraphNode node : parsedNodes.values()) {
+            String label = node.getId();
+            int weight = Integer.parseInt(node.getAttribute("Weight").toString());
 
-            while ((line = reader.readLine()) != null) {
-                Matcher nodeMatcher = NODE_REGEX.matcher(line);
-                Matcher edgeMatcher = EDGE_REGEX.matcher(line);
-
-                if (edgeMatcher.find()) {
-                    String parent = edgeMatcher.group(1);
-                    String child = edgeMatcher.group(2);
-                    int weight = Integer.parseInt(edgeMatcher.group(3));
-
-                    edges.add(new Edge(nodes.get(parent), nodes.get(child), weight));
-                } else if (nodeMatcher.find()) {
-                    String label = nodeMatcher.group(1);
-                    int weight = Integer.parseInt(nodeMatcher.group(2));
-
-                    nodes.put(label, new Node(label, weight));
-                } else if (line.equals("}")) {
-                    break;
-                }
-            }
-            return new TaskGraph(name, nodes, edges);
+            nodes.put(label, new Node(label, weight));
         }
+
+        for (GraphEdge edge : parsedEdges.values()) {
+            Node parent = nodes.get(edge.getNode1().getId());
+            Node child = nodes.get(edge.getNode2().getId());
+            int weight = Integer.parseInt(edge.getAttribute("Weight").toString());
+
+            edges.add(new Edge(parent, child, weight));
+        }
+        return new TaskGraph(parser.getGraphId(), nodes, edges);
     }
 
     /**
@@ -76,7 +62,7 @@ public class GraphParser {
      * @param taskGraph calculated schedule object
      * @throws IOException if the output file cannot be created or if an error occurs while writing
      */
-    public void generateOutput(Graph taskGraph, String outputPath) throws IOException {
+    public static void generateOutput(Graph taskGraph, String outputPath) throws IOException {
         File file = new File(outputPath);
         if (!file.exists()) {
             file.createNewFile();
@@ -117,7 +103,7 @@ public class GraphParser {
      * @param node the node which requires formatting for output
      * @return formatted output string for the supplied node
      */
-    private String formatNode(Node node) throws ScheduleException {
+    private static String formatNode(Node node) throws ScheduleException {
         // TODO Get appropriate information from the schedule
         return "\t" + node.toString() +
                 "\t[Weight=" + node.getCost() +
