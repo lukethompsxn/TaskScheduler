@@ -17,7 +17,7 @@ import se306.a1.scheduler.util.ScheduleException;
  * This class is a basic implementation of a scheduler, and will produce an unoptimised schedule by greedily
  * assigning the tasks to the processors.
  *
- * @author Rodger Gu, Zhi Qiao, Abhinav Behal
+ * @author Rodger Gu, Zhi Qiao, Abhinav Behal, Luke Thompson
  */
 public class BasicScheduler implements Scheduler {
 
