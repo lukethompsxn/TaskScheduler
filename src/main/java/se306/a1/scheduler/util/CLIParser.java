@@ -18,7 +18,7 @@ import org.apache.logging.log4j.*;
  **/
 public class CLIParser {
 
-    private static Logger log = LogManager.getLogger(CLIParser.class);
+    private static Logger logger = LogManager.getLogger(CLIParser.class);
 
     private static final CLIParser cliInstance = new CLIParser();
 
@@ -27,13 +27,6 @@ public class CLIParser {
     private Options options = new Options();
     private HelpFormatter help = new HelpFormatter();
     private InputConfig config = new InputConfig();
-
-//    private String inputPath;
-//    private int processors = 1;
-//    private int cores;
-//    private boolean isParallel;
-//    private boolean isVisualised;
-//    private String outPutFile;
 
     private CLIParser() {
 
@@ -78,11 +71,11 @@ public class CLIParser {
                 //int cores = Integer.parseInt(cmd.getArgs()[1]);
                 config.cores = Integer.parseInt(cmd.getArgs()[1]);
                 //System.out.println("Has specified parallel option: number of cores = " + config.cores);
-                log.info("Has specified parallel option: number of cores = " + config.cores);
+                logger.info("Has specified parallel option: number of cores = " + config.cores);
             } else {
                 // p value is not and integer
                 //System.out.println("P is not an integer");
-                log.error("p is not an integer");
+                logger.error("p is not an integer");
                 printHelp();
                 System.exit(1);
             }
@@ -94,7 +87,7 @@ public class CLIParser {
             //isVisualised = true;
             config.isVisualised = true;
             //System.out.println("Has visualise option: " + config.isVisualised);
-            log.info("Has visualise option: " + config.isVisualised);
+            logger.info("Has visualise option: " + config.isVisualised);
         }
 
         // Checks if custom output file is desired
@@ -102,38 +95,38 @@ public class CLIParser {
             //outPutFile = cmd.getOptionValue("o");
             config.outputPath = cmd.getOptionValue("o");
             //System.out.println("Custom output file desired:" + " " + config.outputPath);
-            log.info("Custom output file desired:" + " " + config.outputPath);
+            logger.info("Custom output file desired:" + " " + config.outputPath);
         }
 
         // Checks for file name, and there is only two unnamed CLI (file name + num processors)
         if (cmd.getArgs().length > 2) { // Has too many unnamed inputs
             // Too many unnamed args
             //System.out.println("Unknown unnamed inputs found...");
-            log.error("Unknown unnamed inputs found...");
+            logger.error("Unknown unnamed inputs found...");
             printHelp();
             System.exit(1);
         } else if (cmd.getArgs().length == 2)  { // Has correct number of unnamed inputs
             //inputPath = cmd.getArgs()[0];
             config.inputPath = cmd.getArgs()[0];
             //System.out.println("Specified filename: " + config.inputPath);
-            log.info("Specified filename: " + config.inputPath);
+            logger.info("Specified filename: " + config.inputPath);
 
             // Need to check 2nd unnamed input is integer
             if (isInteger(cmd.getArgs()[1])) {
                 //processors = Integer.parseInt(cmd.getArgs()[1]);
                 config.processors = Integer.parseInt(cmd.getArgs()[1]);
                 //System.out.println("Specified number of processors: " + config.processors);
-                log.info("Specified number of processors: " + config.processors);
+                logger.info("Specified number of processors: " + config.processors);
             } else {
                 // P is not and integer
                 //System.out.println("P is not an integer");
-                log.error("P is not an integer");
+                logger.error("P is not an integer");
                 printHelp();
                 System.exit(1);
             }
         } else { // Does not have required unnamed inputs
             //System.out.println("Required inputs not found...");
-            log.error("Required inputs not found...");
+            logger.error("Required inputs not found...");
             printHelp();
             System.exit(1);
         }
@@ -207,28 +200,4 @@ public class CLIParser {
         sc.nextInt(DEFAULT_RADIX);
         return !sc.hasNext();
     }
-
-//    public boolean isDoVisualise() {
-//        return isVisualised;
-//    }
-//
-//    public boolean isParallel() {
-//        return isParallel;
-//    }
-//
-//    public int getNumCores() {
-//        return cores;
-//    }
-//
-//    public int getNumProcessors() {
-//        return processors;
-//    }
-//
-//    public String getInputFileName() {
-//        return inputPath;
-//    }
-//
-//    public String getOutPutFile() {
-//        return outPutFile;
-//    }
 }
