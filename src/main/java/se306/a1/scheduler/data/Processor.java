@@ -44,7 +44,7 @@ public class Processor {
      *
      * @return the scheduled tasks
      */
-    Collection<Node> getScheduledTasks() {
+    public Collection<Node> getScheduledTasks() {
         return startTimes.keySet();
     }
 

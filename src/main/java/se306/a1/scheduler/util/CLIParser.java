@@ -60,7 +60,7 @@ public class CLIParser {
 
         // Checks if parallel option is set
         if (cmd.hasOption("p")) {
-            // set parametrised variable to true
+            // Set parametrised variable to true
 
             //isParallel = true;
             config.isParallel = true;
@@ -83,7 +83,7 @@ public class CLIParser {
 
         // Checks if visualization wants to be displayed
         if(cmd.hasOption("v")) {
-            // set visualise variable to true
+            // Set visualise variable to true
             //isVisualised = true;
             config.isVisualised = true;
             //System.out.println("Has visualise option: " + config.isVisualised);
@@ -96,6 +96,9 @@ public class CLIParser {
             config.outputPath = cmd.getOptionValue("o");
             //System.out.println("Custom output file desired:" + " " + config.outputPath);
             logger.info("Custom output file desired:" + " " + config.outputPath);
+        } else {
+            config.outputPath = cmd.getArgs()[0].replaceAll(".dot", "") + "-output.dot";
+            logger.info("No custom output path selected, output path set to: " + config.outputPath);
         }
 
         // Checks for file name, and there is only two unnamed CLI (file name + num processors)

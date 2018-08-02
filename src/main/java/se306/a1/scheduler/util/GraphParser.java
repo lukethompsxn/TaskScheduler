@@ -2,10 +2,8 @@ package se306.a1.scheduler.util;
 
 import com.paypal.digraph.parser.GraphEdge;
 import com.paypal.digraph.parser.GraphNode;
-import se306.a1.scheduler.data.Edge;
-import se306.a1.scheduler.data.Graph;
-import se306.a1.scheduler.data.Node;
-import se306.a1.scheduler.data.TaskGraph;
+import com.sun.javafx.binding.StringFormatter;
+import se306.a1.scheduler.data.*;
 
 import java.io.*;
 import java.util.*;
@@ -51,7 +49,7 @@ public class GraphParser {
 
             edges.add(new Edge(parent, child, weight));
         }
-        return new TaskGraph(parser.getGraphId(), nodes, edges);
+        return new TaskGraph(parser.getGraphId().replaceAll("\"", ""), nodes, edges);
     }
 
     /**
@@ -59,37 +57,33 @@ public class GraphParser {
      * This method will take the computed schedule object and generate the
      * corresponding .dot output file.
      *
-     * @param taskGraph calculated schedule object
+     * @param schedule calculated schedule object
      * @throws IOException if the output file cannot be created or if an error occurs while writing
      */
-    public static void generateOutput(Graph taskGraph, String outputPath) throws IOException {
+    public static void generateOutput(Schedule schedule, Graph graph, String outputPath) throws IOException {
         File file = new File(outputPath);
         if (!file.exists()) {
             file.createNewFile();
         }
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            bufferedWriter.write("digraph \"" + taskGraph.getName() + "\" {");
-            Set<Node> marked = new HashSet<>();
-            Queue<Node> nodes = new LinkedList<>();
-            nodes.addAll(taskGraph.getEntryNodes());
+            bufferedWriter.write("digraph \"output" + graph.getName() + "\" {");
 
-            while (!nodes.isEmpty()) {
-                Node node = nodes.poll();
-                if (!marked.contains(node)) {
+            Set<Edge> edges = new HashSet<>();
+
+            for (Processor processor : schedule.getProcessors()) {
+                for (Node node : processor.getScheduledTasks()) {
                     bufferedWriter.newLine();
-                    bufferedWriter.write(formatNode(node));
-                    marked.add(node);
-                } else {
-                    continue;
-                }
-                List<Edge> links = taskGraph.getEdges(node);
-                for (Edge e : links) {
-                    nodes.add(e.getChild());
-                    bufferedWriter.newLine();
-                    bufferedWriter.write(e.toString());
+                    bufferedWriter.write(formatNode(node, schedule.getStartTime(node), processor.getName()));
+                    edges.addAll(graph.getEdges(node));
                 }
             }
+
+            for (Edge edge : edges) {
+                bufferedWriter.newLine();
+                bufferedWriter.write(edge.toString());
+            }
+
             bufferedWriter.newLine();
             bufferedWriter.write("}");
         } catch (ScheduleException e) {
@@ -103,12 +97,11 @@ public class GraphParser {
      * @param node the node which requires formatting for output
      * @return formatted output string for the supplied node
      */
-    private static String formatNode(Node node) throws ScheduleException {
-        // TODO Get appropriate information from the schedule
+    private static String formatNode(Node node, int startTime, String processor) {
         return "\t" + node.toString() +
                 "\t[Weight=" + node.getCost() +
-                ", Start=" /*+ Schedule.getStartTime(node)*/ +
-                ", Processor=" /*+ Schedule.getProcessor(node)*/ + "];";
+                ", Start=" + startTime +
+                ", Processor=" + processor + "];";
     }
 }
 
