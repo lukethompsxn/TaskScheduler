@@ -54,6 +54,10 @@ public class GraphParserTests {
         }
     }
 
+    /**
+     * This test only tests the values written to file, not the syntax of the output
+     * @throws IOException
+     */
     @Test
     public void testOutputGeneration() throws IOException {
         final String outputPath = "test-output.dot";
@@ -67,13 +71,18 @@ public class GraphParserTests {
                 Map<String, MockNode> nodes = parsedOutput.getNodes();
                 Map<Pair<String, String>, MockEdge> edges = parsedOutput.getEdges();
 
+                int numNodes = 0;
+                int numEdges = 0;
+
                 for (Processor processor : s.getProcessors()) {
                     for (Node n : processor.getScheduledTasks()) {
+                        numNodes++;
                         assertTrue(n.getLabel().equals(nodes.get(n.getLabel()).getName()));
                         assertTrue(("" +n.getCost()).equals(nodes.get(n.getLabel()).getWeight()));
                         assertTrue(s.getStartTime(n).toString().equals(nodes.get(n.getLabel()).getStartTime()));
                         assertTrue(processor.getName().equals(nodes.get(n.getLabel()).getProcessor()));
                         for (Edge e : g.getEdges(n)) {
+                            numEdges++;
                             Pair<String, String> pair = new Pair(e.getParent().getLabel(), e.getChild().getLabel());
                             assertTrue(e.getParent().toString().equals(edges.get(pair).getParent()));
                             assertTrue(e.getChild().toString().equals(edges.get(pair).getChild()));
@@ -81,6 +90,8 @@ public class GraphParserTests {
                         }
                     }
                 }
+                assertEquals(parsedOutput.getNodes().size(), numNodes);
+                assertEquals(parsedOutput.getEdges().size(), numEdges);
             }
         } catch (ScheduleException e) {
             e.printStackTrace();
