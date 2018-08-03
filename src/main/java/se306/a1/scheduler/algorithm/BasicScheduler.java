@@ -19,14 +19,10 @@ import se306.a1.scheduler.util.ScheduleException;
  *
  * @author Rodger Gu, Zhi Qiao, Abhinav Behal, Luke Thompson
  */
-public class BasicScheduler implements Scheduler {
+public class BasicScheduler extends Scheduler {
 
     private static Logger logger = LogManager.getLogger(BasicScheduler.class);
 
-    private Schedule schedule;
-    private Graph g;
-
-    @Override
     public Schedule run(Graph g, int numProcessors, int numCores) {
         schedule = new Schedule(numProcessors);
         this.g = g;
@@ -68,41 +64,6 @@ public class BasicScheduler implements Scheduler {
         for (Processor processor : schedule.getProcessors()) {
             System.out.println(processor);
         }
-    }
-
-    /**
-     * This method is given a list of visible tasks and then computes
-     * and schedules the cheapest possible task.
-     */
-    private Node computeCheapest(Collection<Node> nodes) throws ScheduleException {
-        Node cheapest = null;
-        Processor processor = null;
-        int minTime = Integer.MAX_VALUE;
-
-        for (Node node : nodes) {
-            if (!schedule.isScheduled(g.getParents(node)))
-                continue;
-
-            for (Processor p : schedule.getProcessors()) {
-                int time = p.getEarliestStartTime();
-
-                for (Node parent : g.getParents(node)) {
-                    if (!schedule.getProcessor(parent).equals(p)) {
-                        time = Math.max(time, g.getCost(parent, node) + schedule.getStartTime(parent) + parent.getCost());
-                    }
-                }
-
-                if (time < minTime) {
-                    minTime = time;
-                    processor = p;
-                    cheapest = node;
-                }
-            }
-        }
-
-        System.out.println("time:\t" + minTime + "\tnode:\t" + cheapest + "\ton " + processor.getName() + " for " + cheapest.getCost());
-        schedule.addScheduledTask(cheapest, processor, minTime);
-        return cheapest;
     }
 
 }
