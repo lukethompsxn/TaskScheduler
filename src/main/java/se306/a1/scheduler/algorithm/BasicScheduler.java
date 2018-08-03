@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author Rodger Gu, Zhi Qiao, Abhinav Behal, Luke Thompson
  */
-public class BasicScheduler implements Scheduler {
+public class BasicScheduler extends Scheduler {
 
     // Logger for runtime logging
     private static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
@@ -61,6 +61,7 @@ public class BasicScheduler implements Scheduler {
         logger.info(schedule.getProcessors());
     }
 
+<<<<<<< 71a5f4f72fe71c4e5379876ac0eb7d96fb7de885
     /**
      * This method is given a list of visible tasks and then computes
      * and schedules the cheapest possible task.
@@ -96,4 +97,6 @@ public class BasicScheduler implements Scheduler {
         schedule.addScheduledTask(cheapest, processor, minTime);
         return cheapest;
     }
+=======
+>>>>>>> Refactored methods from BasicScheduler into Scheduler
 }
