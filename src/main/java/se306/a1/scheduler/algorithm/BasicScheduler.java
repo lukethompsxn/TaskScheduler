@@ -21,6 +21,7 @@ import se306.a1.scheduler.util.ScheduleException;
  */
 public class BasicScheduler implements Scheduler {
 
+    // Logger for runtime logging
     private static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
 
     private Schedule schedule;

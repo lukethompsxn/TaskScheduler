@@ -8,7 +8,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import java.util.Scanner;
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * This class deals with the command line inputs.
@@ -18,20 +19,23 @@ import org.apache.logging.log4j.*;
  **/
 public class CLIParser {
 
+    // Logger for runtime logging
     private static Logger logger = LogManager.getLogger(CLIParser.class.getSimpleName());
 
+    // Singleton instance
     private static final CLIParser cliInstance = new CLIParser();
 
-    public static final int DEFAULT_RADIX = 10;
+    // Defines the radix (number system) to be used
+    private static final int DEFAULT_RADIX = 10;
 
     private Options options = new Options();
     private HelpFormatter help = new HelpFormatter();
     private InputConfig config = new InputConfig();
 
     private CLIParser() {
-
     }
 
+    // Returns the Singleton instance of CLIParser
     public static CLIParser getCLIParserInst() {
         return cliInstance;
     }
@@ -42,6 +46,7 @@ public class CLIParser {
      * then checks what inputs are present and whether or not they are in
      * the correct format.
      * @param args Input args given by the command line
+     * @return config object holding the parsed inputs of the application
      * @throws ParseException Exception thrown when unable to parse inputs
      */
     public InputConfig parseCLI(String[] args) throws ParseException {
@@ -179,8 +184,8 @@ public class CLIParser {
      * true or false based on whether or not it is an integer. The method also
      * takes a second input radix, this is what base of numbering system should
      * be referenced.
-     * @param potentialNum
-     * @return boolean
+     * @param potentialNum String which will be tested to see if it is a number
+     * @return boolean true/false if the input is a number
      */
     private static boolean isInteger(String potentialNum) {
         Scanner sc = new Scanner(potentialNum.trim());
