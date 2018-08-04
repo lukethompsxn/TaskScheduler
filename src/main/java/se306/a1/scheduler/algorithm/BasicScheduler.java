@@ -21,7 +21,7 @@ import se306.a1.scheduler.util.ScheduleException;
  */
 public class BasicScheduler implements Scheduler {
 
-    private static Logger logger = LogManager.getLogger(BasicScheduler.class);
+    private static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
 
     private Schedule schedule;
     private Graph g;
@@ -46,10 +46,10 @@ public class BasicScheduler implements Scheduler {
         while (!unscheduledNodes.isEmpty()) {
             try {
                 currentNode = computeCheapest(unscheduledNodes);
-                System.out.println(currentNode + " : " + currentNode.getCost());
+                logger.info(currentNode + " : " + currentNode.getCost());
 
                 for (Edge edge : g.getEdges(currentNode)) {
-                    System.out.println(edge);
+                    logger.info(edge);
                     if (!scheduledNodes.contains(edge.getChild())) {
                         unscheduledNodes.add(edge.getChild());
                     }
@@ -58,15 +58,15 @@ public class BasicScheduler implements Scheduler {
                 scheduledNodes.add(currentNode);
                 unscheduledNodes.remove(currentNode);
 
-                System.out.println("Scheduled:\t" + scheduledNodes);
-                System.out.println("Unscheduled:\t" + unscheduledNodes);
+                logger.info("Scheduled:\t" + scheduledNodes);
+                logger.info("Unscheduled:\t" + unscheduledNodes);
             } catch (ScheduleException e) {
                 e.printStackTrace();
             }
         }
 
         for (Processor processor : schedule.getProcessors()) {
-            System.out.println(processor);
+            logger.info(processor);
         }
     }
 
@@ -100,7 +100,7 @@ public class BasicScheduler implements Scheduler {
             }
         }
 
-        System.out.println("time:\t" + minTime + "\tnode:\t" + cheapest + "\ton " + processor.getName() + " for " + cheapest.getCost());
+        logger.info("time:\t" + minTime + "\tnode:\t" + cheapest + "\ton " + processor.getName() + " for " + cheapest.getCost());
         schedule.addScheduledTask(cheapest, processor, minTime);
         return cheapest;
     }

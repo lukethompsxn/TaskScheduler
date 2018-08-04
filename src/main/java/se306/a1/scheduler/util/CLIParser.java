@@ -18,7 +18,7 @@ import org.apache.logging.log4j.*;
  **/
 public class CLIParser {
 
-    private static Logger logger = LogManager.getLogger(CLIParser.class);
+    private static Logger logger = LogManager.getLogger(CLIParser.class.getSimpleName());
 
     private static final CLIParser cliInstance = new CLIParser();
 
@@ -81,7 +81,7 @@ public class CLIParser {
         if(cmd.hasOption("v")) {
             // Set visualise variable to true
             config.isVisualised = true;
-            logger.info("Has visualise option: " + config.isVisualised);
+            logger.info("Has visualise option: true");
         }
 
         // Checks if custom output file is desired
