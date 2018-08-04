@@ -11,13 +11,19 @@ import se306.a1.scheduler.data.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
 
 public class GraphParserTests {
     private static final Map<String, Pair<Integer, Integer>> answers = new HashMap<>();
+    private static final List<String> cycleGraphs = new ArrayList<>();
 
     @BeforeClass
     public static void setUp() {
@@ -26,7 +32,19 @@ public class GraphParserTests {
         answers.put("input_graphs/Nodes_9_SeriesParallel.dot", new Pair<>(9, 12));
         answers.put("input_graphs/Nodes_10_Random.dot", new Pair<>(10, 19));
         answers.put("input_graphs/Nodes_11_OutTree.dot", new Pair<>(11, 10));
+
+
+        try (Stream<Path> paths = Files.walk(Paths.get("input_graphs/"))) {
+            paths.filter(p -> p.toString().endsWith(".dot")).forEach(p -> {
+                if (p.toString().contains("-cycle")) {
+                    cycleGraphs.add(p.toString());
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @Test
     public void testGraphParsing() throws IOException, GraphException {
@@ -51,6 +69,20 @@ public class GraphParserTests {
             }
             assertEquals(nodes.size(), nodeCount);
             assertEquals(edges.size(), edgeCount);
+        }
+    }
+
+    @Test
+    public void testCycleGraphParsing() {
+        for (String path : cycleGraphs) {
+            try {
+                Graph g = GraphParser.parse(path);
+                fail("Should have thrown GraphException");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GraphException e) {
+                assertTrue(true);
+            }
         }
     }
 

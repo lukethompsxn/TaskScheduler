@@ -31,7 +31,9 @@ public class BasicSchedulerTests {
         try (Stream<Path> paths = Files.walk(Paths.get("input_graphs/"))) {
             paths.filter(p -> p.toString().endsWith(".dot")).forEach(p -> {
                 try {
-                    graphs.add(GraphParser.parse(p.toString()));
+                    if (!p.toString().contains("-cycle")) {
+                        graphs.add(GraphParser.parse(p.toString()));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (GraphException e) {
