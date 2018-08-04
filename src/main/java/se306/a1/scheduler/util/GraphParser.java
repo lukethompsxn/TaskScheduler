@@ -62,10 +62,10 @@ public class GraphParser {
      */
     public static void generateOutput(Schedule schedule, Graph graph, String outputPath) throws IOException {
         File file = new File(outputPath);
-        File parentFile = file.getParentFile();
 
         if (!file.exists()) {
-            if (!parentFile.exists()) {
+            File parentFile = file.getParentFile();
+            if (parentFile != null && !parentFile.exists()) {
                 parentFile.mkdirs();
             }
             file.createNewFile();
