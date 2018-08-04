@@ -6,7 +6,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <!--Create specific loggers for individual classes
+        <!--Change level from off to one of below to enable
         ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF
         -->
         <Logger name="CLIParser" level="off" additivity="false">
