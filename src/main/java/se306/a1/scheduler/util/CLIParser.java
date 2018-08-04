@@ -49,7 +49,7 @@ public class CLIParser {
      * @return config object holding the parsed inputs of the application
      * @throws ParseException Exception thrown when unable to parse inputs
      */
-    public InputConfig parseCLI(String[] args) throws ParseException {
+    public InputConfig parseCLI(String[] args) throws ParseException, CLIException {
 
         // Calls method which creates the CLI options
         addOptions();
@@ -72,13 +72,12 @@ public class CLIParser {
 
             // Need to check is valid int
             if (isInteger(stringCores)) {
-                config.cores = Integer.parseInt(cmd.getArgs()[1]);
+                config.cores = Integer.parseInt(stringCores);
                 logger.info("Has specified parallel option: number of cores = " + config.cores);
             } else {
                 // p value is not and integer
                 logger.error("p is not an integer");
-                printHelp();
-                System.exit(1);
+                throw new CLIException("p is not an integer");
             }
         }
 
@@ -102,8 +101,8 @@ public class CLIParser {
         if (cmd.getArgs().length > 2) { // Has too many unnamed inputs
             // Too many unnamed args
             logger.error("Unknown unnamed inputs found...");
-            printHelp();
-            System.exit(1);
+            throw new CLIException("Unknown unnamed inputs found...");
+
         } else if (cmd.getArgs().length == 2)  { // Has correct number of unnamed inputs
             //inputPath = cmd.getArgs()[0];
             config.inputPath = cmd.getArgs()[0];
@@ -116,13 +115,12 @@ public class CLIParser {
             } else {
                 // P is not and integer
                 logger.error("P is not an integer");
-                printHelp();
-                System.exit(1);
+                throw new CLIException("P is not an integer");
             }
+
         } else { // Does not have required unnamed inputs
             logger.error("Required inputs not found...");
-            printHelp();
-            System.exit(1);
+            throw new CLIException("Required inputs not found...");
         }
 
         return config;
@@ -171,7 +169,7 @@ public class CLIParser {
      * -h or --help when running the app. The method is also called when an
      * incorrect input is received.
      */
-    private void printHelp() {
+    void printHelp() {
         help.printHelp("java -jar scheduler.jar INPUT.dot P [OPTION]",
                 "  INPUT.dot      A task graph with integer weights in dot format" +
                         "\n  P              Number of processors to schedule the INPUT graph on\n ",
