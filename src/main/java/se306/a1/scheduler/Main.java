@@ -25,8 +25,8 @@ public class Main {
 
         } catch (ParseException | IOException e) {
             e.printStackTrace();
-        } catch (CLIException e) {
-
+        } catch (GraphException e) {
+            e.printStackTrace();
         }
     }
 }

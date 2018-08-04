@@ -26,12 +26,13 @@ public class GraphParser {
      * @return parsed object containing nodes, links, costs
      * @throws IOException if the file cannot be found, or if an IO error occurs while reading
      */
-    public static Graph parse(String inputPath) throws IOException {
+    public static Graph parse(String inputPath) throws IOException, GraphException {
         com.paypal.digraph.parser.GraphParser parser =
                 new com.paypal.digraph.parser.GraphParser(new FileInputStream(inputPath));
         Map<String, GraphNode> parsedNodes = parser.getNodes();
         Map<String, GraphEdge> parsedEdges = parser.getEdges();
 
+        Map<Node, List<Node>> ancestors = new HashMap<>();
         Map<String, Node> nodes = new HashMap<>();
         List<Edge> edges = new ArrayList<>();
 
@@ -46,6 +47,17 @@ public class GraphParser {
             Node parent = nodes.get(edge.getNode1().getId());
             Node child = nodes.get(edge.getNode2().getId());
             int weight = Integer.parseInt(edge.getAttribute("Weight").toString());
+
+            List<Node> currentAncestors = new ArrayList<>();
+            if (ancestors.get(parent) != null) {
+                currentAncestors.addAll(ancestors.get(parent));
+            }
+            currentAncestors.add(parent);
+            ancestors.put(child, currentAncestors);
+
+            if (currentAncestors.contains(child)) {
+                throw new GraphException("Invalid Graph: Contains a cycle with task: " + child.getLabel());
+            }
 
             edges.add(new Edge(parent, child, weight));
         }

@@ -29,7 +29,7 @@ public class GraphParserTests {
     }
 
     @Test
-    public void testGraphParsing() throws IOException {
+    public void testGraphParsing() throws IOException, GraphException {
         for (Map.Entry<String, Pair<Integer, Integer>> e : answers.entrySet()) {
             int nodeCount = e.getValue().getKey();
             int edgeCount = e.getValue().getValue();
@@ -94,6 +94,8 @@ public class GraphParserTests {
                 assertEquals(parsedOutput.getEdges().size(), numEdges);
             }
         } catch (ScheduleException e) {
+            e.printStackTrace();
+        } catch (GraphException e) {
             e.printStackTrace();
         }
     }
