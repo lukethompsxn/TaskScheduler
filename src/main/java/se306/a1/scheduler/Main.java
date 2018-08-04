@@ -11,7 +11,7 @@ import se306.a1.scheduler.util.*;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         try {
             Logger logger = LogManager.getLogger(Main.class.getSimpleName());
             InputConfig config = CLIParser.getCLIParserInst().parseCLI(args);
@@ -23,10 +23,8 @@ public class Main {
 
             GraphParser.generateOutput(s, g, config.outputPath);
 
-        } catch (ParseException | IOException e) {
+        } catch (ParseException | IOException | GraphException e) {
             e.printStackTrace();
-        } catch (GraphException e) {
-            e.printStackTrace();
-        }
+        } catch (CLIException ignored) { }
     }
 }
