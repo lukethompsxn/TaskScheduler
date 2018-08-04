@@ -7,6 +7,7 @@ import se306.a1.scheduler.data.Graph;
 import se306.a1.scheduler.data.Node;
 import se306.a1.scheduler.data.Processor;
 import se306.a1.scheduler.data.Schedule;
+import se306.a1.scheduler.util.GraphException;
 import se306.a1.scheduler.util.GraphParser;
 import se306.a1.scheduler.util.ScheduleException;
 
@@ -32,6 +33,8 @@ public class BasicSchedulerTests {
                 try {
                     graphs.add(GraphParser.parse(p.toString()));
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (GraphException e) {
                     e.printStackTrace();
                 }
             });
