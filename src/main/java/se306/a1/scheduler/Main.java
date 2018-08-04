@@ -18,7 +18,7 @@ public class Main {
             Schedule s = new BasicScheduler().run(g, config.processors, config.cores);
             System.out.println("Length: " + s.getLength());
 
-           GraphParser.generateOutput(s, g, config.outputPath);
+            GraphParser.generateOutput(s, g, config.outputPath);
 
         } catch (ParseException | IOException e) {
             e.printStackTrace();

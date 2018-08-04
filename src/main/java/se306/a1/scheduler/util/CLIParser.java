@@ -53,7 +53,7 @@ public class CLIParser {
         CommandLine cmd = parser.parse(options, args);
 
         // Checks if help is wanted to be displayed
-        if(cmd.hasOption("h") || (cmd.hasOption("help"))) {
+        if(cmd.hasOption("h") || (cmd.hasOption("help") || cmd.getArgs().length == 0)) {
             printHelp();
             System.exit(1);
         }
@@ -62,19 +62,15 @@ public class CLIParser {
         if (cmd.hasOption("p")) {
             // Set parametrised variable to true
 
-            //isParallel = true;
             config.isParallel = true;
             String stringCores = cmd.getOptionValue("p");
 
             // Need to check is valid int
             if (isInteger(stringCores)) {
-                //int cores = Integer.parseInt(cmd.getArgs()[1]);
                 config.cores = Integer.parseInt(cmd.getArgs()[1]);
-                //System.out.println("Has specified parallel option: number of cores = " + config.cores);
                 logger.info("Has specified parallel option: number of cores = " + config.cores);
             } else {
                 // p value is not and integer
-                //System.out.println("P is not an integer");
                 logger.error("p is not an integer");
                 printHelp();
                 System.exit(1);
@@ -84,17 +80,13 @@ public class CLIParser {
         // Checks if visualization wants to be displayed
         if(cmd.hasOption("v")) {
             // Set visualise variable to true
-            //isVisualised = true;
             config.isVisualised = true;
-            //System.out.println("Has visualise option: " + config.isVisualised);
             logger.info("Has visualise option: " + config.isVisualised);
         }
 
         // Checks if custom output file is desired
         if (cmd.hasOption("o")) {
-            //outPutFile = cmd.getOptionValue("o");
             config.outputPath = cmd.getOptionValue("o");
-            //System.out.println("Custom output file desired:" + " " + config.outputPath);
             logger.info("Custom output file desired:" + " " + config.outputPath);
         } else {
             config.outputPath = cmd.getArgs()[0].replaceAll(".dot", "") + "-output.dot";
@@ -104,31 +96,25 @@ public class CLIParser {
         // Checks for file name, and there is only two unnamed CLI (file name + num processors)
         if (cmd.getArgs().length > 2) { // Has too many unnamed inputs
             // Too many unnamed args
-            //System.out.println("Unknown unnamed inputs found...");
             logger.error("Unknown unnamed inputs found...");
             printHelp();
             System.exit(1);
         } else if (cmd.getArgs().length == 2)  { // Has correct number of unnamed inputs
             //inputPath = cmd.getArgs()[0];
             config.inputPath = cmd.getArgs()[0];
-            //System.out.println("Specified filename: " + config.inputPath);
             logger.info("Specified filename: " + config.inputPath);
 
             // Need to check 2nd unnamed input is integer
             if (isInteger(cmd.getArgs()[1])) {
-                //processors = Integer.parseInt(cmd.getArgs()[1]);
                 config.processors = Integer.parseInt(cmd.getArgs()[1]);
-                //System.out.println("Specified number of processors: " + config.processors);
                 logger.info("Specified number of processors: " + config.processors);
             } else {
                 // P is not and integer
-                //System.out.println("P is not an integer");
                 logger.error("P is not an integer");
                 printHelp();
                 System.exit(1);
             }
         } else { // Does not have required unnamed inputs
-            //System.out.println("Required inputs not found...");
             logger.error("Required inputs not found...");
             printHelp();
             System.exit(1);
@@ -184,7 +170,7 @@ public class CLIParser {
         help.printHelp("java -jar scheduler.jar INPUT.dot P [OPTION]",
                 "  INPUT.dot      A task graph with integer weights in dot format" +
                         "\n  P              Number of processors to schedule the INPUT graph on\n ",
-                options, "Footer for CLI test...");
+                options, "");
     }
 
 
