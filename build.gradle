@@ -34,6 +34,9 @@ dependencies {
 	compile group: 'com.google.dagger', name: 'dagger', version: '2.15'
 	// https://mvnrepository.com/artifact/com.google.dagger/dagger-compiler
 	annotationProcessor group: 'com.google.dagger', name: 'dagger-compiler', version: '2.15'
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+	
 }
 
 jar {
