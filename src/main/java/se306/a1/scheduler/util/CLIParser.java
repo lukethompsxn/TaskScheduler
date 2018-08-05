@@ -50,6 +50,7 @@ public class CLIParser {
      * @throws ParseException Exception thrown when unable to parse inputs
      */
     public InputConfig parseCLI(String[] args) throws ParseException, CLIException {
+        config = new InputConfig();
 
         // Calls method which creates the CLI options
         addOptions();
@@ -91,6 +92,9 @@ public class CLIParser {
         // Checks if custom output file is desired
         if (cmd.hasOption("o")) {
             config.outputPath = cmd.getOptionValue("o");
+            if (config.outputPath.matches(".*[\\/:*?\"<>|].*") || config.outputPath.length() == 0 || config.outputPath.trim().length() == 0) {
+                throw new CLIException("Invalid characters in output path");
+            }
             logger.info("Custom output file desired:" + " " + config.outputPath);
         } else {
             config.outputPath = cmd.getArgs()[0].replaceAll(".dot", "") + "-output.dot";

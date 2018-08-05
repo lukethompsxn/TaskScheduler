@@ -1,8 +1,14 @@
 package se306.a1.scheduler.util;
 
 import org.apache.commons.cli.ParseException;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertEquals;
@@ -16,7 +22,7 @@ public class CLIParserTests {
     }
 
     @Test
-    public void onlyRequiredInputs() {
+    public void testOnlyRequiredInputs() {
         String[] testArgs = {"test.dot", "4"};
 
         try {
@@ -35,7 +41,7 @@ public class CLIParserTests {
     }
 
     @Test
-    public void missingRequiredInputs1() {
+    public void testMissingRequiredInputs1() {
         String[] testArgs = {"test.dot"};
 
         try {
@@ -49,7 +55,7 @@ public class CLIParserTests {
     }
 
     @Test
-    public void missingRequiredInputs2() {
+    public void testMissingRequiredInputs2() {
         String[] testArgs = {"4"};
 
         try {
@@ -63,7 +69,7 @@ public class CLIParserTests {
     }
 
     @Test
-    public void withExtraInputs() {
+    public void testWithExtraInputs() {
         String[] testArgs = {"test.dot", "3", "-v", "-p", "4"};
 
         try {
@@ -82,7 +88,7 @@ public class CLIParserTests {
     }
 
     @Test
-    public void optionsWithUnneededValues() {
+    public void testOptionsWithUnneededValues() {
         String[] testArgs = {"test.dot", "3", "-v", "3", "-p", "4"};
 
         try {
@@ -94,13 +100,33 @@ public class CLIParserTests {
     }
 
     @Test
-    public void unknownExtraInput() {
+    public void testUnknownExtraInput() {
         String[] testArgs = {"test.dot", "3", "-d"};
 
         try {
             CLIParser.getCLIParserInst().parseCLI(testArgs);
         } catch (ParseException ignored) {
         } catch (CLIException ignored) {
+        }
+    }
+
+    @Test
+    public void testInvalidOutputPath() {
+        List<String[]> testArgs = new ArrayList<>();
+        testArgs.add(new String[]{"test.dot", "3", "-o", ""});
+        testArgs.add(new String[]{"test.dot", "3", "-o", "27$9*&@()*&#"});
+        testArgs.add(new String[]{"test.dot", "3", "-o", " "});
+        testArgs.add(new String[]{"test.dot", "3", "-o", " * a * "});
+
+        for (String[] s : testArgs) {
+            try {
+                CLIParser.getCLIParserInst().parseCLI(s);
+                fail("Should have thrown CLIException " + s[3]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (CLIException e) {
+                assertTrue(true);
+            }
         }
     }
 
