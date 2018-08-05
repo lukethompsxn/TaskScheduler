@@ -43,6 +43,9 @@ public class GraphParser {
                 throw new GraphException("Node '" + label + "' not declared or does not have 'Weight' attribute");
             int weight = Integer.parseInt(node.getAttribute("Weight").toString());
 
+            if (weight < 0)
+                throw new GraphException("Nodes cannot have negative weight: " + label);
+
             nodes.put(label, new Node(label, weight));
         }
 
@@ -53,6 +56,9 @@ public class GraphParser {
             if (edge.getAttribute("Weight") == null)
                 throw new GraphException("Edge '" + parent + "->" + child + "' does not have 'Weight' attribute");
             int weight = Integer.parseInt(edge.getAttribute("Weight").toString());
+
+            if (weight < 0)
+                throw new GraphException("Edges cannot have negative weight: " + parent + "->" + child);
 
             List<Node> currentAncestors = new ArrayList<>();
             if (ancestors.get(parent) != null) {

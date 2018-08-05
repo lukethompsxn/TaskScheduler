@@ -71,6 +71,10 @@ public class CLIParser {
             // Need to check number of processors specified
             if (isInteger(cmd.getArgs()[1])) {
                 config.processors = Integer.parseInt(cmd.getArgs()[1]);
+
+                if (config.processors < 1)
+                    throw new CLIException("Must have at least 1 processor");
+
                 logger.info("Specified number of processors: " + config.processors);
             } else {
                 logger.error("Number of processors is not an integer");
