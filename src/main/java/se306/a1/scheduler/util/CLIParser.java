@@ -46,13 +46,19 @@ public class CLIParser {
      * @param args Input args given by the command line
      * @return config object holding the parsed inputs of the application
      * @throws ParseException when unable to parse inputs
-     * @throws CLIException if command line arguments are not specified correctly
+     * @throws CLIException   if command line arguments are not specified correctly
      */
     public InputConfig parseCLI(String[] args) throws ParseException, CLIException {
         InputConfig config = new InputConfig();
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
+
+        // If help option
+        if (cmd.hasOption("h") || (cmd.hasOption("help") || cmd.getArgs().length == 0)) {
+            printHelp();
+            System.exit(1);
+        }
 
         // Checks for file name and number of processors
         if (cmd.getArgs().length != 2) {
@@ -70,12 +76,6 @@ public class CLIParser {
                 logger.error("Number of processors is not an integer");
                 throw new CLIException("Number of processors is not an integer");
             }
-        }
-
-        // If help option
-        if (cmd.hasOption("h") || (cmd.hasOption("help") || cmd.getArgs().length == 0)) {
-            printHelp();
-            System.exit(1);
         }
 
         // Checks if parallel option is set
