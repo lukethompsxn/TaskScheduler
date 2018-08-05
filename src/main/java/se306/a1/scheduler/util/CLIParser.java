@@ -102,13 +102,15 @@ public class CLIParser {
         if (cmd.hasOption("o")) {
             config.outputPath = cmd.getOptionValue("o");
 
-            if (config.outputPath.matches(".*[:*?\"<>|].*") || config.outputPath.trim().length() == 0) {
+            if (config.outputPath.matches(".*[:*?\"<>|].*") || config.outputPath.trim().length() == 0)
                 throw new CLIException("Invalid characters in output path");
-            }
 
             if (!config.outputPath.endsWith(".dot")) config.outputPath += ".dot";
             logger.info("Custom output file desired: " + config.outputPath);
         } else {
+            if (!config.inputPath.endsWith(".dot"))
+                throw new CLIException("Input file must be in INPUT.dot format");
+
             config.outputPath = config.inputPath.substring(0, config.inputPath.length() - 4) + "-output.dot";
             logger.info("No custom output path specified, output path set to: " + config.outputPath);
         }

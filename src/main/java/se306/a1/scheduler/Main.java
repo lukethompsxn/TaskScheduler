@@ -8,6 +8,7 @@ import se306.a1.scheduler.data.Graph;
 import se306.a1.scheduler.data.Schedule;
 import se306.a1.scheduler.util.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
@@ -25,6 +26,9 @@ public class Main {
             logger.info("Length: " + schedule.getLength());
 
             GraphParser.generateOutput(schedule, graph, config.outputPath);
+        } catch (FileNotFoundException fe) {
+            System.out.println("File not found");
+            CLIParser.getCLIParserInst().printHelp();
         } catch (ParseException | ScheduleException | IOException e) {
             e.printStackTrace();
         } catch (GraphException ge) {
