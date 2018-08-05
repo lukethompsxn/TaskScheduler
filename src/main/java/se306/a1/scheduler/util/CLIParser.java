@@ -91,6 +91,11 @@ public class CLIParser {
         // Checks if custom output file is desired
         if (cmd.hasOption("o")) {
             config.outputPath = cmd.getOptionValue("o");
+            int length = config.outputPath.length();
+            config.outputPath.replaceAll("[^a-zA-Z0-9 ]", "");
+            if (config.outputPath.length() != length || config.outputPath.length() == 0) {
+                throw new CLIException("Output path contains special characters");
+            }
             logger.info("Custom output file desired:" + " " + config.outputPath);
         } else {
             config.outputPath = cmd.getArgs()[0].replaceAll(".dot", "") + "-output.dot";
