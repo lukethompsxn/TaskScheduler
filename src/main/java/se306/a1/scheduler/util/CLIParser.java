@@ -92,7 +92,7 @@ public class CLIParser {
         // Checks if custom output file is desired
         if (cmd.hasOption("o")) {
             config.outputPath = cmd.getOptionValue("o");
-            if (config.outputPath.matches(".*[\\/:*?\"<>|].*")) {
+            if (config.outputPath.matches(".*[\\/:*?\"<>|].*") || config.outputPath.length() == 0 || config.outputPath.trim().length() == 0) {
                 throw new CLIException("Invalid characters in output path");
             }
             logger.info("Custom output file desired:" + " " + config.outputPath);
