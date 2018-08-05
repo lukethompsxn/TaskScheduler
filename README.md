@@ -16,18 +16,20 @@ TaskScheduler is a java command line application which takes an input graph and 
 
 
 ### How To Run TaskScheduler
+There are two compulsary input arguments, a) input graph, b) number of processors. There are also optional arguments, please see TaskScheduler Interface below.
+
 1) Navigate to the folder containing scheduler.jar
-2) Run the command **java -jar scheduler.jar <input-graph> <num processors>**
+2) Run the command **java -jar scheduler.jar \<input-graph\> \<num processors\>**
 
 
 ### TaskScheduler Interface
-java -jar scheduler.jar INPUT.dot P [OPTION]
-INPUT. dot a task graph with integer weights in dot format
-P number of processors to schedule the INPUT graph on
-Optional :
--p N use N cores for execution in parallel (default is sequential)
--v visualise the search
--o OUPUT output file is named OUTPUT (default is INPUT-output.dot)
+- java -jar scheduler.jar INPUT.dot P [OPTION]
+- INPUT. dot a task graph with integer weights in dot format
+- P number of processors to schedule the INPUT graph on
+- Optional :
+- -p N use N cores for execution in parallel (default is sequential)
+- -v visualise the search
+- -o OUPUT output file is named OUTPUT (default is INPUT-output.dot)
 
 
 ### Acknowledgements
