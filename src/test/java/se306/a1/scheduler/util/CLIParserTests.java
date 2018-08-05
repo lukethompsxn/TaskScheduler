@@ -136,18 +136,24 @@ public class CLIParserTests {
         String[] s4 = new String[]{"test.dot", "3", "-o",  "a/b/c/test.dot"};
         String[] s5 = new String[]{"test.dot", "3", "-o",  "../a/b/c/test.dot"};
         String[] s6 = new String[]{"test.dot", "3", "-o",  "test"};
+        String[] s7 = new String[]{"test.dot", "3", "-o",  "test\\abc\\wew.dot"};
+        String[] s8 = new String[]{"test.dot", "3", "-o",  "\\test\\wew\\abc.dot"};
         InputConfig config1 = CLIParser.getCLIParserInst().parseCLI(s1);
         InputConfig config2 = CLIParser.getCLIParserInst().parseCLI(s2);
         InputConfig config3 = CLIParser.getCLIParserInst().parseCLI(s3);
         InputConfig config4 = CLIParser.getCLIParserInst().parseCLI(s4);
         InputConfig config5 = CLIParser.getCLIParserInst().parseCLI(s5);
         InputConfig config6 = CLIParser.getCLIParserInst().parseCLI(s6);
+        InputConfig config7 = CLIParser.getCLIParserInst().parseCLI(s7);
+        InputConfig config8 = CLIParser.getCLIParserInst().parseCLI(s8);
         assertTrue(config1.outputPath.equals("/a/b/c/test.dot"));
         assertTrue(config2.outputPath.equals("/test.dot"));
         assertTrue(config3.outputPath.equals("test.dot"));
         assertTrue(config4.outputPath.equals("a/b/c/test.dot"));
         assertTrue(config5.outputPath.equals("../a/b/c/test.dot"));
         assertTrue(config6.outputPath.equals("test.dot"));
+        assertTrue(config7.outputPath.equals("test\\abc\\wew.dot"));
+        assertTrue(config8.outputPath.equals("\\test\\wew\\abc.dot"));
     }
 
 }
