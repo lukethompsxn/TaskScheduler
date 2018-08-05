@@ -17,11 +17,11 @@ public class Main {
             InputConfig config = CLIParser.getCLIParserInst().parseCLI(args);
             logger.info(config.inputPath);
             logger.info(config.outputPath);
-            Graph g = GraphParser.parse(config.inputPath);
-            Schedule s = new BasicScheduler().run(g, config.processors, config.cores);
+            Graph graph = GraphParser.parse(config.inputPath);
+            Schedule s = new BasicScheduler().run(graph, config.processors, config.cores);
             logger.info("Length: " + s.getLength());
 
-            GraphParser.generateOutput(s, g, config.outputPath);
+            GraphParser.generateOutput(s, graph, config.outputPath);
 
         } catch (ParseException | IOException | GraphException e) {
             e.printStackTrace();

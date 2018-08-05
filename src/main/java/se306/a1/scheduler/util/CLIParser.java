@@ -33,6 +33,8 @@ public class CLIParser {
     private InputConfig config = new InputConfig();
 
     private CLIParser() {
+        // Calls method which creates the CLI options
+        addOptions();
     }
 
     // Returns the Singleton instance of CLIParser
@@ -51,9 +53,6 @@ public class CLIParser {
      */
     public InputConfig parseCLI(String[] args) throws ParseException, CLIException {
         config = new InputConfig();
-
-        // Calls method which creates the CLI options
-        addOptions();
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
