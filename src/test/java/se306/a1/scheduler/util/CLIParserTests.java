@@ -1,6 +1,7 @@
 package se306.a1.scheduler.util;
 
 import org.apache.commons.cli.ParseException;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -120,7 +121,7 @@ public class CLIParserTests {
         for (String[] s : testArgs) {
             try {
                 CLIParser.getCLIParserInst().parseCLI(s);
-                fail("Should have thrown CLIException");
+                fail("Should have thrown CLIException " + s[3]);
             } catch (ParseException e) {
                 e.printStackTrace();
             } catch (CLIException e) {
