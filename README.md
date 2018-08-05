@@ -1,6 +1,6 @@
 # TaskScheduler: Team 3 - Vaporware
 
-###Github Username & UPIs
+### Github Username & UPIs
 
 | Github Username | UPI       |
 | --------------- | --------- |
@@ -11,7 +11,7 @@
 | RodgerRG        | `rgu663`  |
 
 
-###About TaskScheduler
+### About TaskScheduler
 TaskScheduler is a java command line application which takes an input graph and a number of processors. It then generates a schedule for executing these tasks which ~~is~~ (will be) the optimal scheduling allocation and order. Currently, it is implemented using a greedly algorithm which selects the next task to be scheduled based on the 'cheapest' node at the that point in time.
 
 
@@ -20,7 +20,7 @@ TaskScheduler is a java command line application which takes an input graph and 
 2) Run the command **java -jar scheduler.jar <input-graph> <num processors>**
 
 
-###TaskScheduler Interface
+### TaskScheduler Interface
 java -jar scheduler.jar INPUT.dot P [OPTION]
 INPUT. dot a task graph with integer weights in dot format
 P number of processors to schedule the INPUT graph on
@@ -30,7 +30,7 @@ Optional :
 -o OUPUT output file is named OUTPUT (default is INPUT-output.dot)
 
 
-###Acknowledgements
+### Acknowledgements
 - **Graph Parser**: [PayPal Graph Parser](https://github.com/paypal/digraph-parser)
 - **Command Line Arguments Parsing**: [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/)
 - **Unit Testing**: [JUnit](https://junit.org/)
