@@ -82,11 +82,11 @@ public class Processor {
 
     @Override
     public String toString() {
-        String string = name + ":\n";
+        StringBuilder stringBuilder = new StringBuilder("\n" + name + ":");
         for (Map.Entry<Node, Integer> entry : startTimes.entrySet()) {
-            string += entry.getValue() + "\t:\t" + entry.getKey() + "\n";
+            stringBuilder.append("\n[t=").append(entry.getValue()).append("\t:\t'").append(entry.getKey()).append("']");
         }
-        return string;
+        return stringBuilder.toString();
     }
 
     @Override

@@ -52,4 +52,4 @@ gradle-app.setting
 *.stackdump
 
 # Other
-.example-input-graphs/
+*-output.dot

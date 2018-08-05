@@ -66,9 +66,7 @@ public class BasicScheduler implements Scheduler {
             }
         }
 
-        for (Processor processor : schedule.getProcessors()) {
-            logger.info(processor);
-        }
+        logger.info(schedule.getProcessors());
     }
 
     /**
@@ -101,7 +99,7 @@ public class BasicScheduler implements Scheduler {
             }
         }
 
-        logger.info("time:\t" + minTime + "\tnode:\t" + cheapest + "\ton " + processor.getName() + " for " + cheapest.getCost());
+        logger.info("node: '" + cheapest + "'\tstarts at " + minTime + "s\ton processor [" + processor.getName() + "] for " + cheapest.getCost() + "s");
         schedule.addScheduledTask(cheapest, processor, minTime);
         return cheapest;
     }
