@@ -10,6 +10,7 @@ import java.util.List;
 import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
+import static se306.a1.scheduler.util.CLIParser.getCLIParserInst;
 
 public class CLIParserTests {
 
@@ -23,7 +24,7 @@ public class CLIParserTests {
         String[] testArgs = {"test.dot", "4"};
 
         try {
-            InputConfig config = CLIParser.getCLIParserInst().parseCLI(testArgs);
+            InputConfig config = getCLIParserInst().parseCLI(testArgs);
             assertEquals(4, config.processors);
             assertEquals("test.dot", config.inputPath);
             assertEquals("test-output.dot", config.outputPath);
@@ -42,7 +43,7 @@ public class CLIParserTests {
         String[] testArgs = {"test.dot"};
 
         try {
-            InputConfig config = CLIParser.getCLIParserInst().parseCLI(testArgs);
+            InputConfig config = getCLIParserInst().parseCLI(testArgs);
             fail();
         } catch (ParseException e) {
 
@@ -56,7 +57,7 @@ public class CLIParserTests {
         String[] testArgs = {"4"};
 
         try {
-            CLIParser.getCLIParserInst().parseCLI(testArgs);
+            getCLIParserInst().parseCLI(testArgs);
             fail();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -70,7 +71,7 @@ public class CLIParserTests {
         String[] testArgs = {"test.dot", "3", "-v", "-p", "4"};
 
         try {
-            InputConfig config = CLIParser.getCLIParserInst().parseCLI(testArgs);
+            InputConfig config = getCLIParserInst().parseCLI(testArgs);
             assertEquals(3, config.processors);
             assertEquals("test.dot", config.inputPath);
             assertEquals("test-output.dot", config.outputPath);
@@ -89,7 +90,7 @@ public class CLIParserTests {
         String[] testArgs = {"test.dot", "3", "-v", "3", "-p", "4"};
 
         try {
-            CLIParser.getCLIParserInst().parseCLI(testArgs);
+            getCLIParserInst().parseCLI(testArgs);
             fail();
         } catch (ParseException ignored) {
         } catch (CLIException e) {
@@ -101,7 +102,7 @@ public class CLIParserTests {
         String[] testArgs = {"test.dot", "3", "-d"};
 
         try {
-            CLIParser.getCLIParserInst().parseCLI(testArgs);
+            getCLIParserInst().parseCLI(testArgs);
         } catch (ParseException ignored) {
         } catch (CLIException ignored) {
         }
@@ -117,7 +118,7 @@ public class CLIParserTests {
 
         for (String[] s : testArgs) {
             try {
-                CLIParser.getCLIParserInst().parseCLI(s);
+                getCLIParserInst().parseCLI(s);
                 fail("Should have thrown CLIException " + s[3]);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -125,6 +126,25 @@ public class CLIParserTests {
                 assertTrue(true);
             }
         }
+    }
+
+    @Test
+    public void testOutputPath() throws ParseException, CLIException {
+        String[] s1 = new String[]{"test.dot", "3", "-o",  "/a/b/c/test.dot"};
+        String[] s2 = new String[]{"test.dot", "3", "-o",  "/test.dot"};
+        String[] s3 = new String[]{"test.dot", "3", "-o",  "test.dot"};
+        String[] s4 = new String[]{"test.dot", "3", "-o",  "a/b/c/test.dot"};
+        String[] s5 = new String[]{"test.dot", "3", "-o",  "../a/b/c/test.dot"};
+        InputConfig config1 = CLIParser.getCLIParserInst().parseCLI(s1);
+        InputConfig config2 = CLIParser.getCLIParserInst().parseCLI(s2);
+        InputConfig config3 = CLIParser.getCLIParserInst().parseCLI(s3);
+        InputConfig config4 = CLIParser.getCLIParserInst().parseCLI(s4);
+        InputConfig config5 = CLIParser.getCLIParserInst().parseCLI(s5);
+        assertTrue(config1.outputPath.equals("/a/b/c/test.dot"));
+        assertTrue(config2.outputPath.equals("/test.dot"));
+        assertTrue(config3.outputPath.equals("test.dot"));
+        assertTrue(config4.outputPath.equals("a/b/c/test.dot"));
+        assertTrue(config5.outputPath.equals("../a/b/c/test.dot"));
     }
 
 }

@@ -102,7 +102,7 @@ public class CLIParser {
         if (cmd.hasOption("o")) {
             config.outputPath = cmd.getOptionValue("o");
 
-            if (config.outputPath.matches(".*[\\/:*?\"<>|].*") || config.outputPath.trim().length() == 0) {
+            if (config.outputPath.matches(".*[:*?\"<>|].*") || config.outputPath.trim().length() == 0) {
                 throw new CLIException("Invalid characters in output path");
             }
 
