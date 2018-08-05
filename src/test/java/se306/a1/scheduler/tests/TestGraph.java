@@ -1,5 +1,6 @@
 package se306.a1.scheduler.tests;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,31 +21,38 @@ public class TestGraph implements Graph{
 	}
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	@Override
 	public List<Edge> getEdges(Node node) {
-		return null;
+		return children.get(node);
 	}
 
 	@Override
 	public List<Node> getParents(Node node) {
-		// TODO Auto-generated method stub
-		return null;
+		return parents.get(node);
 	}
 
 	@Override
 	public List<Node> getEntryNodes() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Node> entries = new ArrayList<>();
+
+        for (Node n : nodes.values()) {
+            if (!parents.containsKey(n) || parents.get(n).isEmpty())
+                entries.add(n);
+        }
+
+        return entries;
 	}
 
 	@Override
 	public Integer getCost(Node parent, Node child) {
-		// TODO Auto-generated method stub
-		return null;
+		 for (Edge e : children.get(parent)) {
+	            if (e.getChild().equals(child))
+	                return e.getCost();
+	        }
+	        return null;
 	}
 
 }

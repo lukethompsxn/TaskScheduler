@@ -11,23 +11,27 @@ import se306.a1.scheduler.data.Node;
 
 @Module
 public class GraphsModule {
+	protected static int counter = 0;
+	
 	@Provides Graph provideGraph(TestGraph g) {
+		counter++;
 		return g;
 	}
 	
 	@Provides Map<Node, List<Edge>> provideChildren() {
-		return null;
+		return BasicSchedulerConfig.getChild(counter);
+		
 	}
 	
 	@Provides Map<Node, List<Node>> provideParents() {
-		return null;
+		return BasicSchedulerConfig.getParent(counter);
 	}
 	
 	@Provides Map<String, Node> provideNodes() {
-		return null;
+		return BasicSchedulerConfig.getNodes(counter);
 	}
 	
 	@Provides String provideName() {
-		return null;
+		return BasicSchedulerConfig.getName(counter);
 	}
 }
