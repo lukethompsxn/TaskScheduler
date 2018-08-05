@@ -26,12 +26,14 @@ hs_err_pid*
 .idea/
 *.iml
 .vscode/
+*.classpath
 .settings/
-.project
+*.project
 
 # Builds
 build/
 out/
+bin/
 
 # Gradle
 .gradle
@@ -45,3 +47,9 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+# Other misc. files
+*.stackdump
+
+# Other
+*-output.dot

@@ -1,0 +1,10 @@
+digraph "Nodes_4_Simple" {
+	0	 [Weight=5];
+	1	 [Weight=5];
+	2	 [Weight=6];
+	3	 [Weight=7];
+	0 -> 1	 [Weight=3];
+	1 -> 2	 [Weight=4];
+	2 -> 1	 [Weight=2];
+	2 -> 3	 [Weight=3];
+}

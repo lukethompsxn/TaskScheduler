@@ -9,11 +9,26 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/commons-cli/commons-cli
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+    compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
+    // https://mvnrepository.com/artifact/org.mockito/mockito-all
+	testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+    
 }
 
 jar {
     manifest {
         attributes 'Main-Class': 'se306.a1.scheduler.Main'
+    }
+    from configurations.runtime.collect() { zipTree(it) }
+}
+
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
     }
 }
 
