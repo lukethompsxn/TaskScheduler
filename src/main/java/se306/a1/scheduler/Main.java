@@ -15,16 +15,23 @@ public class Main {
         try {
             Logger logger = LogManager.getLogger(Main.class.getSimpleName());
             InputConfig config = CLIParser.getCLIParserInst().parseCLI(args);
+
             logger.info(config.inputPath);
             logger.info(config.outputPath);
+
             Graph graph = GraphParser.parse(config.inputPath);
-            Schedule s = new BasicScheduler().run(graph, config.processors, config.cores);
-            logger.info("Length: " + s.getLength());
+            Schedule schedule = new BasicScheduler().run(graph, config.processors, config.cores);
 
-            GraphParser.generateOutput(s, graph, config.outputPath);
+            logger.info("Length: " + schedule.getLength());
 
-        } catch (ParseException | IOException | GraphException e) {
+            GraphParser.generateOutput(schedule, graph, config.outputPath);
+        } catch (ParseException | IOException e) {
             e.printStackTrace();
-        } catch (CLIException ignored) { }
+        } catch (GraphException ge){
+            System.out.println(ge.getMessage());
+        } catch (CLIException ce) {
+            System.out.println(ce.getMessage());
+            CLIParser.getCLIParserInst().printHelp();
+        }
     }
 }

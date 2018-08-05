@@ -172,7 +172,7 @@ public class CLIParser {
      * -h or --help when running the app. The method is also called when an
      * incorrect input is received.
      */
-    void printHelp() {
+    public void printHelp() {
         help.printHelp("java -jar scheduler.jar INPUT.dot P [OPTION]",
                 "  INPUT.dot      A task graph with integer weights in dot format" +
                         "\n  P              Number of processors to schedule the INPUT graph on\n ",
