@@ -133,12 +133,18 @@ public class CLIParserTests {
         String[] s1 = new String[]{"test.dot", "3", "-o",  "/a/b/c/test.dot"};
         String[] s2 = new String[]{"test.dot", "3", "-o",  "/test.dot"};
         String[] s3 = new String[]{"test.dot", "3", "-o",  "test.dot"};
+        String[] s4 = new String[]{"test.dot", "3", "-o",  "a/b/c/test.dot"};
+        String[] s5 = new String[]{"test.dot", "3", "-o",  "../a/b/c/test.dot"};
         InputConfig config1 = CLIParser.getCLIParserInst().parseCLI(s1);
         InputConfig config2 = CLIParser.getCLIParserInst().parseCLI(s2);
         InputConfig config3 = CLIParser.getCLIParserInst().parseCLI(s3);
+        InputConfig config4 = CLIParser.getCLIParserInst().parseCLI(s4);
+        InputConfig config5 = CLIParser.getCLIParserInst().parseCLI(s5);
         assertTrue(config1.outputPath.equals("/a/b/c/test.dot"));
         assertTrue(config2.outputPath.equals("/test.dot"));
         assertTrue(config3.outputPath.equals("test.dot"));
+        assertTrue(config4.outputPath.equals("a/b/c/test.dot"));
+        assertTrue(config5.outputPath.equals("../a/b/c/test.dot"));
     }
 
 }
