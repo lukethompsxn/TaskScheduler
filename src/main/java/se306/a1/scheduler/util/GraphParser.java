@@ -56,7 +56,7 @@ public class GraphParser {
             ancestors.put(child, currentAncestors);
 
             if (currentAncestors.contains(child)) {
-                throw new GraphException("Invalid Graph: Contains a cycle with task: " + child.getLabel());
+                throw new GraphException("Graph contains a cycle with edge: " + parent.getLabel() + " -> " +  child.getLabel());
             }
 
             edges.add(new Edge(parent, child, weight));
