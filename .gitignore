@@ -53,3 +53,4 @@ gradle-app.setting
 
 # Other
 .example-input-graphs/
+/.apt_generated/
