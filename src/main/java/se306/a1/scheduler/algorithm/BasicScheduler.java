@@ -25,12 +25,12 @@ public class BasicScheduler implements Scheduler {
     private static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
 
     private Schedule schedule;
-    private Graph g;
+    private Graph graph;
 
     @Override
-    public Schedule run(Graph g, int numProcessors, int numCores) {
+    public Schedule run(Graph graph, int numProcessors, int numCores) {
         schedule = new Schedule(numProcessors);
-        this.g = g;
+        this.graph = graph;
 
         createSchedule();
         return schedule;
@@ -40,7 +40,7 @@ public class BasicScheduler implements Scheduler {
      * This method traverses the graph and creates the schedule.
      */
     private void createSchedule() {
-        Set<Node> unscheduledNodes = new HashSet<>(g.getEntryNodes());
+        Set<Node> unscheduledNodes = new HashSet<>(graph.getEntryNodes());
         Set<Node> scheduledNodes = new HashSet<>();
         Node currentNode;
 
@@ -49,7 +49,7 @@ public class BasicScheduler implements Scheduler {
                 currentNode = computeCheapest(unscheduledNodes);
                 logger.info(currentNode + " : " + currentNode.getCost());
 
-                for (Edge edge : g.getEdges(currentNode)) {
+                for (Edge edge : graph.getEdges(currentNode)) {
                     logger.info(edge);
                     if (!scheduledNodes.contains(edge.getChild())) {
                         unscheduledNodes.add(edge.getChild());
@@ -79,15 +79,15 @@ public class BasicScheduler implements Scheduler {
         int minTime = Integer.MAX_VALUE;
 
         for (Node node : nodes) {
-            if (!schedule.isScheduled(g.getParents(node)))
+            if (!schedule.isScheduled(graph.getParents(node)))
                 continue;
 
             for (Processor p : schedule.getProcessors()) {
                 int time = p.getEarliestStartTime();
 
-                for (Node parent : g.getParents(node)) {
+                for (Node parent : graph.getParents(node)) {
                     if (!schedule.getProcessor(parent).equals(p)) {
-                        time = Math.max(time, g.getCost(parent, node) + schedule.getStartTime(parent) + parent.getCost());
+                        time = Math.max(time, graph.getCost(parent, node) + schedule.getStartTime(parent) + parent.getCost());
                     }
                 }
 

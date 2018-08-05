@@ -13,10 +13,6 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args)  {
         try {
-            String test = "";
-            test.replaceAll("[^a-zA-Z0-9 ]", "");
-
-
             Logger logger = LogManager.getLogger(Main.class.getSimpleName());
             InputConfig config = CLIParser.getCLIParserInst().parseCLI(args);
             logger.info(config.inputPath);
