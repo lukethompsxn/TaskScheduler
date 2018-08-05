@@ -73,13 +73,11 @@ public class GraphParserTests {
     }
 
     @Test
-    public void testCycleGraphParsing() {
+    public void testCycleGraphParsing() throws IOException {
         for (String path : cycleGraphs) {
             try {
                 Graph g = GraphParser.parse(path);
                 fail("Should have thrown GraphException");
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (GraphException e) {
                 assertTrue(true);
             }
@@ -88,47 +86,40 @@ public class GraphParserTests {
 
     /**
      * This test only tests the values written to file, not the syntax of the output
-     * @throws IOException
      */
     @Test
-    public void testOutputGeneration() throws IOException {
+    public void testOutputGeneration() throws IOException, GraphException, ScheduleException {
         final String outputPath = "test-output.dot";
-        try {
-            for (String inputPath : answers.keySet()) {
-                Graph g = GraphParser.parse(inputPath);
-                Schedule s = new BasicScheduler().run(g, 1, 2);
-                GraphParser.generateOutput(s, g, outputPath);
-                ParsedOutput parsedOutput = parseOutput(outputPath);
+        for (String inputPath : answers.keySet()) {
+            Graph g = GraphParser.parse(inputPath);
+            Schedule s = new BasicScheduler().run(g, 1, 2);
+            GraphParser.generateOutput(s, g, outputPath);
+            ParsedOutput parsedOutput = parseOutput(outputPath);
 
-                Map<String, MockNode> nodes = parsedOutput.getNodes();
-                Map<Pair<String, String>, MockEdge> edges = parsedOutput.getEdges();
+            Map<String, MockNode> nodes = parsedOutput.getNodes();
+            Map<Pair<String, String>, MockEdge> edges = parsedOutput.getEdges();
 
-                int numNodes = 0;
-                int numEdges = 0;
+            int numNodes = 0;
+            int numEdges = 0;
 
-                for (Processor processor : s.getProcessors()) {
-                    for (Node n : processor.getScheduledTasks()) {
-                        numNodes++;
-                        assertTrue(n.getLabel().equals(nodes.get(n.getLabel()).getName()));
-                        assertTrue(("" +n.getCost()).equals(nodes.get(n.getLabel()).getWeight()));
-                        assertTrue(s.getStartTime(n).toString().equals(nodes.get(n.getLabel()).getStartTime()));
-                        assertTrue(processor.getName().equals(nodes.get(n.getLabel()).getProcessor()));
-                        for (Edge e : g.getEdges(n)) {
-                            numEdges++;
-                            Pair<String, String> pair = new Pair(e.getParent().getLabel(), e.getChild().getLabel());
-                            assertTrue(e.getParent().toString().equals(edges.get(pair).getParent()));
-                            assertTrue(e.getChild().toString().equals(edges.get(pair).getChild()));
-                            assertTrue(("" + e.getCost()).equals(edges.get(pair).getWeight()));
-                        }
+            for (Processor processor : s.getProcessors()) {
+                for (Node n : s.getTasks(processor)) {
+                    numNodes++;
+                    assertTrue(n.getLabel().equals(nodes.get(n.getLabel()).getName()));
+                    assertTrue(("" + n.getCost()).equals(nodes.get(n.getLabel()).getWeight()));
+                    assertTrue(s.getStartTime(n).toString().equals(nodes.get(n.getLabel()).getStartTime()));
+                    assertTrue(processor.getName().equals(nodes.get(n.getLabel()).getProcessor()));
+                    for (Edge e : g.getEdges(n)) {
+                        numEdges++;
+                        Pair<String, String> pair = new Pair<>(e.getParent().getLabel(), e.getChild().getLabel());
+                        assertTrue(e.getParent().toString().equals(edges.get(pair).getParent()));
+                        assertTrue(e.getChild().toString().equals(edges.get(pair).getChild()));
+                        assertTrue(("" + e.getCost()).equals(edges.get(pair).getWeight()));
                     }
                 }
-                assertEquals(parsedOutput.getNodes().size(), numNodes);
-                assertEquals(parsedOutput.getEdges().size(), numEdges);
             }
-        } catch (ScheduleException e) {
-            e.printStackTrace();
-        } catch (GraphException e) {
-            e.printStackTrace();
+            assertEquals(parsedOutput.getNodes().size(), numNodes);
+            assertEquals(parsedOutput.getEdges().size(), numEdges);
         }
     }
 
@@ -164,19 +155,19 @@ public class GraphParserTests {
         Map<String, MockNode> nodes = new HashMap<>();
         Map<Pair<String, String>, MockEdge> edges = new HashMap<>();
 
-        public void addNode(MockNode node) {
+        void addNode(MockNode node) {
             nodes.put(node.getName(), node);
         }
 
-        public void addEdge(MockEdge edge) {
-            edges.put(new Pair(edge.getParent(), edge.getChild()), edge);
+        void addEdge(MockEdge edge) {
+            edges.put(new Pair<>(edge.getParent(), edge.getChild()), edge);
         }
 
-        public Map<String, MockNode> getNodes() {
+        Map<String, MockNode> getNodes() {
             return nodes;
         }
 
-        public Map<Pair<String, String>, MockEdge> getEdges() {
+        Map<Pair<String, String>, MockEdge> getEdges() {
             return edges;
         }
     }
@@ -187,48 +178,48 @@ public class GraphParserTests {
         String startTime;
         String processor;
 
-        public MockNode(String name, String weight, String startTime, String processor) {
+        MockNode(String name, String weight, String startTime, String processor) {
             this.name = name;
             this.weight = weight;
             this.startTime = startTime;
             this.processor = processor;
         }
 
-        public String getName() {
+        String getName() {
             return name;
         }
 
-        public String getWeight() {
+        String getWeight() {
             return weight;
         }
 
-        public String getStartTime() {
+        String getStartTime() {
             return startTime;
         }
 
-        public String getProcessor() {
+        String getProcessor() {
             return processor;
         }
     }
 
-    public class MockEdge{
+    public class MockEdge {
         String parent;
         String child;
         String weight;
 
-        public String getParent() {
+        String getParent() {
             return parent;
         }
 
-        public String getChild() {
+        String getChild() {
             return child;
         }
 
-        public String getWeight() {
+        String getWeight() {
             return weight;
         }
 
-        public MockEdge(String parent, String child, String weight) {
+        MockEdge(String parent, String child, String weight) {
             this.parent = parent;
             this.child = child;
             this.weight = weight;

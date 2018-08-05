@@ -1,17 +1,13 @@
 package se306.a1.scheduler.algorithm;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import se306.a1.scheduler.data.*;
+import se306.a1.scheduler.util.ScheduleException;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import se306.a1.scheduler.data.Edge;
-import se306.a1.scheduler.data.Graph;
-import se306.a1.scheduler.data.Node;
-import se306.a1.scheduler.data.Processor;
-import se306.a1.scheduler.data.Schedule;
-import se306.a1.scheduler.util.ScheduleException;
 
 /**
  * This class is a basic implementation of a scheduler, and will produce an unoptimised schedule by greedily
@@ -28,7 +24,7 @@ public class BasicScheduler implements Scheduler {
     private Graph graph;
 
     @Override
-    public Schedule run(Graph graph, int numProcessors, int numCores) {
+    public Schedule run(Graph graph, int numProcessors, int numCores) throws ScheduleException {
         schedule = new Schedule(numProcessors);
         this.graph = graph;
 
@@ -38,40 +34,37 @@ public class BasicScheduler implements Scheduler {
 
     /**
      * This method traverses the graph and creates the schedule.
+     * @throws ScheduleException if an error occurs when scheduling nodes
      */
-    private void createSchedule() {
+    private void createSchedule() throws ScheduleException {
         Set<Node> unscheduledNodes = new HashSet<>(graph.getEntryNodes());
         Set<Node> scheduledNodes = new HashSet<>();
         Node currentNode;
 
         while (!unscheduledNodes.isEmpty()) {
-            try {
-                currentNode = computeCheapest(unscheduledNodes);
-                logger.info(currentNode + " : " + currentNode.getCost());
+            currentNode = computeCheapest(unscheduledNodes);
+            logger.info(currentNode + " : " + currentNode.getCost());
 
-                for (Edge edge : graph.getEdges(currentNode)) {
-                    logger.info(edge);
-                    if (!scheduledNodes.contains(edge.getChild())) {
-                        unscheduledNodes.add(edge.getChild());
-                    }
+            for (Edge edge : graph.getEdges(currentNode)) {
+                logger.info(edge);
+                if (!scheduledNodes.contains(edge.getChild())) {
+                    unscheduledNodes.add(edge.getChild());
                 }
-
-                scheduledNodes.add(currentNode);
-                unscheduledNodes.remove(currentNode);
-
-                logger.info("Scheduled:\t" + scheduledNodes);
-                logger.info("Unscheduled:\t" + unscheduledNodes);
-            } catch (ScheduleException e) {
-                e.printStackTrace();
             }
-        }
 
+            scheduledNodes.add(currentNode);
+            unscheduledNodes.remove(currentNode);
+
+            logger.info("Scheduled:\t" + scheduledNodes);
+            logger.info("Unscheduled:\t" + unscheduledNodes);
+        }
         logger.info(schedule.getProcessors());
     }
 
     /**
      * This method is given a list of visible tasks and then computes
      * and schedules the cheapest possible task.
+     * @throws ScheduleException if an error occurs when scheduling nodes
      */
     private Node computeCheapest(Collection<Node> nodes) throws ScheduleException {
         Node cheapest = null;
@@ -103,5 +96,4 @@ public class BasicScheduler implements Scheduler {
         schedule.addScheduledTask(cheapest, processor, minTime);
         return cheapest;
     }
-
 }

@@ -2,7 +2,6 @@ package se306.a1.scheduler.util;
 
 import com.paypal.digraph.parser.GraphEdge;
 import com.paypal.digraph.parser.GraphNode;
-import com.sun.javafx.binding.StringFormatter;
 import se306.a1.scheduler.data.*;
 
 import java.io.*;
@@ -18,13 +17,14 @@ public class GraphParser {
 
     /**
      * Parses the input .dot file into an TaskGraph object.
-     * This method will take the input filepath and parse directed acyclic graph
+     * This method will take the input filepath and parse the directed acyclic graph
      * into a data object with nodes, edges, and corresponding costs. Within
-     * this hierarchy, parent and child relationships will explicit.
+     * this hierarchy, parent and child relationships will be defined.
      *
      * @param inputPath filepath of input .dot file
      * @return parsed object containing nodes, links, costs
-     * @throws IOException if the file cannot be found, or if an IO error occurs while reading
+     * @throws IOException    if the file cannot be found, or if an IO error occurs while reading
+     * @throws GraphException if the graph object contains invalid elements (cycles etc.)
      */
     public static Graph parse(String inputPath) throws IOException, GraphException {
         com.paypal.digraph.parser.GraphParser parser =
@@ -38,6 +38,9 @@ public class GraphParser {
 
         for (GraphNode node : parsedNodes.values()) {
             String label = node.getId();
+
+            if (node.getAttribute("Weight") == null)
+                throw new GraphException("Node '" + label + "' not declared or does not have 'Weight' attribute");
             int weight = Integer.parseInt(node.getAttribute("Weight").toString());
 
             nodes.put(label, new Node(label, weight));
@@ -46,17 +49,21 @@ public class GraphParser {
         for (GraphEdge edge : parsedEdges.values()) {
             Node parent = nodes.get(edge.getNode1().getId());
             Node child = nodes.get(edge.getNode2().getId());
+
+            if (edge.getAttribute("Weight") == null)
+                throw new GraphException("Edge '" + parent + "->" + child + "' does not have 'Weight' attribute");
             int weight = Integer.parseInt(edge.getAttribute("Weight").toString());
 
             List<Node> currentAncestors = new ArrayList<>();
             if (ancestors.get(parent) != null) {
                 currentAncestors.addAll(ancestors.get(parent));
             }
+
             currentAncestors.add(parent);
             ancestors.put(child, currentAncestors);
 
             if (currentAncestors.contains(child)) {
-                throw new GraphException("Graph contains a cycle with edge: " + parent.getLabel() + " -> " +  child.getLabel());
+                throw new GraphException("Graph contains a cycle with edge: " + parent.getLabel() + " -> " + child.getLabel());
             }
 
             edges.add(new Edge(parent, child, weight));
@@ -65,14 +72,17 @@ public class GraphParser {
     }
 
     /**
-     * Generates the .dot file output from TaskGraph object.
+     * Generates the .dot file output from a Schedule and Graph object.
      * This method will take the computed schedule object and generate the
      * corresponding .dot output file.
      *
-     * @param schedule calculated schedule object
-     * @throws IOException if the output file cannot be created or if an error occurs while writing
+     * @param schedule   calculated schedule object
+     * @param graph      graph representation that is scheduled
+     * @param outputPath location where the output file will be made at
+     * @throws IOException       if the output file cannot be created or if an error occurs while writing
+     * @throws ScheduleException if a node hasn't been correctly scheduled
      */
-    public static void generateOutput(Schedule schedule, Graph graph, String outputPath) throws IOException {
+    public static void generateOutput(Schedule schedule, Graph graph, String outputPath) throws IOException, ScheduleException {
         File file = new File(outputPath);
 
         if (!file.exists()) {
@@ -89,7 +99,7 @@ public class GraphParser {
             Set<Edge> edges = new HashSet<>();
 
             for (Processor processor : schedule.getProcessors()) {
-                for (Node node : processor.getScheduledTasks()) {
+                for (Node node : schedule.getTasks(processor)) {
                     bufferedWriter.newLine();
                     bufferedWriter.write(formatNode(node, schedule.getStartTime(node), processor.getName()));
                     edges.addAll(graph.getEdges(node));
@@ -103,15 +113,15 @@ public class GraphParser {
 
             bufferedWriter.newLine();
             bufferedWriter.write("}");
-        } catch (ScheduleException e) {
-            e.printStackTrace();
         }
     }
 
     /**
      * This method formats the string for printing a node.
      *
-     * @param node the node which requires formatting for output
+     * @param node      the node which requires formatting for output
+     * @param startTime time at which the node is scheduled to start
+     * @param processor the processor on which the node is scheduled to be executed on
      * @return formatted output string for the supplied node
      */
     private static String formatNode(Node node, int startTime, String processor) {
@@ -121,4 +131,3 @@ public class GraphParser {
                 ", Processor=" + processor + "];";
     }
 }
-

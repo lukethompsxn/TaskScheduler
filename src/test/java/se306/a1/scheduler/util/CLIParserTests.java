@@ -1,14 +1,11 @@
 package se306.a1.scheduler.util;
 
 import org.apache.commons.cli.ParseException;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertEquals;
@@ -30,7 +27,7 @@ public class CLIParserTests {
             assertEquals(4, config.processors);
             assertEquals("test.dot", config.inputPath);
             assertEquals("test-output.dot", config.outputPath);
-            assertEquals(-1, config.cores);
+            assertEquals(1, config.cores);
             assertEquals(false, config.isParallel);
             assertEquals(false, config.isVisualised);
         } catch (ParseException e) {

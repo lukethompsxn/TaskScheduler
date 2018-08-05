@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a Directed Acyclic Graph where nodes are tasks and edges
+ * represent dependencies.
+ *
+ * @author Abhinav Behal, Zhi Qiao
+ */
 public class TaskGraph implements Graph {
     private final Map<Node, List<Edge>> children;
     private final Map<Node, List<Node>> parents;
@@ -50,7 +56,6 @@ public class TaskGraph implements Graph {
             if (!parents.containsKey(n) || parents.get(n).isEmpty())
                 entries.add(n);
         }
-
         return entries;
     }
 
@@ -73,6 +78,7 @@ public class TaskGraph implements Graph {
             parents.put(n, new ArrayList<>());
             children.put(n, new ArrayList<>());
         }
+
         for (Edge e : edges) {
             Node parentNode = nodes.containsValue(e.getParent()) ? e.getParent() : null;
             Node childNode = nodes.containsValue(e.getChild()) ? e.getChild() : null;

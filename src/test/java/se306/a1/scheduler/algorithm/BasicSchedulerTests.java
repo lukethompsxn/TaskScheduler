@@ -2,11 +2,7 @@ package se306.a1.scheduler.algorithm;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import se306.a1.scheduler.data.Edge;
-import se306.a1.scheduler.data.Graph;
-import se306.a1.scheduler.data.Node;
-import se306.a1.scheduler.data.Processor;
-import se306.a1.scheduler.data.Schedule;
+import se306.a1.scheduler.data.*;
 import se306.a1.scheduler.util.GraphException;
 import se306.a1.scheduler.util.GraphParser;
 import se306.a1.scheduler.util.ScheduleException;
@@ -34,9 +30,7 @@ public class BasicSchedulerTests {
                     if (!p.toString().contains("-cycle")) {
                         graphs.add(GraphParser.parse(p.toString()));
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (GraphException e) {
+                } catch (IOException | GraphException e) {
                     e.printStackTrace();
                 }
             });

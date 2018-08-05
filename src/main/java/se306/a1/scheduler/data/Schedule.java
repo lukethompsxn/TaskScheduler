@@ -51,6 +51,7 @@ public class Schedule {
      *
      * @param node the node (task) that the start time is wanted for
      * @return the start time of the node (task) on its processor
+     * @throws ScheduleException if node hasn't been scheduled
      */
     public Integer getStartTime(Node node) throws ScheduleException {
         if (!scheduledTasks.containsKey(node)) {
@@ -62,8 +63,9 @@ public class Schedule {
     /**
      * This method returns the processor which the node (task) is allocated to.
      *
-     * @param node the node (task) that the processor is wanted for.
+     * @param node the node (task) that the processor is wanted for
      * @return the processor which the node (task) is allocated to
+     * @throws ScheduleException if node hasn't been scheduled on any processors
      */
     public Processor getProcessor(Node node) throws ScheduleException {
         if (!scheduledTasks.containsKey(node)) {

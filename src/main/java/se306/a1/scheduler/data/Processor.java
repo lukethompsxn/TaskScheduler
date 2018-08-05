@@ -1,6 +1,8 @@
 package se306.a1.scheduler.data;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents a processor and manages the tasks allocated to it.
@@ -28,6 +30,7 @@ public class Processor {
      *
      * @param node the task to be scheduled
      * @param time the time at which to schedule the task
+     * @throws RuntimeException if node cannot be scheduled at the specified time or is already scheduled
      */
     void schedule(Node node, int time) {
         if (startTimes.containsKey(node))
@@ -44,7 +47,7 @@ public class Processor {
      *
      * @return the scheduled tasks
      */
-    public Collection<Node> getScheduledTasks() {
+    Collection<Node> getScheduledTasks() {
         return startTimes.keySet();
     }
 
