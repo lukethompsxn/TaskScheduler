@@ -60,43 +60,4 @@ public class BasicScheduler extends Scheduler {
         }
         logger.info(schedule.getProcessors());
     }
-
-<<<<<<< 71a5f4f72fe71c4e5379876ac0eb7d96fb7de885
-    /**
-     * This method is given a list of visible tasks and then computes
-     * and schedules the cheapest possible task.
-     * @throws ScheduleException if an error occurs when scheduling nodes
-     */
-    private Node computeCheapest(Collection<Node> nodes) throws ScheduleException {
-        Node cheapest = null;
-        Processor processor = null;
-        int minTime = Integer.MAX_VALUE;
-
-        for (Node node : nodes) {
-            if (!schedule.isScheduled(graph.getParents(node)))
-                continue;
-
-            for (Processor p : schedule.getProcessors()) {
-                int time = p.getEarliestStartTime();
-
-                for (Node parent : graph.getParents(node)) {
-                    if (!schedule.getProcessor(parent).equals(p)) {
-                        time = Math.max(time, graph.getCost(parent, node) + schedule.getStartTime(parent) + parent.getCost());
-                    }
-                }
-
-                if (time < minTime) {
-                    minTime = time;
-                    processor = p;
-                    cheapest = node;
-                }
-            }
-        }
-
-        logger.info("node: '" + cheapest + "'\tstarts at " + minTime + "s\ton processor [" + processor.getName() + "] for " + cheapest.getCost() + "s");
-        schedule.addScheduledTask(cheapest, processor, minTime);
-        return cheapest;
-    }
-=======
->>>>>>> Refactored methods from BasicScheduler into Scheduler
 }

@@ -28,10 +28,11 @@ public abstract class Scheduler {
 	 * @param graph         graph containing tasks
 	 * @param numProcessors number of processors to be run on
 	 * @param numCores      number of cores to be run on (optional)
+	 * @throws ScheduleException 
 	 */
 	protected abstract Schedule run(Graph graph,
 			int numProcessors,
-			int numCores);
+			int numCores) throws ScheduleException;
 
 	/**
 	 * This method is given a list of visible tasks and then computes
