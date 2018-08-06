@@ -59,5 +59,9 @@ public class BasicScheduler extends Scheduler {
             logger.info("Unscheduled:\t" + unscheduledNodes);
         }
         logger.info(schedule.getProcessors());
+
+        for (Processor processor : schedule.getProcessors()) {
+            System.out.println(processor);
+        }
     }
 }

@@ -15,7 +15,6 @@ import se306.a1.scheduler.util.ScheduleException;
  *
  * @author Luke Thompson
  */
-
 public abstract class Scheduler {
 	protected Schedule schedule;
 	protected Graph g;
@@ -28,6 +27,7 @@ public abstract class Scheduler {
 	 * @param graph         graph containing tasks
 	 * @param numProcessors number of processors to be run on
 	 * @param numCores      number of cores to be run on (optional)
+<<<<<<< HEAD
 	 * @throws ScheduleException 
 	 */
 	protected abstract Schedule run(Graph graph,
