@@ -24,7 +24,7 @@ public class StateManager {
      *
      * @param schedule a schedule instance to add to the queue
      */
-    public void queueSchedule(Schedule schedule) {
+    public void queue(Schedule schedule) {
         //Comparable needs overwriting in schedule based on heuristic
         schedules.add(schedule);
         logger.info("Schedule Queued. Queue Length = " + schedules.size());
@@ -37,7 +37,7 @@ public class StateManager {
      *
      * @return the best schedule at current point in time
      */
-    public Schedule getBestSchedule() {
+    public Schedule dequeue() {
         logger.info("Best Schedule Retrieved");
         return schedules.poll();
     }
