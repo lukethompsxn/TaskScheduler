@@ -3,6 +3,8 @@ package se306.a1.scheduler.util;
 import org.apache.commons.cli.ParseException;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import se306.a1.scheduler.util.exception.CLIException;
+import se306.a1.scheduler.util.parse.CLIParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
 import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
-import static se306.a1.scheduler.util.CLIParser.getCLIParserInst;
+import static se306.a1.scheduler.util.parse.CLIParser.getCLIParserInst;
 
 public class CLIParserTests {
 

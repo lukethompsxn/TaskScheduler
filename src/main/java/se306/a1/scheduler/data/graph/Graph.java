@@ -1,4 +1,7 @@
-package se306.a1.scheduler.data;
+package se306.a1.scheduler.data.graph;
+
+import se306.a1.scheduler.data.graph.Edge;
+import se306.a1.scheduler.data.graph.Node;
 
 import java.util.List;
 

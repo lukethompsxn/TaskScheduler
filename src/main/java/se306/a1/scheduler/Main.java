@@ -4,9 +4,14 @@ import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se306.a1.scheduler.algorithm.BasicScheduler;
-import se306.a1.scheduler.data.Graph;
-import se306.a1.scheduler.data.Schedule;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.schedule.Schedule;
 import se306.a1.scheduler.util.*;
+import se306.a1.scheduler.util.exception.CLIException;
+import se306.a1.scheduler.util.exception.GraphException;
+import se306.a1.scheduler.util.exception.ScheduleException;
+import se306.a1.scheduler.util.parse.CLIParser;
+import se306.a1.scheduler.util.parse.GraphParser;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

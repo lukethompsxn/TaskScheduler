@@ -1,8 +1,6 @@
-package se306.a1.scheduler.algorithm.astar;
+package se306.a1.scheduler.data.schedule;
 
 import java.util.List;
-
-import se306.a1.scheduler.data.Processor;
 
 public class State {
 	private byte[] nodes;

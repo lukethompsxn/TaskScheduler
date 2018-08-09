@@ -1,4 +1,6 @@
-package se306.a1.scheduler.data;
+package se306.a1.scheduler.data.schedule;
+
+import se306.a1.scheduler.data.graph.Node;
 
 import java.util.Collection;
 import java.util.HashMap;

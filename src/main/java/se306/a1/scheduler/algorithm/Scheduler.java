@@ -2,11 +2,11 @@ package se306.a1.scheduler.algorithm;
 
 import java.util.Collection;
 
-import se306.a1.scheduler.data.Graph;
-import se306.a1.scheduler.data.Node;
-import se306.a1.scheduler.data.Processor;
-import se306.a1.scheduler.data.Schedule;
-import se306.a1.scheduler.util.ScheduleException;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.ScheduleException;
 
 /**
  * This class represents an abstract scheduler.
@@ -17,7 +17,7 @@ import se306.a1.scheduler.util.ScheduleException;
  */
 public abstract class Scheduler {
 	protected Schedule schedule;
-	protected Graph g;
+	protected Graph graph;
 
 	/**
 	 * Initialises and executes the algorithm.
@@ -27,7 +27,7 @@ public abstract class Scheduler {
 	 * @param graph         graph containing tasks
 	 * @param numProcessors number of processors to be run on
 	 * @param numCores      number of cores to be run on (optional)
-<<<<<<< HEAD
+
 	 * @throws ScheduleException 
 	 */
 	protected abstract Schedule run(Graph graph,
@@ -44,15 +44,15 @@ public abstract class Scheduler {
 		int minTime = Integer.MAX_VALUE;
 
 		for (Node node : nodes) {
-			if (!schedule.isScheduled(g.getParents(node)))
+			if (!schedule.isScheduled(graph.getParents(node)))
 				continue;
 
 			for (Processor p : schedule.getProcessors()) {
 				int time = p.getEarliestStartTime();
 
-				for (Node parent : g.getParents(node)) {
+				for (Node parent : graph.getParents(node)) {
 					if (!schedule.getProcessor(parent).equals(p)) {
-						time = Math.max(time, g.getCost(parent, node) + schedule.getStartTime(parent) + parent.getCost());
+						time = Math.max(time, graph.getCost(parent, node) + schedule.getStartTime(parent) + parent.getCost());
 					}
 				}
 

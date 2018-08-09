@@ -6,7 +6,14 @@ import javafx.util.Pair;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import se306.a1.scheduler.algorithm.BasicScheduler;
-import se306.a1.scheduler.data.*;
+import se306.a1.scheduler.data.graph.Edge;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.GraphException;
+import se306.a1.scheduler.util.exception.ScheduleException;
+import se306.a1.scheduler.util.parse.GraphParser;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

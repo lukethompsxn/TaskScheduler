@@ -1,4 +1,4 @@
-package se306.a1.scheduler.data;
+package se306.a1.scheduler.data.graph;
 
 /**
  * Represents a node in a graph, with a given label and cost.

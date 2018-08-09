@@ -1,8 +1,10 @@
-package se306.a1.scheduler.util;
+package se306.a1.scheduler.util.parse;
 
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se306.a1.scheduler.util.InputConfig;
+import se306.a1.scheduler.util.exception.CLIException;
 
 import java.util.Scanner;
 

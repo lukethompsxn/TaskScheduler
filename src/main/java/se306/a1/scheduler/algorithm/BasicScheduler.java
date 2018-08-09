@@ -2,10 +2,13 @@ package se306.a1.scheduler.algorithm;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se306.a1.scheduler.data.*;
-import se306.a1.scheduler.util.ScheduleException;
+import se306.a1.scheduler.data.graph.Edge;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.ScheduleException;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 

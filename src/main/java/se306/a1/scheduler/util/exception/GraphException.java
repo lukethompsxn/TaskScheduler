@@ -1,4 +1,4 @@
-package se306.a1.scheduler.util;
+package se306.a1.scheduler.util.exception;
 
 /**
  * This exception class represented the exceptions associated with the task graph

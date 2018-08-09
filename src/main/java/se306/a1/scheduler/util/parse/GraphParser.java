@@ -1,8 +1,15 @@
-package se306.a1.scheduler.util;
+package se306.a1.scheduler.util.parse;
 
 import com.paypal.digraph.parser.GraphEdge;
 import com.paypal.digraph.parser.GraphNode;
-import se306.a1.scheduler.data.*;
+import se306.a1.scheduler.data.graph.Edge;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.graph.TaskGraph;
+import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.GraphException;
+import se306.a1.scheduler.util.exception.ScheduleException;
 
 import java.io.*;
 import java.util.*;

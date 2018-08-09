@@ -2,10 +2,14 @@ package se306.a1.scheduler.algorithm;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import se306.a1.scheduler.data.*;
-import se306.a1.scheduler.util.GraphException;
-import se306.a1.scheduler.util.GraphParser;
-import se306.a1.scheduler.util.ScheduleException;
+import se306.a1.scheduler.data.graph.Edge;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.GraphException;
+import se306.a1.scheduler.util.parse.GraphParser;
+import se306.a1.scheduler.util.exception.ScheduleException;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,6 +1,8 @@
-package se306.a1.scheduler.data;
+package se306.a1.scheduler.data.schedule;
 
-import se306.a1.scheduler.util.ScheduleException;
+import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.util.exception.ScheduleException;
 
 import java.util.*;
 
