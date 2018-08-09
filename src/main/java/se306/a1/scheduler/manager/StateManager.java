@@ -15,7 +15,7 @@ import java.util.Queue;
 public class StateManager {
     private Queue<Schedule> schedules = new PriorityQueue<>();
 
-    private static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
+    private static Logger logger = LogManager.getLogger(StateManager.class.getSimpleName());
 
     /**
      * This method add a new schedule to the priority queue.
