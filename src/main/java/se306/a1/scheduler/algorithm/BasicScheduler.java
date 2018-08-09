@@ -20,23 +20,13 @@ import java.util.Set;
  */
 public class BasicScheduler extends Scheduler {
 
-    // Logger for runtime logging
-    private static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
-
-    @Override
-    public Schedule run(Graph graph, int numProcessors, int numCores) throws ScheduleException {
-        schedule = new Schedule(numProcessors);
-        this.graph = graph;
-
-        createSchedule();
-        return schedule;
-    }
-
     /**
      * This method traverses the graph and creates the schedule.
+     *
      * @throws ScheduleException if an error occurs when scheduling nodes
      */
-    private void createSchedule() throws ScheduleException {
+    @Override
+    protected void createSchedule() throws ScheduleException {
         Set<Node> unscheduledNodes = new HashSet<>(graph.getEntryNodes());
         Set<Node> scheduledNodes = new HashSet<>();
         Node currentNode;
@@ -59,9 +49,5 @@ public class BasicScheduler extends Scheduler {
             logger.info("Unscheduled:\t" + unscheduledNodes);
         }
         logger.info(schedule.getProcessors());
-
-        for (Processor processor : schedule.getProcessors()) {
-            System.out.println(processor);
-        }
     }
 }

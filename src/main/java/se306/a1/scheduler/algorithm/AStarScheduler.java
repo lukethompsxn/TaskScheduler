@@ -1,14 +1,11 @@
 package se306.a1.scheduler.algorithm;
 
-import se306.a1.scheduler.data.graph.Graph;
-import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.ScheduleException;
 
-public class AStarScheduler extends Scheduler{
+public class AStarScheduler extends Scheduler {
 
-	@Override
-	protected Schedule run(Graph graph, int numProcessors, int numCores) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    protected void createSchedule() throws ScheduleException {
 
+    }
 }
