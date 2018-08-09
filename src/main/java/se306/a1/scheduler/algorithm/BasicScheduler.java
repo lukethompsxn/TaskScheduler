@@ -23,9 +23,6 @@ public class BasicScheduler extends Scheduler {
     // Logger for runtime logging
     private static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
 
-    private Schedule schedule;
-    private Graph graph;
-
     @Override
     public Schedule run(Graph graph, int numProcessors, int numCores) throws ScheduleException {
         schedule = new Schedule(numProcessors);
