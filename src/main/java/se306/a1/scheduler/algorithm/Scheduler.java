@@ -65,7 +65,7 @@ public abstract class Scheduler {
 		}
 
 		System.out.println("time:\t" + minTime + "\tnode:\t" + cheapest + "\ton " + processor.getName() + " for " + cheapest.getCost());
-		schedule.addScheduledTask(cheapest, processor, minTime);
+		schedule.addScheduledTask(cheapest, graph.getEdges(cheapest), processor, minTime);
 		return cheapest;
 	}
 }

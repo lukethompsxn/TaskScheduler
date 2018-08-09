@@ -1,5 +1,6 @@
 package se306.a1.scheduler.data.schedule;
 
+import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.util.exception.ScheduleException;
@@ -15,6 +16,7 @@ import java.util.*;
  */
 public class Schedule {
     private final Map<Node, Processor> scheduledTasks;
+    private Set<Edge> unscheduledTasks;
     private final List<Processor> processors;
     private int length;
 
@@ -28,6 +30,7 @@ public class Schedule {
         scheduledTasks = new HashMap<>();
         processors = new ArrayList<>();
         length = 0;
+        unscheduledTasks = new HashSet<>();
 
         for (int i = 1; i <= numProcessors; i++) {
             processors.add(new Processor("" + i));
@@ -42,10 +45,13 @@ public class Schedule {
      * @param processor the processor which the node (task) is scheduled on
      * @param startTime the starting time of the task to be added to the processor
      */
-    public void addScheduledTask(Node node, Processor processor, int startTime) {
+    public void addScheduledTask(Node node, List<Edge> visibleTasks, Processor processor, int startTime) {
         scheduledTasks.put(node, processor);
         processor.schedule(node, startTime);
         length = Math.max(length, startTime + node.getCost());
+
+
+        unscheduledTasks.addAll(visibleTasks);
     }
 
     /**
@@ -127,5 +133,25 @@ public class Schedule {
      */
     public boolean isScheduled(List<Node> nodes) {
         return scheduledTasks.keySet().containsAll(nodes);
+    }
+
+    /**
+     * This method returns a set of unscheduled tasks for this schedule state.
+     *
+     * @return set of edges where the parent scheduled but the child  is not
+     * yet scheduled.
+     */
+    public Set<Edge> getUnscheduledTasks() {
+        return unscheduledTasks;
+    }
+
+    /**
+     * This method takes a set of egdes where the child node is an unscheduled
+     * task and them to the set of visible tasks which are yet to be scheduled
+     *
+     * @param visibleTasks list of visible, yet unscheduled tasks
+     */
+    public void addUnscheduledTasks(List<Edge> visibleTasks) {
+        unscheduledTasks.addAll(visibleTasks);
     }
 }
