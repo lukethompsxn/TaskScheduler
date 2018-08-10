@@ -21,17 +21,17 @@ public class AStarSchedulerTests {
 
     @BeforeClass
     public static void prepareGraphs() throws IOException, GraphException {
-        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_7_OutTree"), 28);
-        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_8_Random"), 581);
-        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_9_SeriesParallel"), 55);
-        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_10_Random"), 50);
-        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_11_OutTree"), 350);
+        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_7_OutTree.dot"), 28);
+        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_8_Random.dot"), 581);
+        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_9_SeriesParallel.dot"), 55);
+        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_10_Random.dot"), 50);
+        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Node_11_OutTree.dot"), 350);
 
-        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_7_OutTree"), 22);
-        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_8_Random"), 581);
-        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_9_SeriesParallel"), 55);
-        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_10_Random"), 50);
-        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_11_OutTree"), 227);
+        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_7_OutTree.dot"), 22);
+        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_8_Random.dot"), 581);
+        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_9_SeriesParallel.dot"), 55);
+        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_10_Random.dot"), 50);
+        timedGraphs4Proc.put(GraphParser.parse("input_graphs/Node_11_OutTree.dot"), 227);
     }
 
     @Test
