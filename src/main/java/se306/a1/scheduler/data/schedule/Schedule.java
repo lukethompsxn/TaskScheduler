@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class Schedule implements Comparable<Schedule> {
     private final Map<Node, Processor> scheduledTasks;
-    private final Set<Edge> unscheduledTasks;
+    private final Set<Node> unscheduledTasks;
     private final List<Processor> processors;
     private final Graph graph;
     private int length;
@@ -47,12 +47,31 @@ public class Schedule implements Comparable<Schedule> {
      *
      * @param scheduledTasks map of scheduled tasks and their processor
      * @param unscheduledTasks set of unscheduled tasks
+     * @param graph graph object representing nodes and edges
+     * @param length total time for schedule to complete
+     * @param cost underestimate of schedule time
+     */
+    public Schedule(Map<Node, Processor> scheduledTasks, List<Processor> processors, Set<Node> unscheduledTasks, Graph graph, int length, int cost) {
+        this.scheduledTasks = scheduledTasks;
+        this.unscheduledTasks = unscheduledTasks;
+        this.processors = processors;
+        this.length = length;
+        this.cost = cost;
+        this.graph = graph;
+    }
+
+    /**
+     * Constructor for Schedule when creating a schedule as an extension of the
+     * parent tasks schedule.
+     *
+     * @param scheduledTasks map of scheduled tasks and their processor
+     * @param unscheduledTasks set of unscheduled tasks
      * @param processors list of processors
      * @param graph graph object representing nodes and edges
      * @param length total time for schedule to complete
      * @param cost underestimate of schedule time
      */
-    public Schedule(Map<Node, Processor> scheduledTasks, Set<Edge> unscheduledTasks, List<Processor> processors, Graph graph, int length, int cost) {
+    public Schedule(Map<Node, Processor> scheduledTasks, Set<Node> unscheduledTasks, List<Processor> processors, Graph graph, int length, int cost) {
         this.scheduledTasks = scheduledTasks;
         this.unscheduledTasks = unscheduledTasks;
         this.processors = processors;
@@ -76,7 +95,9 @@ public class Schedule implements Comparable<Schedule> {
         length = Math.max(length, startTime + node.getCost());
         cost = Math.max(cost, startTime + graph.getBottomLevel(node));
 
-        unscheduledTasks.addAll(visibleTasks);
+        for (Edge e : visibleTasks) {
+            unscheduledTasks.add(e.getChild());
+        }
     }
 
     /**
@@ -166,7 +187,7 @@ public class Schedule implements Comparable<Schedule> {
      * @return set of edges where the parent scheduled but the child  is not
      * yet scheduled.
      */
-    public Set<Edge> getUnscheduledTasks() {
+    public Set<Node> getUnscheduledTasks() {
         return unscheduledTasks;
     }
 
@@ -177,7 +198,9 @@ public class Schedule implements Comparable<Schedule> {
      * @param visibleTasks list of visible, yet unscheduled tasks
      */
     public void addUnscheduledTasks(List<Edge> visibleTasks) {
-        unscheduledTasks.addAll(visibleTasks);
+        for (Edge e : visibleTasks) {
+            unscheduledTasks.add(e.getChild());
+        }
     }
 
     @Override
