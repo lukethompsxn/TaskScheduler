@@ -16,8 +16,8 @@ import java.util.*;
  */
 public class Schedule implements Comparable<Schedule> {
     private final Map<Node, Processor> scheduledTasks;
-    private final List<Processor> processors;
     private final Set<Edge> unscheduledTasks;
+    private final List<Processor> processors;
     private final Graph graph;
     private int length;
     private int cost;
@@ -39,6 +39,26 @@ public class Schedule implements Comparable<Schedule> {
         for (int i = 1; i <= numProcessors; i++) {
             processors.add(new Processor("" + i));
         }
+    }
+
+    /**
+     * Constructor for Schedule when creating a schedule as an extension of the
+     * parent tasks schedule.
+     *
+     * @param scheduledTasks map of scheduled tasks and their processor
+     * @param unscheduledTasks set of unscheduled tasks
+     * @param processors list of processors
+     * @param graph graph object representing nodes and edges
+     * @param length total time for schedule to complete
+     * @param cost underestimate of schedule time
+     */
+    public Schedule(Map<Node, Processor> scheduledTasks, Set<Edge> unscheduledTasks, List<Processor> processors, Graph graph, int length, int cost) {
+        this.scheduledTasks = scheduledTasks;
+        this.unscheduledTasks = unscheduledTasks;
+        this.processors = processors;
+        this.length = length;
+        this.cost = cost;
+        this.graph = graph;
     }
 
     /**
