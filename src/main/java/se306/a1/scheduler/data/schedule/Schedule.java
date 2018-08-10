@@ -1,8 +1,8 @@
 package se306.a1.scheduler.data.schedule;
 
 import se306.a1.scheduler.data.graph.Edge;
+import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.graph.Node;
-import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
 import java.util.*;
@@ -14,11 +14,13 @@ import java.util.*;
  *
  * @author Luke Thompson
  */
-public class Schedule {
+public class Schedule implements Comparable<Schedule> {
     private final Map<Node, Processor> scheduledTasks;
-    private Set<Edge> unscheduledTasks;
     private final List<Processor> processors;
+    private final Set<Edge> unscheduledTasks;
+    private final Graph graph;
     private int length;
+    private int cost;
 
     /**
      * Constructor for Schedule which generates a specified number of processors
@@ -26,11 +28,13 @@ public class Schedule {
      *
      * @param numProcessors the number of processors as specified in command line
      */
-    public Schedule(int numProcessors) {
+    public Schedule(Graph graph, int numProcessors) {
         scheduledTasks = new HashMap<>();
         processors = new ArrayList<>();
-        length = 0;
         unscheduledTasks = new HashSet<>();
+        length = 0;
+        cost = 0;
+        this.graph = graph;
 
         for (int i = 1; i <= numProcessors; i++) {
             processors.add(new Processor("" + i));
@@ -48,8 +52,9 @@ public class Schedule {
     public void addScheduledTask(Node node, List<Edge> visibleTasks, Processor processor, int startTime) {
         scheduledTasks.put(node, processor);
         processor.schedule(node, startTime);
-        length = Math.max(length, startTime + node.getCost());
 
+        length = Math.max(length, startTime + node.getCost());
+        cost = Math.max(cost, startTime + graph.getBottomLevel(node));
 
         unscheduledTasks.addAll(visibleTasks);
     }
@@ -153,5 +158,10 @@ public class Schedule {
      */
     public void addUnscheduledTasks(List<Edge> visibleTasks) {
         unscheduledTasks.addAll(visibleTasks);
+    }
+
+    @Override
+    public int compareTo(Schedule other) {
+        return Integer.compare(cost, other.cost);
     }
 }

@@ -37,7 +37,7 @@ public abstract class Scheduler {
      * @throws ScheduleException if there is a scheduling error
      */
     public Schedule run(Graph graph, int numProcessors, int numCores) throws ScheduleException {
-        schedule = new Schedule(numProcessors);
+        schedule = new Schedule(graph, numProcessors);
         this.graph = graph;
 
         createSchedule();
