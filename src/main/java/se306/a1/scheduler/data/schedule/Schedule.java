@@ -41,24 +41,6 @@ public class Schedule implements Comparable<Schedule> {
         }
     }
 
-    /**
-     * Constructor for Schedule when creating a schedule as an extension of the
-     * parent tasks schedule.
-     *
-     * @param scheduledTasks map of scheduled tasks and their processor
-     * @param unscheduledTasks set of unscheduled tasks
-     * @param graph graph object representing nodes and edges
-     * @param length total time for schedule to complete
-     * @param cost underestimate of schedule time
-     */
-    public Schedule(Map<Node, Processor> scheduledTasks, List<Processor> processors, Set<Node> unscheduledTasks, Graph graph, int length, int cost) {
-        this.scheduledTasks = scheduledTasks;
-        this.unscheduledTasks = unscheduledTasks;
-        this.processors = processors;
-        this.length = length;
-        this.cost = cost;
-        this.graph = graph;
-    }
 
     /**
      * Constructor for Schedule when creating a schedule as an extension of the
