@@ -24,6 +24,8 @@ public abstract class Scheduler {
 
     protected Schedule schedule;
     protected Graph graph;
+    protected int processors;
+    protected int cores;
 
     /**
      * Initialises and executes the algorithm.
@@ -37,8 +39,9 @@ public abstract class Scheduler {
      * @throws ScheduleException if there is a scheduling error
      */
     public Schedule run(Graph graph, int numProcessors, int numCores) throws ScheduleException {
-        schedule = new Schedule(graph, numProcessors);
         this.graph = graph;
+        processors = numProcessors;
+        cores = numCores;
 
         createSchedule();
 
@@ -83,7 +86,7 @@ public abstract class Scheduler {
         }
 
         logger.info("node: '" + cheapest + "'\tstarts at " + minTime + "s\ton processor [" + processor.getName() + "] for " + cheapest.getCost() + "s");
-        schedule.addScheduledTask(cheapest, graph.getEdges(cheapest), processor, minTime);
+        schedule.addScheduledTask(cheapest, processor, minTime);
         return cheapest;
     }
 }

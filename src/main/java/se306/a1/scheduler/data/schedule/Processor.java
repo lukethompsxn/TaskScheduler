@@ -28,6 +28,17 @@ public class Processor {
     }
 
     /**
+     * Creates a copy of the processor that is passed in.
+     *
+     * @param processor processor object to be copied
+     */
+    public Processor(Processor processor) {
+        this.startTimes = new HashMap<>(processor.startTimes);
+        this.name = processor.name;
+        this.earliestStartTime = processor.earliestStartTime;
+    }
+
+    /**
      * Schedules a task (node) to be run on the processor.
      *
      * @param node the task to be scheduled

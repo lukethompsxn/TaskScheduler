@@ -27,6 +27,8 @@ public class BasicScheduler extends Scheduler {
      */
     @Override
     protected void createSchedule() throws ScheduleException {
+        schedule = new Schedule(graph, processors);
+
         Set<Node> unscheduledNodes = new HashSet<>(graph.getEntryNodes());
         Set<Node> scheduledNodes = new HashSet<>();
         Node currentNode;

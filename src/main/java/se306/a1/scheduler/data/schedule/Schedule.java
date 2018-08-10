@@ -30,17 +30,40 @@ public class Schedule implements Comparable<Schedule> {
      */
     public Schedule(Graph graph, int numProcessors) {
         scheduledTasks = new HashMap<>();
-        processors = new ArrayList<>();
         unscheduledTasks = new HashSet<>();
+        processors = new ArrayList<>();
+        this.graph = graph;
         length = 0;
         cost = 0;
-        this.graph = graph;
 
         for (int i = 1; i <= numProcessors; i++) {
             processors.add(new Processor("" + i));
         }
     }
 
+    /**
+     * Constructor for Schedule when creating a schedule as an extension of the
+     * parent tasks schedule.
+     *
+     * @param scheduledTasks map of scheduled tasks and their processor
+     * @param unscheduledTasks set of unscheduled tasks
+     * @param numProcessors the number of processors as specified in command line
+     * @param graph graph object representing nodes and edges
+     * @param length total time for schedule to complete
+     * @param cost underestimate of schedule time
+     */
+    public Schedule(Map<Node, Processor> scheduledTasks, Set<Node> unscheduledTasks, int numProcessors, Graph graph, int length, int cost) {
+        this.scheduledTasks = scheduledTasks;
+        this.unscheduledTasks = unscheduledTasks;
+        this.processors = new ArrayList<>();
+        this.graph = graph;
+        this.length = length;
+        this.cost = cost;
+
+        for (int i = 1; i <= numProcessors; i++) {
+            processors.add(new Processor("" + i));
+        }
+    }
 
     /**
      * Constructor for Schedule when creating a schedule as an extension of the
@@ -57,9 +80,9 @@ public class Schedule implements Comparable<Schedule> {
         this.scheduledTasks = scheduledTasks;
         this.unscheduledTasks = unscheduledTasks;
         this.processors = processors;
+        this.graph = graph;
         this.length = length;
         this.cost = cost;
-        this.graph = graph;
     }
 
     /**
@@ -70,16 +93,27 @@ public class Schedule implements Comparable<Schedule> {
      * @param processor the processor which the node (task) is scheduled on
      * @param startTime the starting time of the task to be added to the processor
      */
-    public void addScheduledTask(Node node, List<Edge> visibleTasks, Processor processor, int startTime) {
+    public void addScheduledTask(Node node, Processor processor, int startTime) throws ScheduleException {
         scheduledTasks.put(node, processor);
         processor.schedule(node, startTime);
 
         length = Math.max(length, startTime + node.getCost());
         cost = Math.max(cost, startTime + graph.getBottomLevel(node));
 
-        for (Edge e : visibleTasks) {
+        // TODO remove 'if' once working
+        if (!unscheduledTasks.remove(node)) throw new ScheduleException("Task was not waiting to be scheduled or is already scheduled");
+
+        for (Edge e : graph.getEdges(node)) {
             unscheduledTasks.add(e.getChild());
         }
+    }
+
+    public void addScheduledTask(Node node, int startTime) throws ScheduleException {
+        addScheduledTask(node, processors.get(0), startTime);
+    }
+
+    public Map<Node, Processor> getScheduledTasks() {
+        return scheduledTasks;
     }
 
     /**
@@ -118,6 +152,10 @@ public class Schedule implements Comparable<Schedule> {
      */
     public int getLength() {
         return length;
+    }
+
+    public int getCost() {
+        return cost;
     }
 
     /**
