@@ -3,6 +3,7 @@ package se306.a1.scheduler;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import se306.a1.scheduler.algorithm.AStarScheduler;
 import se306.a1.scheduler.algorithm.BasicScheduler;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.Schedule;
@@ -26,7 +27,7 @@ public class Main {
             logger.info(config.outputPath);
 
             Graph graph = GraphParser.parse(config.inputPath);
-            Schedule schedule = new BasicScheduler().run(graph, config.processors, config.cores);
+            Schedule schedule = new AStarScheduler().run(graph, config.processors, config.cores);
 
             logger.info("Length: " + schedule.getLength());
 

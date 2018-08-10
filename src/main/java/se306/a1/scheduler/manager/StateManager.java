@@ -17,9 +17,6 @@ public class StateManager {
     private Node[] nodeLookUp;
     private Queue<Schedule> schedules = new PriorityQueue<>();
 
-    private boolean done = false;
-    private Schedule optimalSchedule;
-
     private static Logger logger = LogManager.getLogger(StateManager.class.getSimpleName());
 
     public StateManager(Graph graph) {
@@ -35,13 +32,6 @@ public class StateManager {
      */
     public void queue(Schedule schedule) {
         //Comparable needs overwriting in schedule based on heuristic
-
-        if (schedule.getUnscheduledTasks().size() == 0) {
-            done = true;
-            optimalSchedule = schedule;
-            return;
-        }
-
         schedules.add(schedule);
         logger.info("Schedule Queued. Queue Length = " + schedules.size());
     }
@@ -56,13 +46,5 @@ public class StateManager {
     public Schedule dequeue() {
         logger.info("Best Schedule Retrieved");
         return schedules.poll();
-    }
-
-    public boolean isDone() {
-        return done;
-    }
-
-    public Schedule getOptimalSchedule() {
-        return optimalSchedule;
     }
 }

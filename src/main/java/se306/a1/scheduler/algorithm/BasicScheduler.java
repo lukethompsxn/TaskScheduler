@@ -9,6 +9,7 @@ import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.data.schedule.Schedule;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,9 +28,15 @@ public class BasicScheduler extends Scheduler {
      */
     @Override
     protected void createSchedule() throws ScheduleException {
-        schedule = new Schedule(graph, processors);
+        schedule = new Schedule(
+                new HashMap<>(),
+                new HashSet<>(graph.getEntryNodes()),
+                processors,
+                graph,
+                0,
+                0);
 
-        Set<Node> unscheduledNodes = new HashSet<>(graph.getEntryNodes());
+        Set<Node> unscheduledNodes = schedule.getUnscheduledTasks();
         Set<Node> scheduledNodes = new HashSet<>();
         Node currentNode;
 
