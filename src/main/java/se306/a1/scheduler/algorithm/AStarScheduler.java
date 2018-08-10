@@ -24,10 +24,9 @@ public class AStarScheduler extends Scheduler {
      * @throws ScheduleException
      */
     private int getCost(Node node, Schedule schedule, Processor processor) throws ScheduleException {
-        int cost = 0;
+        int cost = processor.getEarliestStartTime();
 
         for (Node parent : graph.getParents(node)) {
-            cost = Math.max(cost, processor.getEarliestStartTime());
             if (!schedule.getProcessor(parent).equals(processor)) {
                 cost = Math.max(cost, schedule.getStartTime(parent) + parent.getCost() + graph.getCost(parent, node));
             }
