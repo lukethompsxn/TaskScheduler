@@ -2,20 +2,40 @@ package se306.a1.scheduler.manager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import se306.a1.scheduler.algorithm.BasicScheduler;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.data.schedule.State;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 /**
- * This class is used to maintain the state of schedules and to supply schedules
+ * This class is used to maintain the state of states and to supply states
  * to the scheduler based on heuristics.
  */
 public class StateManager {
-    private Queue<Schedule> schedules = new PriorityQueue<>();
+    private Node[] nodeLookUp;
+    private Queue<State> states = new PriorityQueue<>();
+
+    private boolean done = false;
+    private Schedule optimalSchedule;
 
     private static Logger logger = LogManager.getLogger(StateManager.class.getSimpleName());
+
+    public StateManager(Graph graph) {
+        nodeLookUp = graph.getAllNodes().toArray(new Node[0]);
+    }
+
+    private Schedule translateState(State state) {
+        //TODO
+        return null;
+    }
+
+    private State translateSchedule(Schedule schedule) {
+        //TODO
+        return null;
+    }
 
     /**
      * This method add a new schedule to the priority queue.
@@ -26,8 +46,15 @@ public class StateManager {
      */
     public void queue(Schedule schedule) {
         //Comparable needs overwriting in schedule based on heuristic
-        schedules.add(schedule);
-        logger.info("Schedule Queued. Queue Length = " + schedules.size());
+
+        if (schedule.getUnscheduledTasks().size() == 0) {
+            done = true;
+            optimalSchedule = schedule;
+            return;
+        }
+
+        states.add(translateSchedule(schedule));
+        logger.info("Schedule Queued. Queue Length = " + states.size());
     }
 
     /**
@@ -39,6 +66,14 @@ public class StateManager {
      */
     public Schedule dequeue() {
         logger.info("Best Schedule Retrieved");
-        return schedules.poll();
+        return translateState(states.poll());
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public Schedule getOptimalSchedule() {
+        return optimalSchedule;
     }
 }
