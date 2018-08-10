@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.Schedule;
-import se306.a1.scheduler.data.schedule.State;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -16,7 +15,7 @@ import java.util.Queue;
  */
 public class StateManager {
     private Node[] nodeLookUp;
-    private Queue<State> states = new PriorityQueue<>();
+    private Queue<Schedule> schedules = new PriorityQueue<>();
 
     private boolean done = false;
     private Schedule optimalSchedule;
@@ -24,17 +23,7 @@ public class StateManager {
     private static Logger logger = LogManager.getLogger(StateManager.class.getSimpleName());
 
     public StateManager(Graph graph) {
-        nodeLookUp = graph.getAllNodes().toArray(new Node[0]);
-    }
-
-    private Schedule translateState(State state) {
-        //TODO
-        return null;
-    }
-
-    private State translateSchedule(Schedule schedule) {
-        //TODO
-        return null;
+//        nodeLookUp = graph.getAllNodes().toArray(new Node[0]);
     }
 
     /**
@@ -53,8 +42,8 @@ public class StateManager {
             return;
         }
 
-        states.add(translateSchedule(schedule));
-        logger.info("Schedule Queued. Queue Length = " + states.size());
+        schedules.add(schedule);
+        logger.info("Schedule Queued. Queue Length = " + schedules.size());
     }
 
     /**
@@ -66,7 +55,7 @@ public class StateManager {
      */
     public Schedule dequeue() {
         logger.info("Best Schedule Retrieved");
-        return translateState(states.poll());
+        return schedules.poll();
     }
 
     public boolean isDone() {
