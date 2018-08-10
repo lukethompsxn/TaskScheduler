@@ -18,6 +18,9 @@
         <Logger name="BasicScheduler" level="off" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
+        <Logger name="StateManager" level="off" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Root level="debug">
             <AppenderRef ref="Console"/>
         </Root>

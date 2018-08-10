@@ -9,10 +9,17 @@ import se306.a1.scheduler.util.exception.ScheduleException;
 import java.util.*;
 
 public class AStarScheduler extends Scheduler {
-    StateManager stateManager = new StateManager(graph);
+    StateManager stateManager;
 
     @Override
     protected void createSchedule() throws ScheduleException {
+        stateManager = new StateManager(graph);
+
+        BasicScheduler basicScheduler = new BasicScheduler();
+        int greedy = basicScheduler.run(graph, processors, cores).getLength();
+
+        System.out.println(greedy);
+
         // Adds a new state for each entry node on a processor
         for (Node node : graph.getEntryNodes()) {
             Schedule s = new Schedule(
@@ -27,12 +34,13 @@ public class AStarScheduler extends Scheduler {
             stateManager.queue(s);
         }
 
-        //
-        while (!stateManager.isDone()) {
-            Schedule top = stateManager.dequeue();
+        Schedule top = stateManager.dequeue();
+
+        while (top.getUnscheduledTasks().size() != 0) {
             List<Processor> topProcessors = top.getProcessors();
 
             for (Node node : top.getUnscheduledTasks()) {
+                if (!top.isScheduled(graph.getParents(node))) continue;
                 for (Processor processor : topProcessors) {
                     List<Processor> processors = new ArrayList<>(topProcessors);
                     Processor newProcessor = new Processor(processor);
@@ -41,8 +49,8 @@ public class AStarScheduler extends Scheduler {
                     processors.add(newProcessor);
 
                     Schedule schedule = new Schedule(
-                            top.getScheduledTasks(),
-                            top.getUnscheduledTasks(),
+                            new HashMap<>(top.getScheduledTasks()),
+                            new HashSet<>(top.getUnscheduledTasks()),
                             processors,
                             graph,
                             top.getLength(),
@@ -50,14 +58,16 @@ public class AStarScheduler extends Scheduler {
                     );
 
                     // Need to fix
-                    // schedule.addScheduledTask(node, newProcessor, getStartTime(node, top, newProcessor));
+                    schedule.addScheduledTask(node, newProcessor, getStartTime(node, top, newProcessor));
 
+                    if (schedule.getLength() > greedy) continue;
                     stateManager.queue(schedule);
                 }
             }
+            top = stateManager.dequeue();
         }
 
-        schedule = stateManager.getOptimalSchedule();
+        schedule = top;
     }
 
     /**
