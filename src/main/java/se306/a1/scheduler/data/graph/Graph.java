@@ -3,6 +3,7 @@ package se306.a1.scheduler.data.graph;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -15,11 +16,18 @@ import java.util.List;
 public interface Graph {
 
     /**
-     * Gets the name of the task graph.
+     * Gets the name of the graph.
      *
      * @return the name of the graph
      */
     String getName();
+
+    /**
+     * Gets the nodes in the graph.
+     *
+     * @return a collection of all the nodes in the graph
+     */
+    Collection<Node> getAllNodes();
 
     /**
      * Gets the outgoing edges from the given node.

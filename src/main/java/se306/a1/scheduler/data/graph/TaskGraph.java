@@ -38,6 +38,11 @@ public class TaskGraph implements Graph {
     }
 
     @Override
+    public Collection<Node> getAllNodes() {
+        return nodes.values();
+    }
+
+    @Override
     public List<Edge> getEdges(Node node) {
         return children.get(node);
     }
