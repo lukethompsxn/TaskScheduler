@@ -1,9 +1,6 @@
 package se306.a1.scheduler.data.graph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a Directed Acyclic Graph where nodes are tasks and edges
@@ -15,6 +12,7 @@ public class TaskGraph implements Graph {
     private final Map<Node, List<Edge>> children;
     private final Map<Node, List<Node>> parents;
     private final Map<String, Node> nodes;
+    private final Map<Node, Integer> bottomLevels;
     private final String name;
 
     /**
@@ -27,6 +25,7 @@ public class TaskGraph implements Graph {
     public TaskGraph(String name, Map<String, Node> nodes, List<Edge> edges) {
         children = new HashMap<>();
         parents = new HashMap<>();
+        bottomLevels = new HashMap<>();
         this.nodes = nodes;
         this.name = name;
 
@@ -68,6 +67,11 @@ public class TaskGraph implements Graph {
         return null;
     }
 
+    @Override
+    public Integer getBottomLevel(Node node) {
+        return bottomLevels.get(node);
+    }
+
     /**
      * Private helper method used to construct the edges connecting the graph.
      *
@@ -87,6 +91,33 @@ public class TaskGraph implements Graph {
 
             children.get(parentNode).add(e);
             parents.get(childNode).add(parentNode);
+        }
+
+        calculateBottomLevels();
+    }
+
+    /**
+     * Helper method used to calculate the bottom levels for all nodes in the graph.
+     */
+    private void calculateBottomLevels() {
+        Queue<Node> queue = new ArrayDeque<>();
+
+        // Add all the exit nodes
+        for (Node n : nodes.values()) {
+            if (!children.containsKey(n) || children.get(n).isEmpty()) {
+                queue.add(n);
+                bottomLevels.put(n, n.getCost());
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            Node node = queue.poll();
+            int cost = bottomLevels.get(node);
+
+            for (Node n : parents.get(node)) {
+                bottomLevels.put(n, n.getCost() + cost);
+                queue.add(n);
+            }
         }
     }
 }

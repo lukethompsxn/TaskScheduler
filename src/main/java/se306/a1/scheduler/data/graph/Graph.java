@@ -52,4 +52,13 @@ public interface Graph {
      * @return the cost of link
      */
     Integer getCost(Node parent, Node child);
+
+    /**
+     * Gets the bottom level of the given node, which is the cost of the
+     * longest path from the node to an exit node.
+     *
+     * @param node the node to get the bottom level of
+     * @return the bottom level of the node
+     */
+    Integer getBottomLevel(Node node);
 }
