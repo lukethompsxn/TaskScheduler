@@ -45,7 +45,7 @@ public class Processor {
      * @param time the time at which to schedule the task
      * @throws RuntimeException if node cannot be scheduled at the specified time or is already scheduled
      */
-    void schedule(Node node, int time) {
+    public void schedule(Node node, int time) {
         if (startTimes.containsKey(node))
             throw new RuntimeException("Node " + node + " has already been scheduled");
         else if (time < earliestStartTime)
@@ -115,6 +115,6 @@ public class Processor {
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return startTimes.hashCode();
     }
 }

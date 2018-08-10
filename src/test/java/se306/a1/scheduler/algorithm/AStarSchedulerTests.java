@@ -16,8 +16,8 @@ import static org.junit.Assert.assertTrue;
 
 public class AStarSchedulerTests {
     private static SchedulerTestHelper helper = new SchedulerTestHelper();
-    private static Map<Graph, Integer>  timedGraphs2Proc = new HashMap<>();
-    private static Map<Graph, Integer>  timedGraphs4Proc = new HashMap<>();
+    private static Map<Graph, Integer> timedGraphs2Proc = new HashMap<>();
+    private static Map<Graph, Integer> timedGraphs4Proc = new HashMap<>();
 
     @BeforeClass
     public static void prepareGraphs() throws IOException, GraphException {
@@ -35,21 +35,41 @@ public class AStarSchedulerTests {
     }
 
     @Test
-    public void testTimedGraphs2Proc () throws ScheduleException {
+    public void testTimedGraphs2Proc() throws ScheduleException {
         final int processors = 2;
         for (Graph g : timedGraphs2Proc.keySet()) {
             Schedule s = new AStarScheduler().run(g, processors, 1);
-            assertTrue(helper.isValid(g,s));
+            assertTrue(helper.isValid(g, s));
             assertTrue(timedGraphs2Proc.get(g).equals(s.getLength()));
         }
     }
 
     @Test
-    public void testTimedGraphs4Proc () throws ScheduleException {
+    public void testTimedGraphs2ProcByte() throws ScheduleException {
+        final int processors = 2;
+        for (Graph g : timedGraphs2Proc.keySet()) {
+            Schedule s = new AStarByteScheduler().run(g, processors, 1);
+            assertTrue(helper.isValid(g, s));
+            assertTrue(timedGraphs2Proc.get(g).equals(s.getLength()));
+        }
+    }
+
+    @Test
+    public void testTimedGraphs4Proc() throws ScheduleException {
         final int processors = 4;
         for (Graph g : timedGraphs4Proc.keySet()) {
             Schedule s = new AStarScheduler().run(g, processors, 1);
-            assertTrue(helper.isValid(g,s));
+            assertTrue(helper.isValid(g, s));
+            assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
+        }
+    }
+
+    @Test
+    public void testTimedGraphs4ProcByte() throws ScheduleException {
+        final int processors = 4;
+        for (Graph g : timedGraphs4Proc.keySet()) {
+            Schedule s = new AStarByteScheduler().run(g, processors, 1);
+            assertTrue(helper.isValid(g, s));
             assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
         }
     }

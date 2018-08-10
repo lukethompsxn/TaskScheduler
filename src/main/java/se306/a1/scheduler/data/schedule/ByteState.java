@@ -1,12 +1,11 @@
 package se306.a1.scheduler.data.schedule;
 
+import javafx.util.Pair;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.manager.ByteStateManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ByteState implements Comparable<ByteState> {
     private final ByteStateManager manager;
@@ -121,8 +120,30 @@ public class ByteState implements Comparable<ByteState> {
     private int getStartTime(int nodeIndex) {
         for (int i = 0; i < startTimes.length; ++i) {
             if (startTimes[i][nodeIndex] != -1)
-                    return startTimes[i][nodeIndex];
+                return startTimes[i][nodeIndex];
         }
         return -1;
+    }
+
+    public Schedule toSchedule() {
+        Map<Node, Processor> processors = new HashMap<>();
+        List<Pair<Node, Integer>> nodes = new ArrayList<>();
+        for (int i = 0; i < startTimes.length; ++i) {
+            for (int j = 0; j < startTimes[i].length; ++j) {
+                if (startTimes[i][j] == -1)
+                    continue;
+                Node node = manager.getNode(j);
+                nodes.add(new Pair<>(node, startTimes[i][j]));
+                processors.put(node, manager.getProcessor(i));
+            }
+        }
+        nodes.sort(Comparator.comparingInt(Pair::getValue));
+        for (Pair<Node, Integer> pair : nodes) {
+            Node node = pair.getKey();
+            int time = pair.getValue();
+            processors.get(node).schedule(node, time);
+        }
+
+        return new Schedule(processors, new HashSet<>(), manager.getProcessors(), graph, length, cost);
     }
 }

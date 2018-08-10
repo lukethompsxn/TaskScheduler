@@ -35,7 +35,7 @@ public class AStarByteScheduler extends Scheduler {
                 }
             }
         }
-        System.out.println(optimal.getLength());
+        schedule = optimal.toSchedule();
     }
 
     /**
