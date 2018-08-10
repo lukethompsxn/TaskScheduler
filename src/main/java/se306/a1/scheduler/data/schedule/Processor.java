@@ -21,7 +21,7 @@ public class Processor {
      *
      * @param name the name of the processor
      */
-    Processor(String name) {
+    public Processor(String name) {
         startTimes = new HashMap<>();
         this.name = name;
         this.earliestStartTime = 0;

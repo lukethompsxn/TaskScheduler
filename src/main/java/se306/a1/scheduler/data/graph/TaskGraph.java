@@ -1,5 +1,7 @@
 package se306.a1.scheduler.data.graph;
 
+import javafx.util.Pair;
+
 import java.util.*;
 
 /**
@@ -13,6 +15,7 @@ public class TaskGraph implements Graph {
     private final Map<Node, List<Node>> parents;
     private final Map<String, Node> nodes;
     private final Map<Node, Integer> bottomLevels;
+    private final Map<Pair<Node, Node>, Integer> edgeCosts;
     private final String name;
 
     /**
@@ -26,6 +29,7 @@ public class TaskGraph implements Graph {
         children = new HashMap<>();
         parents = new HashMap<>();
         bottomLevels = new HashMap<>();
+        edgeCosts = new HashMap<>();
         this.nodes = nodes;
         this.name = name;
 
@@ -65,11 +69,7 @@ public class TaskGraph implements Graph {
 
     @Override
     public Integer getCost(Node parent, Node child) {
-        for (Edge e : children.get(parent)) {
-            if (e.getChild().equals(child))
-                return e.getCost();
-        }
-        return null;
+        return edgeCosts.get(new Pair<>(parent, child));
     }
 
     @Override
@@ -96,6 +96,8 @@ public class TaskGraph implements Graph {
 
             children.get(parentNode).add(e);
             parents.get(childNode).add(parentNode);
+
+            edgeCosts.put(new Pair<>(parentNode, childNode), e.getCost());
         }
 
         calculateBottomLevels();
@@ -120,7 +122,11 @@ public class TaskGraph implements Graph {
             int cost = bottomLevels.get(node);
 
             for (Node n : parents.get(node)) {
-                bottomLevels.put(n, n.getCost() + cost);
+                int newCost = n.getCost() + cost;
+                if (bottomLevels.containsKey(n))
+                    newCost = Math.max(bottomLevels.get(n), newCost);
+
+                bottomLevels.put(n, newCost);
                 queue.add(n);
             }
         }
