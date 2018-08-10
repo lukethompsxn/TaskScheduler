@@ -15,7 +15,6 @@ import java.util.Map;
 import static org.junit.Assert.assertTrue;
 
 public class AStarSchedulerTests {
-    private static SchedulerTestHelper helper = new SchedulerTestHelper();
     private static Map<Graph, Integer> timedGraphs2Proc = new HashMap<>();
     private static Map<Graph, Integer> timedGraphs4Proc = new HashMap<>();
 
@@ -39,7 +38,7 @@ public class AStarSchedulerTests {
         final int processors = 2;
         for (Graph g : timedGraphs2Proc.keySet()) {
             Schedule s = new AStarScheduler().run(g, processors, 1);
-            assertTrue(helper.isValid(g, s));
+            assertTrue(SchedulerTestHelper.isValid(g, s));
             assertTrue(timedGraphs2Proc.get(g).equals(s.getLength()));
         }
     }
@@ -49,7 +48,7 @@ public class AStarSchedulerTests {
         final int processors = 2;
         for (Graph g : timedGraphs2Proc.keySet()) {
             Schedule s = new AStarByteScheduler().run(g, processors, 1);
-            assertTrue(helper.isValid(g, s));
+            assertTrue(SchedulerTestHelper.isValid(g, s));
             assertTrue(timedGraphs2Proc.get(g).equals(s.getLength()));
         }
     }
@@ -59,7 +58,7 @@ public class AStarSchedulerTests {
         final int processors = 4;
         for (Graph g : timedGraphs4Proc.keySet()) {
             Schedule s = new AStarScheduler().run(g, processors, 1);
-            assertTrue(helper.isValid(g, s));
+            assertTrue(SchedulerTestHelper.isValid(g, s));
             assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
         }
     }
@@ -69,7 +68,7 @@ public class AStarSchedulerTests {
         final int processors = 4;
         for (Graph g : timedGraphs4Proc.keySet()) {
             Schedule s = new AStarByteScheduler().run(g, processors, 1);
-            assertTrue(helper.isValid(g, s));
+            assertTrue(SchedulerTestHelper.isValid(g, s));
             assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
         }
     }

@@ -12,12 +12,11 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 public class BasicSchedulerTests {
-    private static SchedulerTestHelper helper = new SchedulerTestHelper();
     private static List<Graph> graphs = new ArrayList<>();
 
     @BeforeClass
     public static void parseGraphs() {
-        graphs = helper.parseGraphs();
+        graphs = SchedulerTestHelper.parseGraphs();
     }
 
     @Test
@@ -25,7 +24,7 @@ public class BasicSchedulerTests {
         final int processors = 1;
         for (Graph g : graphs) {
             Schedule s = new BasicScheduler().run(g, processors, 1);
-            assertTrue(helper.isValid(g, s));
+            assertTrue(SchedulerTestHelper.isValid(g, s));
         }
     }
 
@@ -34,7 +33,7 @@ public class BasicSchedulerTests {
         final int processors = 4;
         for (Graph g : graphs) {
             Schedule s = new BasicScheduler().run(g, processors, 1);
-            assertTrue(helper.isValid(g, s));
+            assertTrue(SchedulerTestHelper.isValid(g, s));
         }
     }
 
