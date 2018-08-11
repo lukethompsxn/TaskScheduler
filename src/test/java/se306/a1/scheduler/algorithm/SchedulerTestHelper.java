@@ -5,6 +5,7 @@ import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.support.GXLGraph;
 import se306.a1.scheduler.util.exception.GraphException;
 import se306.a1.scheduler.util.exception.ScheduleException;
 import se306.a1.scheduler.util.parse.GraphParser;
@@ -20,9 +21,12 @@ import java.util.Queue;
 import java.util.stream.Stream;
 
 public class SchedulerTestHelper {
+    private static List<GXLGraph> gxlGraphs = new ArrayList<>();
+    private static List<Graph> graphs = new ArrayList<>();
+
 
     public static List<Graph> parseGraphs() {
-        List<Graph> graphs = new ArrayList<>();
+        graphs = new ArrayList<>();
 
         try (Stream<Path> paths = Files.walk(Paths.get("input_graphs/"))) {
             paths.filter(p -> p.toString().endsWith(".dot")).forEach(p -> {
@@ -39,6 +43,28 @@ public class SchedulerTestHelper {
         }
 
         return graphs;
+    }
+
+    public static List<GXLGraph> parseGXLGraphs() {
+        gxlGraphs = new ArrayList<>();
+
+        try (Stream<Path> paths = Files.walk(Paths.get("input_graphs/gxl_graphs/"))) {
+            paths.filter(p -> p.toString().endsWith(".dot")).forEach(p -> {
+                try {
+                    String[] strings = p.toString().split("_");
+                    int numProcessors = Integer.parseInt(strings[strings.length-3]);
+                    int length = Integer.parseInt(strings[strings.length-2]);
+                    int sequentialLength = Integer.parseInt(strings[strings.length-1].replaceAll(".dot", ""));
+                    gxlGraphs.add(new GXLGraph(GraphParser.parse(p.toString()), numProcessors, length, sequentialLength));
+                } catch (IOException | GraphException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return gxlGraphs;
     }
 
     public static boolean isValid(Graph g, Schedule s) throws ScheduleException {
