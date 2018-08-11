@@ -29,12 +29,12 @@ hs_err_pid*
 *.classpath
 .settings/
 *.project
+*.factorypath
 
 # Builds
 build/
 out/
 bin/
-.apt_generated/
 
 # Gradle
 .gradle
@@ -54,3 +54,6 @@ gradle-app.setting
 
 # Other
 *-output.dot
+.example-input-graphs/
+/.apt_generated/
+
