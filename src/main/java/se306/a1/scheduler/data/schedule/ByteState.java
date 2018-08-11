@@ -104,6 +104,23 @@ public class ByteState implements Comparable<ByteState> {
         return Integer.compare(cost, other.cost);
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (!(other instanceof ByteState))
+            return false;
+        ByteState o = (ByteState) other;
+
+        // TODO check that this actually leads to pruning of equivalent states
+        return Arrays.equals(startTimes, o.startTimes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(startTimes);
+    }
+
     public Schedule toSchedule() {
         Map<Node, Processor> processors = new HashMap<>();
         List<Pair<Node, Integer>> nodes = new ArrayList<>();

@@ -7,6 +7,7 @@ import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.util.SetBackedPriorityQueue;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
 import java.util.*;
@@ -28,7 +29,7 @@ public class ByteStateManager {
     public ByteStateManager(Graph graph, int numProcessors) throws ScheduleException {
         upperBound = new BasicScheduler().run(graph, numProcessors, 0).getLength();
 
-        states = new PriorityQueue<>();
+        states = new SetBackedPriorityQueue<>();
         nodes = new ArrayList<>(graph.getAllNodes());
         nodeIndices = new HashMap<>();
         processors = new ArrayList<>();
