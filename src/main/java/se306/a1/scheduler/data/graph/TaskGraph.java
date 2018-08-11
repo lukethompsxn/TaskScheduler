@@ -123,11 +123,14 @@ public class TaskGraph implements Graph {
 
             for (Node n : parents.get(node)) {
                 int newCost = n.getCost() + cost;
+                int currentCost = 0;
                 if (bottomLevels.containsKey(n))
-                    newCost = Math.max(bottomLevels.get(n), newCost);
+                    currentCost = bottomLevels.get(n);
 
-                bottomLevels.put(n, newCost);
-                queue.add(n);
+                if (newCost > currentCost) {
+                    bottomLevels.put(n, newCost);
+                    queue.add(n);
+                }
             }
         }
     }
