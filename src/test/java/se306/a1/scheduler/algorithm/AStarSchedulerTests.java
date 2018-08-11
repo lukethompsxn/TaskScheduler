@@ -41,16 +41,6 @@ public class AStarSchedulerTests {
     }
 
     @Test
-    public void testTimedGraphs2Proc() throws ScheduleException {
-        final int processors = 2;
-        for (Graph g : timedGraphs2Proc.keySet()) {
-            Schedule s = new AStarScheduler().run(g, processors, 1);
-            assertTrue(SchedulerTestHelper.isValid(g, s));
-            assertTrue(timedGraphs2Proc.get(g).equals(s.getLength()));
-        }
-    }
-
-    @Test
     public void testTimedGraphs2ProcByte() throws ScheduleException {
         final int processors = 2;
         for (Graph g : timedGraphs2Proc.keySet()) {
@@ -61,39 +51,12 @@ public class AStarSchedulerTests {
     }
 
     @Test
-    public void testTimedGraphs4Proc() throws ScheduleException {
-        final int processors = 4;
-        for (Graph g : timedGraphs4Proc.keySet()) {
-            Schedule s = new AStarScheduler().run(g, processors, 1);
-            assertTrue(SchedulerTestHelper.isValid(g, s));
-            assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
-        }
-    }
-
-    @Test
     public void testTimedGraphs4ProcByte() throws ScheduleException {
         final int processors = 4;
         for (Graph g : timedGraphs4Proc.keySet()) {
             Schedule s = new AStarByteScheduler().run(g, processors, 1);
             assertTrue(SchedulerTestHelper.isValid(g, s));
             assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
-        }
-    }
-
-    @Test
-    public void testGXLGraphs() throws ScheduleException {
-        for (GXLGraph g : gxlGraphs) {
-            Schedule s = new AStarScheduler().run(g.getGraph(), g.getNumProcessors(), 1);
-            assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s));
-            assertEquals(s.getLength(), g.getLength());
-            System.out.println("Graph Passed Multiple Processor: " + g.getGraph().getName());
-
-            if (g.getSequentialLength() != -1) {
-                Schedule s_sequential = new AStarScheduler().run(g.getGraph(), 1, 1);
-                assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s_sequential));
-                assertEquals(s_sequential.getLength(), g.getSequentialLength());
-                System.out.println("Graph Passed Single Processor: " + g.getGraph().getName());
-            }
         }
     }
 
