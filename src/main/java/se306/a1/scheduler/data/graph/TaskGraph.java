@@ -11,12 +11,12 @@ import java.util.*;
  * @author Abhinav Behal, Zhi Qiao
  */
 public class TaskGraph implements Graph {
+    private final String name;
+    private final Map<String, Node> nodes;
     private final Map<Node, List<Edge>> children;
     private final Map<Node, List<Node>> parents;
-    private final Map<String, Node> nodes;
     private final Map<Node, Integer> bottomLevels;
-    private final Map<Pair<Node, Node>, Integer> edgeCosts;
-    private final String name;
+    private final Map<Node, Map<Node, Integer>> edgeCosts;
 
     /**
      * Creates a TaskGraph with a given name, nodes, and associated edges.
@@ -69,7 +69,7 @@ public class TaskGraph implements Graph {
 
     @Override
     public Integer getCost(Node parent, Node child) {
-        return edgeCosts.get(new Pair<>(parent, child));
+        return edgeCosts.get(parent).get(child);
     }
 
     @Override
@@ -97,7 +97,10 @@ public class TaskGraph implements Graph {
             children.get(parentNode).add(e);
             parents.get(childNode).add(parentNode);
 
-            edgeCosts.put(new Pair<>(parentNode, childNode), e.getCost());
+            if (!edgeCosts.containsKey(parentNode))
+                edgeCosts.put(parentNode, new HashMap<>());
+
+            edgeCosts.get(parentNode).put(childNode, e.getCost());
         }
 
         calculateBottomLevels();
