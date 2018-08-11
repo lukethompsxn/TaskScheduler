@@ -2,7 +2,6 @@ package se306.a1.scheduler.util;
 
 import com.paypal.digraph.parser.GraphEdge;
 import com.paypal.digraph.parser.GraphNode;
-import javafx.util.Pair;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import se306.a1.scheduler.algorithm.BasicScheduler;
@@ -56,8 +55,8 @@ public class GraphParserTests {
     @Test
     public void testGraphParsing() throws IOException, GraphException {
         for (Map.Entry<String, Pair<Integer, Integer>> e : answers.entrySet()) {
-            int nodeCount = e.getValue().getKey();
-            int edgeCount = e.getValue().getValue();
+            int nodeCount = e.getValue().first();
+            int edgeCount = e.getValue().second();
 
             Graph g = GraphParser.parse(e.getKey());
             Set<Node> nodes = new HashSet<>();

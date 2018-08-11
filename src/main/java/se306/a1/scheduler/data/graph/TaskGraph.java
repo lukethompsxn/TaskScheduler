@@ -1,6 +1,6 @@
 package se306.a1.scheduler.data.graph;
 
-import javafx.util.Pair;
+import se306.a1.scheduler.util.Pair;
 
 import java.util.*;
 
