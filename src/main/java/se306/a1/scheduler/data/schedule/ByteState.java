@@ -1,18 +1,21 @@
 package se306.a1.scheduler.data.schedule;
 
+import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.manager.ByteStateManager;
 import se306.a1.scheduler.util.Pair;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class ByteState implements Comparable<ByteState> {
     private final ByteStateManager manager;
     private final Graph graph;
-    private int[] startTimes;
-    private int[] processorIndices;
-    private int[] earliestStartTimes;
+    private final int[] startTimes;
+    private final int[] processorIndices;
+    private final int[] earliestStartTimes;
+    private final boolean[] free;
     private int cost;
     private int length;
 
@@ -26,6 +29,10 @@ public class ByteState implements Comparable<ByteState> {
         this.earliestStartTimes = new int[numProcessors];
         this.processorIndices = new int[numNodes];
         this.startTimes = new int[numNodes];
+        this.free = new boolean[numNodes];
+        for (Node n : graph.getEntryNodes()) {
+            free[manager.indexOf(n)] = true;
+        }
 
         Arrays.fill(this.startTimes, -1);
         Arrays.fill(this.processorIndices, -1);
@@ -37,6 +44,7 @@ public class ByteState implements Comparable<ByteState> {
         startTimes = Arrays.copyOf(other.startTimes, other.startTimes.length);
         earliestStartTimes = Arrays.copyOf(other.earliestStartTimes, other.earliestStartTimes.length);
         processorIndices = Arrays.copyOf(other.processorIndices, other.processorIndices.length);
+        free = Arrays.copyOf(other.free, other.free.length);
 
         manager = other.manager;
         graph = other.graph;
@@ -52,13 +60,18 @@ public class ByteState implements Comparable<ByteState> {
 
         if (processorIndices[nodeIndex] != -1)
             throw new RuntimeException("Task has already been scheduled");
+        if (!free[nodeIndex])
+            throw new RuntimeException("Task is not free to schedule");
 
         for (Node parent : graph.getParents(node)) {
             int parentIndex = manager.indexOf(parent);
             if (processorIndices[parentIndex] == -1)
                 return null;
             if (processorIndices[parentIndex] != processorIndex) {
-                startTime = Math.max(startTime, startTimes[parentIndex] + parent.getCost() + graph.getCost(parent, node));
+                int cost = graph.getCost(parent, node);
+                if (cost == -1)
+                    continue;
+                startTime = Math.max(startTime, startTimes[parentIndex] + parent.getCost() + cost);
             }
         }
 
@@ -67,13 +80,36 @@ public class ByteState implements Comparable<ByteState> {
         newState.startTimes[nodeIndex] = startTime;
         newState.processorIndices[nodeIndex] = processorIndex;
         newState.earliestStartTimes[processorIndex] = startTime + node.getCost();
-        newState.cost = Math.max(newState.cost, startTime + graph.getBottomLevel(node));
         newState.length = Math.max(newState.length, startTime + node.getCost());
+        newState.cost = Math.max(newState.cost, startTime + graph.getBottomLevel(node));
+        newState.free[nodeIndex] = false;
+
+        for (Edge e : graph.getEdges(node)) {
+            Node child = e.getChild();
+            int childIndex = manager.indexOf(child);
+
+            for (Node parent : graph.getParents(child)) {
+                int parentIndex = manager.indexOf(parent);
+                if (processorIndices[parentIndex] == -1)
+                    break;
+            }
+
+            newState.free[childIndex] = true;
+        }
 
         return newState;
     }
 
-    public List<Node> getUnscheduled() {
+    public List<Node> getFreeNodes() {
+        List<Node> out = new ArrayList<>();
+        for (int i = 0; i < free.length; ++i) {
+            if (free[i])
+                out.add(manager.getNode(i));
+        }
+        return out;
+    }
+
+    public List<Node> getUnscheduledNodes() {
         List<Node> out = new ArrayList<>();
         for (int i = 0; i < processorIndices.length; ++i) {
             if (processorIndices[i] == -1)
@@ -82,7 +118,7 @@ public class ByteState implements Comparable<ByteState> {
         return out;
     }
 
-    public List<Node> getScheduled() {
+    public List<Node> getScheduledNodes() {
         List<Node> out = new ArrayList<>();
         for (int i = 0; i < processorIndices.length; ++i) {
             if (processorIndices[i] != -1)

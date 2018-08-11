@@ -7,6 +7,8 @@ import se306.a1.scheduler.data.schedule.Schedule;
 import se306.a1.scheduler.manager.ByteStateManager;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
+import java.util.List;
+
 public class AStarByteScheduler extends Scheduler {
 
     @Override
@@ -19,22 +21,26 @@ public class AStarByteScheduler extends Scheduler {
             stateManager.queue(s);
         }
 
-        ByteState optimal = null;
+        ByteState optimal;
         while (true) {
-            ByteState top = stateManager.dequeue();
-            if (top.getUnscheduled().size() == 0) {
-                optimal = top;
+            ByteState current = stateManager.dequeue();
+            List<Node> freeNodes = current.getFreeNodes();
+
+            if (freeNodes.isEmpty()) {
+                optimal = current;
                 break;
             }
-            for (Node node : top.getUnscheduled()) {
+
+            for (Node node : freeNodes) {
                 for (Processor processor : stateManager.getProcessors()) {
-                    ByteState next = top.scheduleTask(node, processor);
+                    ByteState next = current.scheduleTask(node, processor);
                     if (next == null)
                         break;
                     stateManager.queue(next);
                 }
             }
         }
+
         schedule = optimal.toSchedule();
     }
 
