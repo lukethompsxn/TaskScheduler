@@ -98,7 +98,7 @@ public class GraphParserTests {
         final String outputPath = "test-output.dot";
         for (String inputPath : answers.keySet()) {
             Graph g = GraphParser.parse(inputPath);
-            Schedule s = new BasicScheduler().run(g, 1, 2);
+            Schedule s = new BasicScheduler().run(g, 1, 2, false);
             GraphParser.generateOutput(s, g, outputPath);
             ParsedOutput parsedOutput = parseOutput(outputPath);
 
