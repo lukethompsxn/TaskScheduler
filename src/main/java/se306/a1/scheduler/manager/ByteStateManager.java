@@ -108,12 +108,7 @@ public class ByteStateManager {
         final Visualiser visualiser = new Visualiser();
 
         void update() {
-            final Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    visualiser.updateCurrentState(peek());
-                }
-            };
+            final Runnable runnable = () -> visualiser.updateCurrentState(peek());
             final ScheduledFuture<?> senderHanlde = scheduler
                     .scheduleAtFixedRate(
                             runnable, 0, 100, TimeUnit.MILLISECONDS);
