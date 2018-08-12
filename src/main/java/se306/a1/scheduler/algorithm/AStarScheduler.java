@@ -20,7 +20,7 @@ public class AStarScheduler extends Scheduler {
         BasicScheduler basicScheduler = new BasicScheduler();
 
         // Greedy heuristic as an upper-bound
-        int greedy = basicScheduler.run(graph, processors, cores).getLength();
+        int greedy = basicScheduler.run(graph, processors, cores, isVisualised).getLength();
 
         // Adds a new state for each entry node on a processor
         for (Node node : graph.getEntryNodes()) {
