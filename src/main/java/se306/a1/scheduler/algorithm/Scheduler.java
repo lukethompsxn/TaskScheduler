@@ -26,6 +26,7 @@ public abstract class Scheduler {
     protected Graph graph;
     protected int processors;
     protected int cores;
+    protected boolean isVisualised;
 
     /**
      * Initialises and executes the algorithm.
@@ -38,10 +39,11 @@ public abstract class Scheduler {
      * @param numCores      number of cores to be run on (optional)
      * @throws ScheduleException if there is a scheduling error
      */
-    public Schedule run(Graph graph, int numProcessors, int numCores) throws ScheduleException {
+    public Schedule run(Graph graph, int numProcessors, int numCores, boolean isVisualised) throws ScheduleException {
         this.graph = graph;
-        processors = numProcessors;
-        cores = numCores;
+        this.processors = numProcessors;
+        this.cores = numCores;
+        this.isVisualised = isVisualised;
 
         createSchedule();
 

@@ -2,6 +2,7 @@ package se306.a1.scheduler.manager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.CronScheduledFuture;
 import se306.a1.scheduler.algorithm.BasicScheduler;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.graph.Node;
@@ -25,17 +26,21 @@ public class ByteStateManager {
     private final List<Processor> processors;
     private final Map<Processor, Integer> processorIndices;
     private int upperBound = Integer.MAX_VALUE;
+    protected final Graph graph;
+    private ScheduledFuture task;
+
 
     private static Logger logger = LogManager.getLogger(ByteStateManager.class.getSimpleName());
 
-    public ByteStateManager(Graph graph, int numProcessors) throws ScheduleException {
-        upperBound = new BasicScheduler().run(graph, numProcessors, 0).getLength();
+    public ByteStateManager(Graph graph, int numProcessors, boolean isVisualised) throws ScheduleException {
+        upperBound = new BasicScheduler().run(graph, numProcessors, 0, false).getLength();
 
         states = new SetBackedPriorityQueue<>();
         nodes = new ArrayList<>(graph.getAllNodes());
         nodeIndices = new HashMap<>();
         processors = new ArrayList<>();
         processorIndices = new HashMap<>();
+        this.graph = graph;
 
         for (int i = 0; i < nodes.size(); ++i) {
             nodeIndices.put(nodes.get(i), i);
@@ -44,6 +49,10 @@ public class ByteStateManager {
         for (int i = 0; i < numProcessors; ++i) {
             processors.add(new Processor("" + i));
             processorIndices.put(processors.get(i), i);
+        }
+
+        if (isVisualised) {
+            updaterService();
         }
     }
 
@@ -93,27 +102,20 @@ public class ByteStateManager {
         return states.poll();
     }
 
-    /**
-     * This method returns the best schedule at the current point in execution,
-     * but does not remove it from the top of the queue
-     *
-     * @return the best schedule at current point in execution
-     */
-    protected ByteState peek() {
-        return states.peek();
-    }
 
-    class UpdaterService {
-        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        final Visualiser visualiser = new Visualiser();
+    private void updaterService() {
+        final Visualiser visualiser = new Visualiser(graph);
 
-        void update() {
-            final Runnable runnable = () -> visualiser.updateCurrentState(peek());
-            final ScheduledFuture<?> senderHanlde = scheduler
-                    .scheduleAtFixedRate(
-                            runnable, 0, 100, TimeUnit.MILLISECONDS);
+        Runnable updateSchedule = () -> {
+            visualiser.updateCurrentState(states.peek());
 
-        }
+            if (false) {
+                task.cancel(true);
+            }
+        };
+
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        task = executor.scheduleAtFixedRate(updateSchedule, 0, 20, TimeUnit.MILLISECONDS);
     }
 }
 
