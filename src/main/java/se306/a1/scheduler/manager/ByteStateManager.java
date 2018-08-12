@@ -9,8 +9,10 @@ import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.util.SetBackedPriorityQueue;
 import se306.a1.scheduler.util.exception.ScheduleException;
+import visualisation.Visualiser;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * This class is used to maintain the state of states and to supply states
@@ -84,10 +86,39 @@ public class ByteStateManager {
      * The schedule which is returned (the front of the queue) is determined
      * by heuristics which are implemented in the comparable method of schedule.
      *
-     * @return the best schedule at current point in time
+     * @return the best schedule at current point in execution
      */
     public ByteState dequeue() {
         logger.info("Best Schedule Retrieved");
         return states.poll();
     }
+
+    /**
+     * This method returns the best schedule at the current point in execution,
+     * but does not remove it from the top of the queue
+     *
+     * @return the best schedule at current point in execution
+     */
+    protected ByteState peek() {
+        return states.peek();
+    }
+
+    class UpdaterService {
+        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        final Visualiser visualiser = new Visualiser();
+
+        void update() {
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    visualiser.updateCurrentState(peek());
+                }
+            };
+            final ScheduledFuture<?> senderHanlde = scheduler
+                    .scheduleAtFixedRate(
+                            runnable, 0, 100, TimeUnit.MILLISECONDS);
+
+        }
+    }
 }
+

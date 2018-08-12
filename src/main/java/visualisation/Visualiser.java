@@ -1,11 +1,11 @@
-package se306.a1.scheduler.manager;
+package visualisation;
 
 import se306.a1.scheduler.data.schedule.ByteState;
 
 /**
  * This class is used to manage the visualisation interaction with the algorithm
  */
-public class VisualisationManager {
+public class Visualiser {
     ByteState currentState;
 
     /**
