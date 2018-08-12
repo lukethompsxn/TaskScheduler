@@ -38,6 +38,14 @@ public class ByteState implements Comparable<ByteState> {
         Arrays.fill(this.processorIndices, -1);
     }
 
+    public int[] getStartTimes() {
+        return startTimes;
+    }
+
+    public int[] getProcessorIndices() {
+        return processorIndices;
+    }
+
     // Does a deep copy of the passed in ByteState, except for the graph and manager objects
     // which are shallow copied
     private ByteState(ByteState other) {

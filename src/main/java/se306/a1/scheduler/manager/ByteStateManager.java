@@ -102,9 +102,8 @@ public class ByteStateManager {
         return states.poll();
     }
 
-
     private void updaterService() {
-        final Visualiser visualiser = new Visualiser(graph);
+        final Visualiser visualiser = new Visualiser(this, graph);
 
         Runnable updateSchedule = () -> {
             visualiser.updateCurrentState(states.peek());
@@ -115,7 +114,7 @@ public class ByteStateManager {
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        task = executor.scheduleAtFixedRate(updateSchedule, 0, 20, TimeUnit.MILLISECONDS);
+        task = executor.scheduleAtFixedRate(updateSchedule, 0, 50, TimeUnit.MILLISECONDS);
     }
 }
 
