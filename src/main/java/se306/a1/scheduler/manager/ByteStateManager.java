@@ -49,7 +49,7 @@ public class ByteStateManager {
         return nodeIndices.get(n);
     }
 
-    public int indexOf(Processor p) {
+    public Integer indexOf(Processor p) {
         return processorIndices.get(p);
     }
 
@@ -73,7 +73,7 @@ public class ByteStateManager {
      * @param state a schedule instance to add to the queue
      */
     public void queue(ByteState state) {
-        if (state.getLength() > upperBound)
+        if (state.getCost() > upperBound)
             return;
         states.add(state);
         logger.info("Schedule Queued. Queue Length = " + states.size());
