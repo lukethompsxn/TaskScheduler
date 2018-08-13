@@ -142,6 +142,11 @@ public class Visualiser {
         frame.setVisible(true);
     }
 
+    /**
+     * This method is used to determine the level which is the node is to be
+     * placed on in the visualisation.
+     * This is done by placing the node one level below its lowest parent.
+     */
     private void determineLevels() {
         List<Node> exitNodes = graphData.getExitNodes();
 
@@ -181,6 +186,14 @@ public class Visualiser {
         }
     }
 
+    /**
+     * This method is used to retrieve the X coordinate for the given node.
+     * This is done by using the number of nodes at that level in the display
+     * hierarchy to create an even distribution at each level.
+     *
+     * @param node the node to retrieve the x coordinate for
+     * @return the x coordinate for the given node
+     */
     private double getXCoordinate(Node node) {
         int level = nodeLevels.get(node);
         int num = levels.get(level);
