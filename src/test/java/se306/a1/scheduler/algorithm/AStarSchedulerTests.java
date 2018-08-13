@@ -63,11 +63,12 @@ public class AStarSchedulerTests {
 
     @Test
     public void testGXLGraphsByte() throws ScheduleException {
+        long firstStart = System.nanoTime();
         for (GXLGraph g : gxlGraphs) {
             System.out.println("[Testing]\t" + g.getGraph().getName());
 
             long start = System.nanoTime();
-            Schedule s = new AStarByteScheduler().run(g.getGraph(), g.getNumProcessors(), 1, false);
+            Schedule s = new AStarByteScheduler().run(g.getGraph(), g.getNumProcessors(), 1, true);
             long end = System.nanoTime();
 
             assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s));
@@ -88,5 +89,6 @@ public class AStarSchedulerTests {
                 System.out.println("[Time]\t" + (end - start) / 1000000);
             }
         }
+        System.out.println((System.nanoTime() - firstStart) / 1000000);
     }
 }
