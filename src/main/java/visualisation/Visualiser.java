@@ -195,6 +195,6 @@ public class Visualiser {
             levels.put(level, num-2);
             num = num-1;
         }
-        return num;
+        return num/2;
     }
 }
