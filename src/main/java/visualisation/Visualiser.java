@@ -5,15 +5,23 @@ import org.graphstream.graph.implementations.MultiGraph;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
+import se306.a1.scheduler.manager.ByteStateManager;
+
+import javax.swing.*;
 
 /**
  * This class is used to manage the visualisation interaction with the algorithm
  */
 public class Visualiser {
-    se306.a1.scheduler.data.graph.Graph graphData;
-    Graph visualisedGraph;
-    ByteState currentState;
-    ByteState previousState;
+    private se306.a1.scheduler.data.graph.Graph graphData;
+    private Graph visualisedGraph;
+    private ByteStateManager manager;
+    private ByteState currentState;
+    private ByteState previousState;
+
+    private JFrame frame;
+    private final int WIDTH;
+    private final int HEIGHT = 500;
 
     private static final String styleSheet =
                     "node {" +
@@ -36,8 +44,16 @@ public class Visualiser {
      *
      * @param graph graph object for the given directed graph
      */
-    public Visualiser(se306.a1.scheduler.data.graph.Graph graph) {
+    public Visualiser(ByteStateManager manager, se306.a1.scheduler.data.graph.Graph graph) {
+        this.manager = manager;
         this.graphData = graph;
+
+        WIDTH = Math.max(200, manager.getProcessors().size() * 50);
+
+        frame = new JFrame();
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(WIDTH + 15, HEIGHT);
+        frame.setVisible(true);
         drawTree();
     }
 
@@ -102,5 +118,8 @@ public class Visualiser {
      * the redrawing of the processor map visualisation.
      */
     private void drawProcessorMap() {
+        frame.getContentPane().removeAll(); //TODO panel still needs clearing
+        frame.add(new ProcessorWindow(manager, currentState, WIDTH, HEIGHT));
+        frame.setVisible(true);
     }
 }

@@ -29,6 +29,7 @@ public class ByteStateManager {
     protected final Graph graph;
     private ScheduledFuture task;
 
+    private ByteState latestState;
 
     private static Logger logger = LogManager.getLogger(ByteStateManager.class.getSimpleName());
 
@@ -98,25 +99,27 @@ public class ByteStateManager {
      * @return the best schedule at current point in execution
      */
     public ByteState dequeue() {
+        latestState = states.peek();
         logger.info("Best Schedule Retrieved");
         return states.poll();
     }
 
+
     private void updaterService() {
-        final Visualiser visualiser = new Visualiser(graph);
+        final Visualiser visualiser = new Visualiser(this, graph);
 
         Runnable updateSchedule = () -> {
-            if (states.peek() != null) {
-                visualiser.updateCurrentState(states.peek());
+            if (latestState != null) {
+                visualiser.updateCurrentState(latestState);
             }
-            if (false) {
+
+            if (latestState.getFreeNodes().isEmpty()) {
                 task.cancel(true);
             }
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        task = executor.scheduleAtFixedRate(updateSchedule, 0, 20, TimeUnit.MILLISECONDS);
+        task = executor.scheduleAtFixedRate(updateSchedule, 0, 50, TimeUnit.MILLISECONDS);
     }
 }
-
 

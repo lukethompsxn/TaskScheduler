@@ -49,12 +49,12 @@ public class SchedulerTestHelper {
         gxlGraphs = new ArrayList<>();
 
         try (Stream<Path> paths = Files.walk(Paths.get("input_graphs/gxl_graphs/"))) {
-            paths.filter(p -> p.toString().endsWith(".dot")).forEach(p -> {
+            paths.filter(p -> p.toString().endsWith(".dot") && !p.toString().endsWith("-output.dot")).forEach(p -> {
                 try {
                     String[] strings = p.toString().split("_");
-                    int numProcessors = Integer.parseInt(strings[strings.length-3]);
-                    int length = Integer.parseInt(strings[strings.length-2]);
-                    int sequentialLength = Integer.parseInt(strings[strings.length-1].replaceAll(".dot", ""));
+                    int numProcessors = Integer.parseInt(strings[strings.length - 3]);
+                    int length = Integer.parseInt(strings[strings.length - 2]);
+                    int sequentialLength = Integer.parseInt(strings[strings.length - 1].replaceAll(".dot", ""));
                     gxlGraphs.add(new GXLGraph(GraphParser.parse(p.toString()), numProcessors, length, sequentialLength));
                 } catch (IOException | GraphException e) {
                     e.printStackTrace();
