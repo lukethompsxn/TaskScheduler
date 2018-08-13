@@ -2,10 +2,14 @@ package se306.a1.scheduler.visualisation;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.View;
+import org.graphstream.ui.view.Viewer;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
+
 
 import javax.swing.*;
 import java.util.*;
@@ -18,9 +22,12 @@ public class Visualiser {
     private Graph visualisedGraph;
     private ByteStateManager manager;
     private ByteState currentState;
-    private ByteState previousState;
     private Map<Node, Integer> nodeLevels;
     private Map<Integer, Integer> levels;
+    Set<String> previousNodes = new HashSet<>();
+    Set<String> previousEdges = new HashSet<>();
+    Set<String> currentNodes = new HashSet<>();
+    Set<String> currentEdges = new HashSet<>();
 
     private JFrame frame;
     private final int WIDTH;
@@ -35,14 +42,24 @@ public class Visualiser {
                     " stroke-color: black;" +
                     "}" +
                     "node.marked {" +
-                    "   fill-color: red;" +
+                    "   fill-color: green;" +
+                    "}" +
+                    "node.seen {" +
+                     "   fill-color: orange;" +
                     "}" +
                     "edge {" +
                     "   fill-color: black;" +
+                    "   size: 2px;" +
                     "}" +
                     "edge.marked {" +
-                    "   fill-color: red;" +
-                    "}";
+                    "   fill-color: green;" +
+                    "   size: 2px;" +
+                    "}" +
+                    "edge.seen {" +
+                    "   fill-color: orange;" +
+                    "   size: 2px;" +
+                    "}"
+            ;
 
     /**
      * This is the constructor for Visualiser.
@@ -77,7 +94,6 @@ public class Visualiser {
      * @param state the latest explored state from the top of the queue
      */
     public void updateCurrentState(ByteState state) {
-        this.previousState = currentState;
         this.currentState = state;
 
         drawHighlighting();
@@ -113,6 +129,7 @@ public class Visualiser {
                 }
             }
         }
+//        frame.add(visualisedGraph.display().addDefaultView(false));
         visualisedGraph.display(false);
     }
 
@@ -121,13 +138,33 @@ public class Visualiser {
      * the redrawing of the highlighted visualisation.
      */
     private void drawHighlighting() {
+        previousNodes = new HashSet<>(currentNodes);
+        previousEdges = new HashSet<>(currentEdges);
+        currentNodes = new HashSet<>();
+        currentEdges = new HashSet<>();
+
         Set<Node> scheduled = currentState.getStartTimes().keySet();
         for (Node parent : scheduled) {
             visualisedGraph.getNode(parent.getLabel()).setAttribute("ui.class", "marked");
+            currentNodes.add(parent.getLabel());
             for (Edge e : graphData.getEdges(parent)) {
                 if (scheduled.contains(e.getChild())) {
-                    visualisedGraph.getEdge(parent.getLabel() + "-" + e.getChild().getLabel()).setAttribute("ui.class", "marked");
+                    String label = parent.getLabel() + "-" + e.getChild().getLabel();
+                    visualisedGraph.getEdge(label).setAttribute("ui.class", "marked");
+                    currentEdges.add(label);
                 }
+            }
+        }
+
+        for (String s : previousNodes) {
+            if (!currentNodes.contains(s)) {
+                visualisedGraph.getNode(s).changeAttribute("ui.class", "seen");
+            }
+        }
+
+        for (String s : previousEdges) {
+            if (!currentEdges.contains(s)) {
+                visualisedGraph.getEdge(s).changeAttribute("ui.class", "seen");
             }
         }
     }
