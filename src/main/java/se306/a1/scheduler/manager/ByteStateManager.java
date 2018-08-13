@@ -7,7 +7,6 @@ import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
-import se306.a1.scheduler.util.SetBackedPriorityQueue;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
 import java.util.*;
@@ -18,6 +17,7 @@ import java.util.*;
  */
 public class ByteStateManager {
     private final Queue<ByteState> states;
+    private final Set<ByteState> seenStates;
     private final List<Node> nodes;
     private final Map<Node, Integer> nodeIndices;
     private final List<Processor> processors;
@@ -27,9 +27,10 @@ public class ByteStateManager {
     private static Logger logger = LogManager.getLogger(ByteStateManager.class.getSimpleName());
 
     public ByteStateManager(Graph graph, int numProcessors) throws ScheduleException {
-        upperBound = new BasicScheduler().run(graph, numProcessors, 0).getLength();
+        upperBound = new BasicScheduler().run(graph, numProcessors, 1).getLength();
 
-        states = new SetBackedPriorityQueue<>();
+        states = new PriorityQueue<>();
+        seenStates = new HashSet<>();
         nodes = new ArrayList<>(graph.getAllNodes());
         nodeIndices = new HashMap<>();
         processors = new ArrayList<>();
@@ -73,9 +74,12 @@ public class ByteStateManager {
      * @param state a schedule instance to add to the queue
      */
     public void queue(ByteState state) {
-        if (state.getCost() > upperBound)
+        if (state.getLength() > upperBound || seenStates.contains(state))
             return;
+
         states.add(state);
+        seenStates.add(state);
+
         logger.info("Schedule Queued. Queue Length = " + states.size());
     }
 
