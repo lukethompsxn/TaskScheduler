@@ -1,4 +1,4 @@
-package visualisation;
+package se306.a1.scheduler.visualisation;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;

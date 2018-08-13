@@ -1,4 +1,4 @@
-package visualisation;
+package se306.a1.scheduler.visualisation;
 
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;

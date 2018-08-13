@@ -8,7 +8,7 @@ import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.util.exception.ScheduleException;
-import visualisation.Visualiser;
+import se306.a1.scheduler.visualisation.Visualiser;
 
 import java.util.*;
 import java.util.concurrent.Executors;
