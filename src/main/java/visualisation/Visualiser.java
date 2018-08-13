@@ -54,7 +54,7 @@ public class Visualiser {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH + 15, HEIGHT);
         frame.setVisible(true);
-        drawTree();
+//        drawTree();
     }
 
     /**
@@ -68,7 +68,7 @@ public class Visualiser {
     public void updateCurrentState(ByteState state) {
         this.previousState = currentState;
         this.currentState = state;
-        drawHighlighting();
+//        drawHighlighting();
         drawProcessorMap();
     }
 
