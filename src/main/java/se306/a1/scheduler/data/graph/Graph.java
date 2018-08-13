@@ -76,4 +76,6 @@ public interface Graph {
      * @return the bottom level of the node
      */
     Integer getBottomLevel(Node node);
+
+    List<Node> getExitNodes();
 }

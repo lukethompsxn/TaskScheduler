@@ -85,6 +85,18 @@ public class TaskGraph implements Graph {
         return bottomLevels.get(node);
     }
 
+    @Override
+    public List<Node> getExitNodes() {
+        List<Node> exits = new ArrayList<>();
+
+        for (Node n : nodes.values()) {
+            if (!children.containsKey(n) || children.get(n).isEmpty())
+                exits.add(n);
+        }
+
+        return exits;
+    }
+
     /**
      * Private helper method used to construct the edges connecting the graph.
      *

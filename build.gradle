@@ -16,6 +16,8 @@ dependencies {
     compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
     compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
     compile group: 'org.graphstream', name: 'gs-core', version: '1.3'
+    compile group: 'org.graphstream', name: 'gs-ui', version: '1.3'
+
 }
 
 jar {
