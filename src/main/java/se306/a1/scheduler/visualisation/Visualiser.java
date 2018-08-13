@@ -2,14 +2,10 @@ package se306.a1.scheduler.visualisation;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui.swingViewer.ViewPanel;
-import org.graphstream.ui.view.View;
-import org.graphstream.ui.view.Viewer;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
-
 
 import javax.swing.*;
 import java.util.*;
@@ -35,31 +31,30 @@ public class Visualiser {
 
     private static final String styleSheet =
                     "node {" +
-                    "   fill-color: grey;" +
+                    "   fill-color: #839192;" +
                     " size: 20px, 20px;" +
                     " shape: circle;" +
                     " stroke-mode: plain;" +
                     " stroke-color: black;" +
                     "}" +
                     "node.marked {" +
-                    "   fill-color: green;" +
+                    "   fill-color: #28B463;" +
                     "}" +
                     "node.seen {" +
-                     "   fill-color: orange;" +
+                     "   fill-color: #D68910;" +
                     "}" +
                     "edge {" +
                     "   fill-color: black;" +
                     "   size: 2px;" +
                     "}" +
                     "edge.marked {" +
-                    "   fill-color: green;" +
+                    "   fill-color: #28B463;" +
                     "   size: 2px;" +
                     "}" +
                     "edge.seen {" +
-                    "   fill-color: orange;" +
+                    "   fill-color: #D68910;" +
                     "   size: 2px;" +
-                    "}"
-            ;
+                    "}";
 
     /**
      * This is the constructor for Visualiser.
@@ -129,7 +124,9 @@ public class Visualiser {
                 }
             }
         }
-//        frame.add(visualisedGraph.display().addDefaultView(false));
+//        Viewer viewer = new Viewer(visualisedGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+//        ViewPanel viewPanel = viewer.addDefaultView(false);
+//        frame.add(viewPanel);
         visualisedGraph.display(false);
     }
 
@@ -186,9 +183,9 @@ public class Visualiser {
      */
     private void determineLevels() {
         List<Node> exitNodes = graphData.getExitNodes();
+        int maxLevel = 0;
 
         Queue<Node> queue = new ArrayDeque<>();
-
 
         for (Node node : exitNodes) {
             nodeLevels.put(node, 0);
@@ -205,13 +202,25 @@ public class Visualiser {
                     if (nodeLevels.get(parent) < nodeLevels.get(node) + 1) {
                         nodeLevels.put(parent, nodeLevels.get(node) + 1);
                         queue.add(parent);
+
+                        if (nodeLevels.get(parent) > maxLevel) {
+                            maxLevel = nodeLevels.get(parent);
+                        }
                     }
                 } else {
                     nodeLevels.put(parent, nodeLevels.get(node) + 1);
                     queue.add(parent);
+
+                    if (nodeLevels.get(parent) > maxLevel) {
+                        maxLevel = nodeLevels.get(parent);
+                    }
                 }
 
             }
+        }
+
+        for (Node node : graphData.getEntryNodes()) {
+            nodeLevels.put(node, maxLevel);
         }
 
         for (Integer i : nodeLevels.values()) {
