@@ -28,7 +28,6 @@ public class AStarByteScheduler extends Scheduler {
 
             if (freeNodes.isEmpty()) {
                 optimal = current;
-                System.out.println("done");
                 break;
             }
 

@@ -37,7 +37,8 @@ public class AStarSchedulerTests {
         timedGraphs4Proc.put(GraphParser.parse("input_graphs/Nodes_10_Random.dot"), 50);
         timedGraphs4Proc.put(GraphParser.parse("input_graphs/Nodes_11_OutTree.dot"), 227);
 
-        gxlGraphs = SchedulerTestHelper.parseGXLGraphs();
+        //Change enum to desired graph type to test
+        gxlGraphs = SchedulerTestHelper.parseGXLGraphs(SchedulerTestHelper.GraphType.NONE);
     }
 
 //    @Test
@@ -60,20 +61,31 @@ public class AStarSchedulerTests {
         }
     }
 
-//    @Test
+    @Test
     public void testGXLGraphsByte() throws ScheduleException {
         for (GXLGraph g : gxlGraphs) {
+            System.out.println("[Testing]\t" + g.getGraph().getName());
+
+            long start = System.nanoTime();
             Schedule s = new AStarByteScheduler().run(g.getGraph(), g.getNumProcessors(), 1, false);
+            long end = System.nanoTime();
+
             assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s));
             assertEquals(s.getLength(), g.getLength());
-            System.out.println("[Byte] Graph Passed Multiple Processor: " + g.getGraph().getName());
+
+            System.out.println("[Byte]\tGraph Passed on " + g.getNumProcessors() + " Processors");
+            System.out.println("[Time]\t" + (end - start) / 1000000);
 
             if (g.getSequentialLength() != -1) {
+                start = System.nanoTime();
                 Schedule s_sequential = new AStarByteScheduler().run(g.getGraph(), 1, 1, false);
+                end = System.nanoTime();
+
                 assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s_sequential));
                 assertEquals(s_sequential.getLength(), g.getSequentialLength());
-                System.out.println("[Byte] Graph Passed Single Processor: " + g.getGraph().getName());
 
+                System.out.println("[Byte]\tGraph Passed Single Processor");
+                System.out.println("[Time]\t" + (end - start) / 1000000);
             }
         }
     }

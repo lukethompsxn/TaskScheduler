@@ -24,6 +24,37 @@ public class SchedulerTestHelper {
     private static List<GXLGraph> gxlGraphs = new ArrayList<>();
     private static List<Graph> graphs = new ArrayList<>();
 
+    enum GraphType {
+        TWO("2p"),
+        FOUR("4p"),
+        EIGHT("8p"),
+        SIXTEEN("16p"),
+        FORK("Fork_Nodes"),
+        JOIN("Join"),
+        FORK_JOIN("Fork_Join"),
+        INDEPENDENT("Independent"),
+        INTREE("InTree"),
+        OUTTREE("OutTree"),
+        BALANCED("Balanced"),
+        UNBALANCED("Unbalanced"),
+        PIPELINE("Pipeline"),
+        RANDOM("Random_Nodes"),
+        SERIESPARALLEL("SeriesParallel"),
+        STENCIL("Stencil"),
+        ALL(""),
+        NONE("N/A");
+
+        private final String value;
+
+        GraphType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
 
     public static List<Graph> parseGraphs() {
         graphs = new ArrayList<>();
@@ -45,11 +76,14 @@ public class SchedulerTestHelper {
         return graphs;
     }
 
-    public static List<GXLGraph> parseGXLGraphs() {
+    public static List<GXLGraph> parseGXLGraphs(GraphType filter) {
         gxlGraphs = new ArrayList<>();
 
         try (Stream<Path> paths = Files.walk(Paths.get("input_graphs/gxl_graphs/"))) {
-            paths.filter(p -> p.toString().endsWith(".dot") && !p.toString().endsWith("-output.dot")).forEach(p -> {
+            paths.filter(p ->
+                    p.toString().endsWith(".dot") &&
+                            !p.toString().endsWith("-output.dot") &&
+                            p.toString().contains(filter.toString())).forEach(p -> {
                 try {
                     String[] strings = p.toString().split("_");
                     int numProcessors = Integer.parseInt(strings[strings.length - 3]);
