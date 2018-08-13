@@ -2,17 +2,16 @@ package se306.a1.scheduler.visualisation;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui.swingViewer.ViewPanel;
-import org.graphstream.ui.view.View;
-import org.graphstream.ui.view.Viewer;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
-
 import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * This class is used to manage the visualisation interaction with the algorithm
@@ -24,28 +23,31 @@ public class Visualiser {
     private ByteState currentState;
     private Map<Node, Integer> nodeLevels;
     private Map<Integer, Integer> levels;
-    Set<String> previousNodes = new HashSet<>();
-    Set<String> previousEdges = new HashSet<>();
-    Set<String> currentNodes = new HashSet<>();
-    Set<String> currentEdges = new HashSet<>();
+    private Set<String> previousNodes;
+    private Set<String> previousEdges;
+    private Set<String> currentNodes = new HashSet<>();
+    private Set<String> currentEdges = new HashSet<>();
 
     private JFrame frame;
     private final int WIDTH;
     private final int HEIGHT = 500;
 
+    private Random rand = new Random();
+    private Color color = getRandomColor();
+
     private static final String styleSheet =
                     "node {" +
                     "   fill-color: grey;" +
-                    " size: 20px, 20px;" +
-                    " shape: circle;" +
-                    " stroke-mode: plain;" +
-                    " stroke-color: black;" +
+                    "   size: 20px, 20px;" +
+                    "   shape: circle;" +
+                    "   stroke-mode: plain;" +
+                    "   stroke-color: black;" +
                     "}" +
                     "node.marked {" +
                     "   fill-color: green;" +
                     "}" +
                     "node.seen {" +
-                     "   fill-color: orange;" +
+                    "   fill-color: orange;" +
                     "}" +
                     "edge {" +
                     "   fill-color: black;" +
@@ -58,8 +60,7 @@ public class Visualiser {
                     "edge.seen {" +
                     "   fill-color: orange;" +
                     "   size: 2px;" +
-                    "}"
-            ;
+                    "}";
 
     /**
      * This is the constructor for Visualiser.
@@ -175,7 +176,7 @@ public class Visualiser {
      */
     private void drawProcessorMap() {
         frame.getContentPane().removeAll(); //TODO panel still needs clearing
-        frame.add(new ProcessorWindow(manager, currentState, WIDTH, HEIGHT));
+        frame.add(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
         frame.setVisible(true);
     }
 
@@ -236,15 +237,28 @@ public class Visualiser {
         int num = levels.get(level);
 
         if (num % 2 == 0) {
-            if (num-2 == 0) {
-                levels.put(level, num-4);
+            if (num - 2 == 0) {
+                levels.put(level, num - 4);
             } else {
-                levels.put(level, num-2);
+                levels.put(level, num - 2);
             }
         } else {
-            levels.put(level, num-2);
-            num = num-1;
+            levels.put(level, num - 2);
+            num = num - 1;
         }
-        return num/2;
+        return num / 2;
+    }
+
+    /**
+     * This method returns a random colour where its RGB values are all between
+     * 0.5 and 1, i.e. 'lighter/brighter' colours.
+     *
+     * @return Color object with randomly initialised RGB values
+     */
+    private Color getRandomColor() {
+        float r = rand.nextFloat() / 2f + 0.5f;
+        float g = rand.nextFloat() / 2f + 0.5f;
+        float b = rand.nextFloat() / 2f + 0.5f;
+        return new Color(r, g, b);
     }
 }

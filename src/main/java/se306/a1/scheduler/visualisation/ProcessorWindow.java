@@ -18,14 +18,18 @@ public class ProcessorWindow extends JPanel {
     private Map<Processor, Map<Node, Integer>> scheduleTimes;
     private Random rand = new Random();
 
+    private Color color;
+
     private final int PROCESSORS;
     private final int WIDTH;
     private final int HEIGHT;
 
-    ProcessorWindow(ByteStateManager manager, ByteState state, int width, int height) {
+    ProcessorWindow(ByteStateManager manager, ByteState state, Color color, int width, int height) {
         this.manager = manager;
         this.state = state;
         scheduleTimes = new HashMap<>();
+
+        this.color = color;
 
         PROCESSORS = manager.getProcessors().size();
         WIDTH = width / PROCESSORS;
@@ -82,7 +86,7 @@ public class ProcessorWindow extends JPanel {
                 Node node = entry.getKey();
                 int startTime = entry.getValue();
 
-                g.setColor(getRandomColor());
+                g.setColor(getRandomColor(manager.indexOf(node)));
                 g.fillRect(xPos,
                         yOffset + startTime * scale,
                         WIDTH,
@@ -104,10 +108,12 @@ public class ProcessorWindow extends JPanel {
 //        paintComponent(getGraphics());
 //    }
 
-    private Color getRandomColor() {
-        double r = rand.nextFloat() / 2f + 0.5;
-        double g = rand.nextFloat() / 2f + 0.5;
-        double b = rand.nextFloat() / 2f + 0.5;
-        return new Color((float) r, (float) g, (float) b);
+    private Color getRandomColor(int val) {
+        //Minimum of % 8 / 12 for largest color diff
+        float r = color.getRed() * (1 - val % 8 / 16f) / 255;
+        float g = color.getGreen() * (1 - val % 8 / 16f) / 255;
+        float b = color.getBlue() * (1 - val % 8 / 16f) / 255;
+
+        return new Color(r, g, b);
     }
 }
