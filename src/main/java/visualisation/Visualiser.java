@@ -46,6 +46,7 @@ public class Visualiser {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH + 15, HEIGHT);
+        frame.setVisible(true);
         drawTree();
     }
 

@@ -29,6 +29,7 @@ public class ByteStateManager {
     protected final Graph graph;
     private ScheduledFuture task;
 
+    private ByteState latestState;
 
     private static Logger logger = LogManager.getLogger(ByteStateManager.class.getSimpleName());
 
@@ -98,6 +99,7 @@ public class ByteStateManager {
      * @return the best schedule at current point in execution
      */
     public ByteState dequeue() {
+        latestState = states.peek();
         logger.info("Best Schedule Retrieved");
         return states.poll();
     }
@@ -106,9 +108,9 @@ public class ByteStateManager {
         final Visualiser visualiser = new Visualiser(this, graph);
 
         Runnable updateSchedule = () -> {
-            visualiser.updateCurrentState(states.peek());
+            visualiser.updateCurrentState(latestState);
 
-            if (false) {
+            if (latestState.getFreeNodes().isEmpty()) {
                 task.cancel(true);
             }
         };

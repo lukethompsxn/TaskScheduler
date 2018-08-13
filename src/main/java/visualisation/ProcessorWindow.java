@@ -22,8 +22,6 @@ public class ProcessorWindow extends JPanel {
     private final int WIDTH;
     private final int HEIGHT;
 
-    private Graphics g;
-
     ProcessorWindow(ByteStateManager manager, ByteState state, int width, int height) {
         this.manager = manager;
         this.state = state;
@@ -33,7 +31,10 @@ public class ProcessorWindow extends JPanel {
         WIDTH = width / PROCESSORS;
         HEIGHT = height;
 
+        buildVisual();
+    }
 
+    private void buildVisual() {
         int[] startTimes = state.getStartTimes();
         int[] processorIndices = state.getProcessorIndices();
 
@@ -51,7 +52,6 @@ public class ProcessorWindow extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        this.g = g;
         int yOffset = 30;
 
         //Dynamically change scale if too high, default scale = 5
@@ -104,8 +104,7 @@ public class ProcessorWindow extends JPanel {
     //TODO implement this to save on remaking processor panels
 //    @Override
 //    public void repaint() {
-//        g.clearRect(0, 0, getWidth(), getHeight());
-//
+//        paintComponent(getGraphics());
 //    }
 
     private Color getRandomColor() {
