@@ -38,14 +38,6 @@ public class ByteState implements Comparable<ByteState> {
         Arrays.fill(this.processorIndices, -1);
     }
 
-    public int[] getStartTimes() {
-        return startTimes;
-    }
-
-    public int[] getProcessorIndices() {
-        return processorIndices;
-    }
-
     // Does a deep copy of the passed in ByteState, except for the graph and manager objects
     // which are shallow copied
     private ByteState(ByteState other) {
@@ -108,6 +100,14 @@ public class ByteState implements Comparable<ByteState> {
         return newState;
     }
 
+    public int getCost() {
+        return cost;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
     public List<Node> getFreeNodes() {
         List<Node> out = new ArrayList<>();
         for (int i = 0; i < free.length; ++i) {
@@ -117,30 +117,46 @@ public class ByteState implements Comparable<ByteState> {
         return out;
     }
 
-    public List<Node> getUnscheduledNodes() {
-        List<Node> out = new ArrayList<>();
-        for (int i = 0; i < processorIndices.length; ++i) {
-            if (processorIndices[i] == -1)
-                out.add(manager.getNode(i));
+    public Map<Node, Integer> getStartTimes() {
+        Map<Node, Integer> out = new HashMap<>();
+        for (int i = 0; i < startTimes.length; ++i) {
+            int time = startTimes[i];
+            if (time == -1)
+                continue;
+            out.put(manager.getNode(i), time);
         }
         return out;
     }
 
-    public List<Node> getScheduledNodes() {
-        List<Node> out = new ArrayList<>();
+    public Map<Node, Processor> getProcessors() {
+        Map<Node, Processor> out = new HashMap<>();
         for (int i = 0; i < processorIndices.length; ++i) {
-            if (processorIndices[i] != -1)
-                out.add(manager.getNode(i));
+            int index = processorIndices[i];
+            if (index == -1)
+                continue;
+            out.put(manager.getNode(i), manager.getProcessor(index));
         }
         return out;
     }
 
-    public int getCost() {
-        return cost;
-    }
+    public Schedule toSchedule() {
+        Map<Node, Processor> processors = new HashMap<>();
+        List<Pair<Node, Integer>> nodes = new ArrayList<>();
+        for (int i = 0; i < startTimes.length; ++i) {
+            if (startTimes[i] == -1)
+                continue;
+            Node node = manager.getNode(i);
+            nodes.add(new Pair<>(node, startTimes[i]));
+            processors.put(node, manager.getProcessor(processorIndices[i]));
+        }
+        nodes.sort(Comparator.comparingInt(Pair::second));
+        for (Pair<Node, Integer> pair : nodes) {
+            Node node = pair.first();
+            int time = pair.second();
+            processors.get(node).schedule(node, time);
+        }
 
-    public int getLength() {
-        return length;
+        return new Schedule(processors, new HashSet<>(), manager.getProcessors(), graph, length, cost);
     }
 
     @Override
@@ -163,25 +179,5 @@ public class ByteState implements Comparable<ByteState> {
     @Override
     public int hashCode() {
         return Arrays.hashCode(startTimes);
-    }
-
-    public Schedule toSchedule() {
-        Map<Node, Processor> processors = new HashMap<>();
-        List<Pair<Node, Integer>> nodes = new ArrayList<>();
-        for (int i = 0; i < startTimes.length; ++i) {
-                if (startTimes[i] == -1)
-                    continue;
-                Node node = manager.getNode(i);
-                nodes.add(new Pair<>(node, startTimes[i]));
-                processors.put(node, manager.getProcessor(processorIndices[i]));
-        }
-        nodes.sort(Comparator.comparingInt(Pair::second));
-        for (Pair<Node, Integer> pair : nodes) {
-            Node node = pair.first();
-            int time = pair.second();
-            processors.get(node).schedule(node, time);
-        }
-
-        return new Schedule(processors, new HashSet<>(), manager.getProcessors(), graph, length, cost);
     }
 }

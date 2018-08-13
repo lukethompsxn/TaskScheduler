@@ -35,18 +35,15 @@ public class ProcessorWindow extends JPanel {
     }
 
     private void buildVisual() {
-        int[] startTimes = state.getStartTimes();
-        int[] processorIndices = state.getProcessorIndices();
+        Map<Node, Integer> startTimes = state.getStartTimes();
+        Map<Node, Processor> processors = state.getProcessors();
 
-        for (Processor processor : manager.getProcessors()) {
-            scheduleTimes.put(processor, new HashMap<>());
-        }
+        for (Node n : processors.keySet()) {
+            Processor p = processors.get(n);
+            if (!scheduleTimes.containsKey(p))
+                scheduleTimes.put(processors.get(n), new HashMap<>());
 
-        for (int i = 0; i < startTimes.length; i++) {
-            if (startTimes[i] != -1) {
-                scheduleTimes.get(manager.getProcessor(processorIndices[i]))
-                        .put(manager.getNode(i), startTimes[i]);
-            }
+            scheduleTimes.get(p).put(n, startTimes.get(n));
         }
     }
 
@@ -67,9 +64,9 @@ public class ProcessorWindow extends JPanel {
         g.clearRect(0, 0, getWidth(), getHeight());
 
         //Draw each processor
-        for (Processor processor : manager.getProcessors()) {
-            int numProc = manager.indexOf(processor);
+        for (Processor processor : scheduleTimes.keySet()) {
 
+            int numProc = Integer.parseInt(processor.getName());
             //x-shift based on which processor it is
             int xPos = numProc * WIDTH;
 

@@ -8,6 +8,8 @@ import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
 import javax.swing.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class is used to manage the visualisation interaction with the algorithm
@@ -103,12 +105,13 @@ public class Visualiser {
      */
     private void drawHighlighting() {
         System.out.println("called");
-        for (Node parent : currentState.getScheduledNodes()) {
-            visualisedGraph.getNode(parent.getLabel()).setAttribute("ui.class", "marked");
-            for (Node child : currentState.getScheduledNodes()) {
-                if (graphData.containsEdge(parent, child)) {
-                    visualisedGraph.getEdge(parent.getLabel() + "-" + child.getLabel()).setAttribute("ui.class", "marked");
-                }
+        Set<Node> scheduled = currentState.getStartTimes().keySet();
+        for (Node parent : scheduled) {
+            visualisedGraph.getNode(parent.getLabel()).setAttribute("ui.marked", "marked");
+            for (Edge e : graphData.getEdges(parent)) {
+                if (!scheduled.contains(e.getChild()))
+                    continue;
+                visualisedGraph.getEdge(parent.getLabel() + "-" + e.getChild().getLabel()).setAttribute("ui.class", "marked");
             }
         }
     }
