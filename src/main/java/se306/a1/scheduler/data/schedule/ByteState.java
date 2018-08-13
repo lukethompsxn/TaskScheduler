@@ -96,12 +96,12 @@ public class ByteState implements Comparable<ByteState> {
         int nodeIndex = manager.indexOf(node);
         int processorIndex = manager.indexOf(processor);
 
-        int startTime = earliestStartTimes[processorIndex];
-
         if (processorIndices[nodeIndex] != -1)
             throw new RuntimeException("Task has already been scheduled");
         if (!isFree(nodeIndex))
             throw new RuntimeException("Task is not free to schedule");
+
+        int startTime = earliestStartTimes[processorIndex];
 
         for (Node parent : graph.getParents(node)) {
             int parentIndex = manager.indexOf(parent);
@@ -130,13 +130,19 @@ public class ByteState implements Comparable<ByteState> {
         for (Edge e : graph.getEdges(node)) {
             Node child = e.getChild();
             int childIndex = manager.indexOf(child);
+            boolean canSchedule = true;
+
             for (Node parent : graph.getParents(child)) {
                 int parentIndex = manager.indexOf(parent);
-                if (processorIndices[parentIndex] == -1)
+
+                if (newState.processorIndices[parentIndex] == -1) {
+                    canSchedule = false;
                     break;
+                }
             }
 
-            newState.setFree(childIndex, true);
+            if (canSchedule)
+                newState.setFree(childIndex, true);
         }
 
         // TODO: figure out a way to speed up the DRT calculation
