@@ -167,29 +167,33 @@ public class ByteState implements Comparable<ByteState> {
     }
 
     /**
-     * Retrieve a list of nodes that are currently not scheduled on any processor.
+     * Retrieve a map of nodes to their scheduled start time.
      *
-     * @return a list of nodes that haven't been scheduled yet
+     * @return a map of node to start time
      */
-    public List<Node> getUnscheduledNodes() {
-        List<Node> out = new ArrayList<>();
-        for (int i = 0; i < processorIndices.length; ++i) {
-            if (processorIndices[i] == -1)
-                out.add(manager.getNode(i));
+    public Map<Node, Integer> getStartTimes() {
+        Map<Node, Integer> out = new HashMap<>();
+        for (int i = 0; i < startTimes.length; ++i) {
+            int time = startTimes[i];
+            if (time == -1)
+                continue;
+            out.put(manager.getNode(i), time);
         }
         return out;
     }
 
     /**
-     * Retrieve a list of nodes that have been scheduled on some processor.
+     * Retrieve a map of nodes to the processor they are scheduled on.
      *
-     * @return a list of nodes that have been scheduled
+     * @return a map of node to processor
      */
-    public List<Node> getScheduledNodes() {
-        List<Node> out = new ArrayList<>();
+    public Map<Node, Processor> getProcessors() {
+        Map<Node, Processor> out = new HashMap<>();
         for (int i = 0; i < processorIndices.length; ++i) {
-            if (processorIndices[i] != -1)
-                out.add(manager.getNode(i));
+            int index = processorIndices[i];
+            if (index == -1)
+                continue;
+            out.put(manager.getNode(i), manager.getProcessor(index));
         }
         return out;
     }
@@ -235,27 +239,6 @@ public class ByteState implements Comparable<ByteState> {
         }
 
         return new Schedule(processors, new HashSet<>(), manager.getProcessors(), graph, length, cost);
-    }
-
-    @Override
-    public int compareTo(ByteState other) {
-        return Integer.compare(cost, other.cost);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other)
-            return true;
-        if (!(other instanceof ByteState))
-            return false;
-        ByteState o = (ByteState) other;
-
-        return Arrays.equals(startTimes, o.startTimes);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(startTimes);
     }
 
     /**
@@ -317,5 +300,26 @@ public class ByteState implements Comparable<ByteState> {
             drt = Math.min(drt, processorDRT);
         }
         return drt;
+    }
+
+    @Override
+    public int compareTo(ByteState other) {
+        return Integer.compare(cost, other.cost);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (!(other instanceof ByteState))
+            return false;
+        ByteState o = (ByteState) other;
+
+        return Arrays.equals(startTimes, o.startTimes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(startTimes);
     }
 }

@@ -1,8 +1,5 @@
 package se306.a1.scheduler.data.graph;
 
-import se306.a1.scheduler.data.graph.Edge;
-import se306.a1.scheduler.data.graph.Node;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -53,6 +50,13 @@ public interface Graph {
     List<Node> getEntryNodes();
 
     /**
+     * Gets the exit nodes of the graph
+     *
+     * @return a list of exit nodes out of the graph
+     */
+    List<Node> getExitNodes();
+
+    /**
      * Gets the cost of the link between the two given nodes.
      *
      * @param parent the parent node in the link
@@ -60,6 +64,16 @@ public interface Graph {
      * @return the cost of link
      */
     Integer getCost(Node parent, Node child);
+
+    /**
+     * Determines whether the graph contains an edge between a given
+     * parent and child.
+     *
+     * @param parent parent node in the link
+     * @param child  child node in the link
+     * @return
+     */
+    boolean containsEdge(Node parent, Node child);
 
     /**
      * Gets the bottom level of the given node, which is the cost of the

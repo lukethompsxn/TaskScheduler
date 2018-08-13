@@ -23,7 +23,7 @@ public class BasicSchedulerTests {
     public void testSingleProcessorScheduleIsValid() throws ScheduleException {
         final int processors = 1;
         for (Graph g : graphs) {
-            Schedule s = new BasicScheduler().run(g, processors, 1);
+            Schedule s = new BasicScheduler().run(g, processors, 1, false);
             assertTrue(SchedulerTestHelper.isValid(g, s));
         }
     }
@@ -32,7 +32,7 @@ public class BasicSchedulerTests {
     public void testMultiProcessorScheduleIsValid() throws ScheduleException {
         final int processors = 4;
         for (Graph g : graphs) {
-            Schedule s = new BasicScheduler().run(g, processors, 1);
+            Schedule s = new BasicScheduler().run(g, processors, 1, false);
             assertTrue(SchedulerTestHelper.isValid(g, s));
         }
     }

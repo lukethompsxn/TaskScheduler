@@ -12,7 +12,7 @@ public class AStarByteScheduler extends Scheduler {
 
     @Override
     protected void createSchedule() throws ScheduleException {
-        ByteStateManager stateManager = new ByteStateManager(graph, processors);
+        ByteStateManager stateManager = new ByteStateManager(graph, processors, isVisualised);
         // Adds a new state for each entry node on a processor
         for (Node node : graph.getEntryNodes()) {
             ByteState s = new ByteState(stateManager, graph);

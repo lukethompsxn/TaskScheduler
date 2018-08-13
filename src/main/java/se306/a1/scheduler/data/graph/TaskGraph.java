@@ -1,7 +1,5 @@
 package se306.a1.scheduler.data.graph;
 
-import se306.a1.scheduler.util.Pair;
-
 import java.util.*;
 
 /**
@@ -68,8 +66,28 @@ public class TaskGraph implements Graph {
     }
 
     @Override
+    public List<Node> getExitNodes() {
+        List<Node> exits = new ArrayList<>();
+
+        for (Node n : nodes.values()) {
+            if (!children.containsKey(n) || children.get(n).isEmpty())
+                exits.add(n);
+        }
+
+        return exits;
+    }
+
+    @Override
     public Integer getCost(Node parent, Node child) {
         return edgeCosts.get(parent).get(child);
+    }
+
+    @Override
+    public boolean containsEdge(Node parent, Node child) {
+        if (edgeCosts.get(parent).get(child) == null) {
+            return false;
+        }
+        return true;
     }
 
     @Override
