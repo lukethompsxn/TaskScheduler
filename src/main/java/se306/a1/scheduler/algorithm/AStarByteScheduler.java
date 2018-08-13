@@ -30,8 +30,6 @@ public class AStarByteScheduler extends Scheduler {
             for (Node node : freeNodes) {
                 for (Processor processor : stateManager.getProcessors()) {
                     ByteState next = current.scheduleTask(node, processor);
-                    if (next == null)
-                        break;
                     stateManager.queue(next);
                 }
             }
