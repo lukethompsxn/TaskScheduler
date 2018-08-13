@@ -102,13 +102,13 @@ public class ByteStateManager {
         return states.poll();
     }
 
-
     private void updaterService() {
         final Visualiser visualiser = new Visualiser(graph);
 
         Runnable updateSchedule = () -> {
-            visualiser.updateCurrentState(states.peek());
-
+            if (states.peek() != null) {
+                visualiser.updateCurrentState(states.peek());
+            }
             if (false) {
                 task.cancel(true);
             }
@@ -118,4 +118,5 @@ public class ByteStateManager {
         task = executor.scheduleAtFixedRate(updateSchedule, 0, 20, TimeUnit.MILLISECONDS);
     }
 }
+
 
