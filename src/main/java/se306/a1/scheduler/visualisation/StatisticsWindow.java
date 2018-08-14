@@ -17,8 +17,9 @@ public class StatisticsWindow extends JPanel {
     private Instant timeStart;
     private String[] colors;
 
-    private static final int WIDTH = 150;
-    private static final int HEIGHT = 100;
+    private static final int WIDTH = 140;
+    private static final int HEIGHT = 63;
+    private static final int X_OFFESET = 125;
 
     public StatisticsWindow(ByteStateManager manager, Graph graph) {
         this.manager = manager;
@@ -61,19 +62,23 @@ public class StatisticsWindow extends JPanel {
 
         int i = 0;
         for (String item : stats.keySet()) {
-            int xPos = (i * WIDTH) + (i * 10);
+            int yPos = (i * HEIGHT) + (i * 5);
+
+            if (i == 0) {
+                yPos = yPos + 3;
+            }
+
             g.setColor(Color.decode(colors[i]));
-            g.fillRoundRect(xPos, 0, WIDTH, HEIGHT, 5, 5);
+            g.fillRoundRect(X_OFFESET, yPos, WIDTH, HEIGHT, 5, 5);
 
-            g.setFont(new Font("TimesNewRoman", Font.ITALIC, 15));
+            g.setFont(new Font("Calibri", Font.PLAIN, 15));
             g.setColor(Color.LIGHT_GRAY);
-            g.drawString(item, xPos + 5, 15);
+            g.drawString(item, 5 + X_OFFESET, yPos + 15);
 
-//            g.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
-//            FontMetrics fontMetrics =
-//            g.setColor(Color.WHITE);
+            g.setFont(new Font("Calibri", Font.BOLD, 15));
+            g.setColor(Color.WHITE);
             Rectangle2D rect = fm.getStringBounds(stats.get(item), g2d);
-            g.drawString(stats.get(item), xPos + (WIDTH/2) - (int) (rect.getWidth()/2), HEIGHT/2);
+            g.drawString(stats.get(item), (WIDTH/2) - (int) (rect.getWidth()/2) + X_OFFESET, yPos + HEIGHT/2 + HEIGHT/4);
             i++;
         }
     }

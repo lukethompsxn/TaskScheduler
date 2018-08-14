@@ -42,7 +42,7 @@ public class Visualiser {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH + 15, HEIGHT);
-        frame.setVisible(true);
+//        frame.setVisible(true);
     }
 
     /**
@@ -65,11 +65,32 @@ public class Visualiser {
      * the redrawing of the processor map visualisation.
      */
     private void drawComponents() {
-        frame.getContentPane().removeAll(); //TODO panel still needs clearing
-        frame.add(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
-        frame.add(new StatisticsWindow(manager, graph));
-      //  frame.add(graphWindow.drawHighlighting(currentState));
+        JPanel p = new JPanel();
+        p.setLayout(new GridLayout(0,3));
+
+        p.add(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
+        p.add(graphWindow.drawHighlighting(currentState));
+        p.add(new StatisticsWindow(manager, graph));
+
+//        JPanel p2 = new JPanel();
+//        p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
+//        p2.add(p);
+//        p2.add(new StatisticsWindow(manager, graph));
+////
+//        Panel p2 = new Panel();
+//        p2.setLayout(new BoxLayout());
+//        p2.add(p);
+
+        frame.add(p);
+//        frame.add(n);
         frame.setVisible(true);
+
+//
+//        frame.getContentPane().removeAll(); //TODO panel still needs clearing
+//        frame.add(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
+//        frame.add(new StatisticsWindow(manager, graph));
+//        frame.add();
+//        frame.setVisible(true);
     }
 
     /**
