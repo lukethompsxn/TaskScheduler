@@ -124,7 +124,7 @@ public class ByteStateManager {
      *
      * @return number of seen states
      */
-    public Integer getNumStatesSeen() { return seenStates.size(); }
+    public Integer getNumStatesSeen() { return seenStateHashes.size(); }
 
     /**
      * Gets the number of cores which are being used.
