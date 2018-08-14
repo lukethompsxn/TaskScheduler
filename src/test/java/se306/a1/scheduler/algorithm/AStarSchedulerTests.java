@@ -72,7 +72,7 @@ public class AStarSchedulerTests {
             long end = System.nanoTime();
 
             assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s));
-            assertEquals(s.getLength(), g.getLength());
+            assertEquals(g.getLength(), s.getLength());
 
             System.out.println("[Byte]\tGraph Passed on " + g.getNumProcessors() + " Processors");
             System.out.println("[Time]\t" + (end - start) / 1000000);
@@ -83,7 +83,7 @@ public class AStarSchedulerTests {
                 end = System.nanoTime();
 
                 assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s_sequential));
-                assertEquals(s_sequential.getLength(), g.getSequentialLength());
+                assertEquals(g.getSequentialLength(), s_sequential.getLength());
 
                 System.out.println("[Byte]\tGraph Passed Single Processor");
                 System.out.println("[Time]\t" + (end - start) / 1000000);
