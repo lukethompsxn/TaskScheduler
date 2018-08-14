@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -90,6 +91,24 @@ public class ParallelScheduler extends Scheduler{
 				};
 
 				Future<Schedule> future = (Future<Schedule>) p.submit(thread);
+				futures.add(future);
+			}
+			
+			//check futures to see if any have returned.
+			for(Future<Schedule> f : futures) {
+				if(f.isDone()) {
+					try {
+						Schedule s = (Schedule) f.get();
+						
+						
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	}
