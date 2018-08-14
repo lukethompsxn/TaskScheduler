@@ -53,3 +53,4 @@ gradle-app.setting
 
 # Other
 *-output.dot
+/.apt_generated/
