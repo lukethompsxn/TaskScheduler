@@ -1,5 +1,6 @@
 package se306.a1.scheduler.visualisation;
 
+import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
@@ -13,6 +14,7 @@ import java.util.Random;
 public class Visualiser {
     private ByteStateManager manager;
     private ByteState currentState;
+    private Graph graph;
 
     private GraphWindow graphWindow;
 
@@ -32,6 +34,7 @@ public class Visualiser {
      */
     public Visualiser(ByteStateManager manager, se306.a1.scheduler.data.graph.Graph graph) {
         this.manager = manager;
+        this.graph = graph;
         this.graphWindow = new GraphWindow(graph);
 
         WIDTH = Math.max(200, manager.getProcessors().size() * 50);
@@ -54,22 +57,20 @@ public class Visualiser {
         this.currentState = state;
 
         graphWindow.drawHighlighting(currentState);
-        drawProcessorMap();
+        drawComponents();
     }
-
-
 
     /**
      * This method is called whenever the current schedule is updated to handle
      * the redrawing of the processor map visualisation.
      */
-    private void drawProcessorMap() {
+    private void drawComponents() {
         frame.getContentPane().removeAll(); //TODO panel still needs clearing
         frame.add(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
+        frame.add(new StatisticsWindow(manager, graph));
+      //  frame.add(graphWindow.drawHighlighting(currentState));
         frame.setVisible(true);
     }
-
-
 
     /**
      * This method returns a random colour where its RGB values are all between

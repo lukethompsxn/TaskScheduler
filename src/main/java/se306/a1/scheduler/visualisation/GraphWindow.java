@@ -2,6 +2,8 @@ package se306.a1.scheduler.visualisation;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.Viewer;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
@@ -84,17 +86,14 @@ public class GraphWindow {
                 }
             }
         }
-//        Viewer viewer = new Viewer(visualisedGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
-//        ViewPanel viewPanel = viewer.addDefaultView(false);
-//        frame.add(viewPanel);
-        visualisedGraph.display(false);
+//        visualisedGraph.display(false);
     }
 
     /**
      * This method is called whenever the current schedule is updated to handle
      * the redrawing of the highlighted visualisation.
      */
-    public void drawHighlighting(ByteState currentState) {
+    public ViewPanel drawHighlighting(ByteState currentState) {
         previousNodes = new HashSet<>(currentNodes);
         previousEdges = new HashSet<>(currentEdges);
         currentNodes = new HashSet<>();
@@ -124,6 +123,10 @@ public class GraphWindow {
                 visualisedGraph.getEdge(s).changeAttribute("ui.class", "seen");
             }
         }
+
+        Viewer viewer = new Viewer(visualisedGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        return viewer.addDefaultView(false);
+
     }
 
     /**

@@ -95,6 +95,11 @@ public class TaskGraph implements Graph {
         return bottomLevels.get(node);
     }
 
+    @Override
+    public Integer getEdgeCount() {
+        return children.size();
+    }
+
     /**
      * Private helper method used to construct the edges connecting the graph.
      *
