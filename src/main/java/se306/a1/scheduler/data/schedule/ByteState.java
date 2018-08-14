@@ -242,7 +242,7 @@ public class ByteState implements Comparable<ByteState> {
             processors.get(node).schedule(node, time);
         }
 
-        return new Schedule(processors, new HashSet<>(), manager.getProcessors(), graph, length, cost);
+        return new Schedule(processors, manager.getProcessors(), length);
     }
 
     /**

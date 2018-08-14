@@ -38,7 +38,7 @@ public class AStarSchedulerTests {
         timedGraphs4Proc.put(GraphParser.parse("input_graphs/Nodes_11_OutTree.dot"), 227);
 
         //Change enum to desired graph type to test
-        gxlGraphs = SchedulerTestHelper.parseGXLGraphs(SchedulerTestHelper.GraphType.NONE);
+        gxlGraphs = SchedulerTestHelper.parseGXLGraphs(SchedulerTestHelper.GraphType.TEN_NODES);
     }
 
 //    @Test
@@ -68,7 +68,7 @@ public class AStarSchedulerTests {
             System.out.println("[Testing]\t" + g.getGraph().getName());
 
             long start = System.nanoTime();
-            Schedule s = new AStarByteScheduler().run(g.getGraph(), g.getNumProcessors(), 1, true);
+            Schedule s = new AStarByteScheduler().run(g.getGraph(), g.getNumProcessors(), 1, false);
             long end = System.nanoTime();
 
             assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s));

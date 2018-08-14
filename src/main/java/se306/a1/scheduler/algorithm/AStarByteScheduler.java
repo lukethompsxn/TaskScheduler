@@ -3,6 +3,7 @@ package se306.a1.scheduler.algorithm;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
 import se306.a1.scheduler.manager.ByteStateManager;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class AStarByteScheduler extends Scheduler {
 
     @Override
-    protected void createSchedule() throws ScheduleException {
+    protected Schedule createSchedule() throws ScheduleException {
         ByteStateManager stateManager = new ByteStateManager(graph, processors, isVisualised);
         // Adds a new state for each entry node on a processor
         for (Node node : graph.getEntryNodes()) {
@@ -37,6 +38,6 @@ public class AStarByteScheduler extends Scheduler {
             }
         }
 
-        schedule = optimal.toSchedule();
+        return optimal.toSchedule();
     }
 }
