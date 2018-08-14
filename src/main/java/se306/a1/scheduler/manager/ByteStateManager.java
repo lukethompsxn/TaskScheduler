@@ -154,7 +154,6 @@ public class ByteStateManager {
 
             if (latestState.getFreeNodes().isEmpty()) {
                 visualiser.updateCurrentState(latestState);
-                System.out.println("cancelled");
                 task.cancel(true);
             }
         };
