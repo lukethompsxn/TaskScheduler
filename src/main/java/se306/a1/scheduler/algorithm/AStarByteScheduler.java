@@ -22,7 +22,9 @@ public class AStarByteScheduler extends Scheduler {
         ByteState optimal;
         while (true) {
             ByteState current = stateManager.dequeue();
+            current.order();
             List<Node> freeNodes = current.getFreeNodes();
+
             if (freeNodes.isEmpty()) {
                 optimal = current;
                 break;
