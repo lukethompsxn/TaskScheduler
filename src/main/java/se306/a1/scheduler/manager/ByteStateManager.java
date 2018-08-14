@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ByteStateManager {
     private final Queue<ByteState> states;
-    private final Set<ByteState> seenStates;
+    private final Set<Integer> seenStateHashes;
     private final List<Node> nodes;
     private final Map<Node, Integer> nodeIndices;
     private final List<Processor> processors;
@@ -30,6 +30,8 @@ public class ByteStateManager {
     private int upperBound = Integer.MAX_VALUE;
     protected final Graph graph;
     private ScheduledFuture task;
+
+    private int numCores;
 
     private ByteState latestState;
 
@@ -39,12 +41,13 @@ public class ByteStateManager {
         upperBound = new BasicScheduler().run(graph, numProcessors, 1, false).getLength();
 
         states = new PriorityQueue<>();
-        seenStates = new HashSet<>();
+        seenStateHashes = new HashSet<>();
         nodes = new ArrayList<>(graph.getAllNodes());
         nodeIndices = new HashMap<>();
         processors = new ArrayList<>();
         processorIndices = new HashMap<>();
         this.graph = graph;
+        this.numCores = 1;
 
         for (int i = 0; i < nodes.size(); ++i) {
             nodeIndices.put(nodes.get(i), i);
@@ -110,6 +113,27 @@ public class ByteStateManager {
     }
 
     /**
+     * Gets the current length of the queue.
+     *
+     * @return length of the priority queue
+     */
+    public Integer getQueueLength() { return states.size(); }
+
+    /**
+     * Gets the number of states which have been seen.
+     *
+     * @return number of seen states
+     */
+    public Integer getNumStatesSeen() { return seenStateHashes.size(); }
+
+    /**
+     * Gets the number of cores which are being used.
+     *
+     * @return number of cores
+     */
+    public int getNumCores() { return numCores; }
+
+    /**
      * This method add a new schedule to the priority queue.
      * Queuing order in the queue is based on the heuristics which are
      * implemented in the overridden comparable method for schedule.
@@ -117,11 +141,15 @@ public class ByteStateManager {
      * @param state a schedule instance to add to the queue
      */
     public void queue(ByteState state) {
-        if (state.getLength() > upperBound || seenStates.contains(state))
+        if (state.getCost() > upperBound)
+            return;
+
+        int hash = state.hashCode();
+        if (seenStateHashes.contains(hash))
             return;
 
         states.add(state);
-        seenStates.add(state);
+        seenStateHashes.add(hash);
 
         logger.info("Schedule Queued. Queue Length = " + states.size());
     }
@@ -159,7 +187,7 @@ public class ByteStateManager {
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        task = executor.scheduleAtFixedRate(updateSchedule, 0, 50, TimeUnit.MILLISECONDS);
+        task = executor.scheduleAtFixedRate(updateSchedule, 25, 50, TimeUnit.MILLISECONDS);
     }
 }
 

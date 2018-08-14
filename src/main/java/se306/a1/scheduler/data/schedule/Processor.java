@@ -115,6 +115,6 @@ public class Processor {
 
     @Override
     public int hashCode() {
-        return startTimes.hashCode();
+        return name.hashCode();
     }
 }
