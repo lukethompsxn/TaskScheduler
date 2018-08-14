@@ -207,6 +207,6 @@ public class GraphWindow {
             levels.put(level, num - 2);
             num = num - 1;
         }
-        return (0 - num) / 2;
+        return (0 - num);
     }
 }

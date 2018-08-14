@@ -1,11 +1,18 @@
 package se306.a1.scheduler.visualisation;
 
+import javafx.embed.swing.JFXPanel;
+import javafx.embed.swing.SwingNode;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -20,10 +27,16 @@ public class Visualiser {
 
     private JFrame frame;
     private final int WIDTH;
-    private final int HEIGHT = 500;
+    private final int HEIGHT = 720;
 
     private Random rand = new Random();
     private Color color = getRandomColor();
+
+    @FXML
+    private SwingNode processorNode;
+
+    @FXML
+    private SwingNode graphNode;
 
     /**
      * This is the constructor for Visualiser.
@@ -37,7 +50,7 @@ public class Visualiser {
         this.graph = graph;
         this.graphWindow = new GraphWindow(graph);
 
-        WIDTH = Math.max(200, manager.getProcessors().size() * 50);
+        WIDTH = 1080; //Math.max(200, manager.getProcessors().size() * 50);
 
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -65,15 +78,35 @@ public class Visualiser {
      * the redrawing of the processor map visualisation.
      */
     private void drawComponents() {
+        final JFXPanel fxPanel = new JFXPanel();
         JPanel p = new JPanel();
-        p.setLayout(new GridLayout(0,3));
+        JPanel p2 = new JPanel();
+        p.setLayout(new GridLayout(2,0));
+        p2.setLayout(new GridLayout(0,2));
 
         p.add(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
         p.add(graphWindow.drawHighlighting(currentState));
-        p.add(new StatisticsWindow(manager, graph));
+        p2.add(p);
+        p2.add(new StatisticsWindow(manager, graph));
 
-        frame.add(p);
+        frame.add(p2);
         frame.setVisible(true);
+
+//        try {
+//            Parent root = FXMLLoader.load(getClass().getResource("se306/a1/scheduler/visualisation/Visualiser.fxml"));
+//            Scene scene = new Scene(root, 1080, 720);
+//            processorNode.setContent(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
+//            graphNode.setContent(graphWindow.drawHighlighting(currentState));
+//            fxPanel.setScene(scene);
+//
+//            frame.add(fxPanel);
+//            frame.setVisible(true);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
     }
 
     /**

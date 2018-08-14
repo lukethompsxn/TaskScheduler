@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.embed.swing.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="se306.a1.scheduler.visualisation.Visualiser">
+   <children>
+      <GridPane layoutX="1.0" layoutY="-2.0" prefHeight="720.0" prefWidth="844.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="384.0" minHeight="10.0" prefHeight="354.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="390.0" minHeight="10.0" prefHeight="356.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <SwingNode id="processorNode" />
+            <SwingNode id="graphNode" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
