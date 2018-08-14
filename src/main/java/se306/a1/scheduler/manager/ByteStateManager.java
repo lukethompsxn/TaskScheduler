@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ByteStateManager {
     private final Queue<ByteState> states;
-    private final Set<ByteState> seenStates;
+    private final Set<Integer> seenStateHashes;
     private final List<Node> nodes;
     private final Map<Node, Integer> nodeIndices;
     private final List<Processor> processors;
@@ -41,7 +41,7 @@ public class ByteStateManager {
         upperBound = new BasicScheduler().run(graph, numProcessors, 1, false).getLength();
 
         states = new PriorityQueue<>();
-        seenStates = new HashSet<>();
+        seenStateHashes = new HashSet<>();
         nodes = new ArrayList<>(graph.getAllNodes());
         nodeIndices = new HashMap<>();
         processors = new ArrayList<>();
@@ -124,7 +124,7 @@ public class ByteStateManager {
      *
      * @return number of seen states
      */
-    public Integer getNumStatesSeen() { return seenStates.size(); }
+    public Integer getNumStatesSeen() { return seenStateHashes.size(); }
 
     /**
      * Gets the number of cores which are being used.
@@ -141,11 +141,15 @@ public class ByteStateManager {
      * @param state a schedule instance to add to the queue
      */
     public void queue(ByteState state) {
-        if (state.getLength() > upperBound || seenStates.contains(state))
+        if (state.getCost() > upperBound)
+            return;
+
+        int hash = state.hashCode();
+        if (seenStateHashes.contains(hash))
             return;
 
         states.add(state);
-        seenStates.add(state);
+        seenStateHashes.add(hash);
 
         logger.info("Schedule Queued. Queue Length = " + states.size());
     }

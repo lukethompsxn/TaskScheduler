@@ -17,9 +17,9 @@ public class ByteState implements Comparable<ByteState> {
     private final ByteStateManager manager;
     private final Graph graph;
 
-    private final int[] virtualEdges;
+    private final byte[] virtualEdges;
     private final int[] startTimes;
-    private final int[] processorIndices;
+    private final byte[] processorIndices;
     private final int[] earliestStartTimes;
     private final byte[] free;
 
@@ -40,9 +40,9 @@ public class ByteState implements Comparable<ByteState> {
         int numNodes = graph.getAllNodes().size();
         int numProcessors = manager.getProcessors().size();
 
-        this.virtualEdges = new int[numNodes];
+        this.virtualEdges = new byte[numNodes];
         this.earliestStartTimes = new int[numProcessors];
-        this.processorIndices = new int[numNodes];
+        this.processorIndices = new byte[numNodes];
         this.startTimes = new int[numNodes];
         this.free = new byte[numNodes / 8 + 1];
 
@@ -64,9 +64,9 @@ public class ByteState implements Comparable<ByteState> {
 
         cost = Math.max(cost, criticalPathLength);
 
-        Arrays.fill(this.virtualEdges, -1);
+        Arrays.fill(this.virtualEdges, (byte) -1);
         Arrays.fill(this.startTimes, -1);
-        Arrays.fill(this.processorIndices, -1);
+        Arrays.fill(this.processorIndices, (byte) -1);
     }
 
     /**
@@ -124,7 +124,7 @@ public class ByteState implements Comparable<ByteState> {
         newState.cost = Math.max(newState.bottomLevel, newState.idleTime);
 
         newState.startTimes[nodeIndex] = startTime;
-        newState.processorIndices[nodeIndex] = processorIndex;
+        newState.processorIndices[nodeIndex] = (byte) processorIndex;
         newState.earliestStartTimes[processorIndex] = startTime + node.getCost();
         newState.length = Math.max(newState.length, startTime + node.getCost());
 
@@ -317,21 +317,22 @@ public class ByteState implements Comparable<ByteState> {
      * on the same processor (parent nodes do not have to be the same node).
      * If any free nodes have a child node, the child node must be the same for all
      * other free nodes.
-     *
+     * <p>
      * Sorts based on increasing DRT 0->..., then decreasing out-going edge costs inf->...
      * Ordering is applied if the resulting sorted nodes have decreasing out-going edge
      * costs. Ordering is enforced via virtual edges.
      */
     public void order() {
-        if (getFreeNodes().size() < 2) return;
+        List<Node> freeNodes = getFreeNodes();
+        if (freeNodes.size() < 2) return;
 
-        List<Node> canOrder = new ArrayList<>();
         Map<Node, Integer> outCosts = new HashMap<>();
+        Map<Node, Node> parentMap = new HashMap<>();
         int commonParentProc = -1;
         Node commonChild = null;
 
         // Check if all free nodes have common parent processor and child node (if they have one)
-        for (Node node : getFreeNodes()) {
+        for (Node node : freeNodes) {
             if (graph.getParents(node).size() > 1) return;
             if (graph.getEdges(node).size() > 1) return;
 
@@ -351,52 +352,49 @@ public class ByteState implements Comparable<ByteState> {
 
             if (thisChild != null && thisChild != commonChild) return;
 
-            canOrder.add(node);
             outCosts.put(node, thisChild == null ? 0 : graph.getCost(node, thisChild));
+            if (!parents.isEmpty())
+                parentMap.put(node, parents.get(0));
         }
 
         //Sort and build virtual edges
-        if (canOrder.containsAll(getFreeNodes())) {
-            canOrder.sort((a, b) -> {
-                // DRT
-                List<Node> aParents = graph.getParents(a);
-                Node aParent = aParents.size() == 1 ? aParents.get(0) : null;
-                int incomingA = aParent == null ? 0 : startTimes[manager.indexOf(aParent)] + aParent.getCost() + graph.getCost(aParent, a);
+        freeNodes.sort((a, b) -> {
+            // DRT
+            //List<Node> aParents = graph.getParents(a);
+            Node aParent = parentMap.get(a);
+            int incomingA = aParent == null ? 0 : startTimes[manager.indexOf(aParent)] + aParent.getCost() + graph.getCost(aParent, a);
 
-                List<Node> bParents = graph.getParents(b);
-                Node bParent = bParents.size() == 1 ? bParents.get(0) : null;
-                int incomingB = bParent == null ? 0 : startTimes[manager.indexOf(bParent)] + bParent.getCost() + graph.getCost(bParent, b);
+            //List<Node> bParents = graph.getParents(b);
+            Node bParent = parentMap.get(b);
+            int incomingB = bParent == null ? 0 : startTimes[manager.indexOf(bParent)] + bParent.getCost() + graph.getCost(bParent, b);
 
-                int comparison = Integer.compare(incomingA, incomingB);
+            int comparison = Integer.compare(incomingA, incomingB);
 
-                // Decreasing outgoing costs if tied DRT
-                if (comparison == 0) {
-                    int outgoingA = outCosts.get(a);
-                    int outgoingB = outCosts.get(b);
+            // Decreasing outgoing costs if tied DRT
+            if (comparison == 0) {
+                int outgoingA = outCosts.get(a);
+                int outgoingB = outCosts.get(b);
 
-                    return Integer.compare(outgoingB, outgoingA);
-                }
-                return comparison;
-            });
-
-            // Verify if decreasing outgoing
-            int max = Integer.MAX_VALUE;
-            for (Node node : canOrder) {
-                if (outCosts.get(node) <= max)
-                    max = outCosts.get(node);
-                else
-                    return;
+                return Integer.compare(outgoingB, outgoingA);
             }
+            return comparison;
+        });
 
-//            System.out.println(canOrder);
+        // Verify if decreasing outgoing
+        int max = Integer.MAX_VALUE;
+        for (Node node : freeNodes) {
+            if (outCosts.get(node) <= max)
+                max = outCosts.get(node);
+            else
+                return;
+        }
 
-            // Add virtual edges to ordered 'parents'
-            for (int i = 1; i < canOrder.size(); i++) {
-                int virtualParent = manager.indexOf(canOrder.get(i - 1));
-                int virtualChild = manager.indexOf(canOrder.get(i));
+        // Add virtual edges to ordered 'parents'
+        for (int i = 1; i < freeNodes.size(); i++) {
+            int virtualParent = manager.indexOf(freeNodes.get(i - 1));
+            int virtualChild = manager.indexOf(freeNodes.get(i));
 
-                virtualEdges[virtualChild] = virtualParent;
-            }
+            virtualEdges[virtualChild] = (byte) virtualParent;
         }
     }
 
