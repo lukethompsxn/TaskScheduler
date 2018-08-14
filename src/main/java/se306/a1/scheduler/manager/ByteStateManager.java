@@ -31,6 +31,8 @@ public class ByteStateManager {
     protected final Graph graph;
     private ScheduledFuture task;
 
+    private int numCores;
+
     private ByteState latestState;
 
     private static Logger logger = LogManager.getLogger(ByteStateManager.class.getSimpleName());
@@ -45,6 +47,7 @@ public class ByteStateManager {
         processors = new ArrayList<>();
         processorIndices = new HashMap<>();
         this.graph = graph;
+        this.numCores = 1;
 
         for (int i = 0; i < nodes.size(); ++i) {
             nodeIndices.put(nodes.get(i), i);
@@ -110,6 +113,27 @@ public class ByteStateManager {
     }
 
     /**
+     * Gets the current length of the queue.
+     *
+     * @return length of the priority queue
+     */
+    public Integer getQueueLength() { return states.size(); }
+
+    /**
+     * Gets the number of states which have been seen.
+     *
+     * @return number of seen states
+     */
+    public Integer getNumStatesSeen() { return seenStates.size(); }
+
+    /**
+     * Gets the number of cores which are being used.
+     *
+     * @return number of cores
+     */
+    public int getNumCores() { return numCores; }
+
+    /**
      * This method add a new schedule to the priority queue.
      * Queuing order in the queue is based on the heuristics which are
      * implemented in the overridden comparable method for schedule.
@@ -163,7 +187,7 @@ public class ByteStateManager {
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        task = executor.scheduleAtFixedRate(updateSchedule, 0, 50, TimeUnit.MILLISECONDS);
+        task = executor.scheduleAtFixedRate(updateSchedule, 25, 50, TimeUnit.MILLISECONDS);
     }
 }
 
