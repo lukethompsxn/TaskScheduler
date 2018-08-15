@@ -12,10 +12,16 @@
         <Logger name="CLIParser" level="off" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Logger name="Main" level="off" additivity="false">
+        <Logger name="Main" level="info" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
         <Logger name="BasicScheduler" level="off" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="StateManager" level="off" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="ByteStateManager" level="off" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
         <Root level="debug">
