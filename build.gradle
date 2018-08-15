@@ -30,12 +30,6 @@ dependencies {
     compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
     // https://mvnrepository.com/artifact/org.mockito/mockito-all
 	testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
-	// https://mvnrepository.com/artifact/com.google.dagger/dagger
-	compile group: 'com.google.dagger', name: 'dagger', version: '2.15'
-	// https://mvnrepository.com/artifact/com.google.dagger/dagger-compiler
-	annotationProcessor group: 'com.google.dagger', name: 'dagger-compiler', version: '2.15'
-	// https://mvnrepository.com/artifact/com.google.guava/guava
-	compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
     compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
     compile group: 'org.graphstream', name: 'gs-core', version: '1.3'
     compile group: 'org.graphstream', name: 'gs-ui', version: '1.3'
