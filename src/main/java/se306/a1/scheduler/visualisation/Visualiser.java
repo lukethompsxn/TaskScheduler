@@ -33,7 +33,7 @@ public class Visualiser {
     private HashMap<String, String> stats;
 
     private GraphWindow graphWindow;
-    private GUIController controller;
+    private static GUIController controller;
 
     private JFrame frame;
     private final int WIDTH;
@@ -60,16 +60,13 @@ public class Visualiser {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH + 15, HEIGHT);
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        ExecutorService executor = Executors.newScheduledThreadPool(2);
         executor.submit(new Runnable() {
             @Override
             public void run() {
                 Application.launch(GUILauncher.class);
-                controller = GUILauncher.getController();
             }
         });
-
-
     }
 
     /**
@@ -106,8 +103,9 @@ public class Visualiser {
 //        frame.add(p2);
 //        frame.setVisible(true);
 
-        controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
-
+//       controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
+        controller.timeLabel.setText("hello");
+        System.out.println("gg");
 //        try {
 //            Parent root = FXMLLoader.load(getClass().getResource("se306/a1/scheduler/visualisation/Visualiser.fxml"));
 //            Scene scene = new Scene(root, 1080, 720);
@@ -147,5 +145,9 @@ public class Visualiser {
         stats.put("STATES SEEN", manager.getNumStatesSeen() + "");
         stats.put("RUN TIME", 0 + "");
         return stats;
+    }
+
+    public static void setController(GUIController ctrlr) {
+        controller = ctrlr;
     }
 }

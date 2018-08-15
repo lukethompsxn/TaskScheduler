@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 public class GUIController implements Initializable {
 
     @FXML
-    private Label timeLabel;
+    public Label timeLabel;
 
     @FXML
     private Label bestLabel;

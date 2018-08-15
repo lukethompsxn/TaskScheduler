@@ -1,6 +1,7 @@
 package se306.a1.scheduler.visualisation;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,7 +16,7 @@ public class GUILauncher extends Application {
 
     private Stage primaryStage;
     private Pane rootPane;
-    private static GUIController controller;
+
 
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -30,9 +31,9 @@ public class GUILauncher extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/Visualiser.fxml"));
 
-            controller = new GUIController(this);
+            GUIController controller = new GUIController(this);
             loader.setController(controller);
-
+            Visualiser.setController(controller);
 
             rootPane = loader.load();
 
@@ -47,9 +48,9 @@ public class GUILauncher extends Application {
             e.printStackTrace();
         }
     }
-
-    public static GUIController getController() {
-        return controller;
-    }
+//
+//    public static GUIController getController() {
+//        return loader.getController();
+//    }
 
 }
