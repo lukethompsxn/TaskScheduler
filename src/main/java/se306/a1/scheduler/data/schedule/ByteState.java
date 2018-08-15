@@ -14,9 +14,6 @@ import java.util.*;
  * task availability to save on memory.
  */
 public class ByteState implements Comparable<ByteState> {
-    private final ByteStateManager manager;
-    private final Graph graph;
-
     private final byte[] virtualEdges;
     private final int[] startTimes;
     private final byte[] processorIndices;
@@ -35,8 +32,6 @@ public class ByteState implements Comparable<ByteState> {
      * @param graph   the graph associated with this ByteState
      */
     public ByteState(ByteStateManager manager, Graph graph) {
-        this.manager = manager;
-        this.graph = graph;
         int numNodes = graph.getAllNodes().size();
         int numProcessors = manager.getProcessors().size();
 
@@ -81,8 +76,6 @@ public class ByteState implements Comparable<ByteState> {
         processorIndices = Arrays.copyOf(other.processorIndices, other.processorIndices.length);
         free = Arrays.copyOf(other.free, other.free.length);
 
-        manager = other.manager;
-        graph = other.graph;
         cost = other.cost;
         length = other.length;
         idleTime = other.idleTime;
@@ -96,7 +89,7 @@ public class ByteState implements Comparable<ByteState> {
      * @param processor the processor to schedule on
      * @return a new ByteState with the task scheduled
      */
-    public ByteState scheduleTask(Node node, Processor processor) {
+    public ByteState scheduleTask(Node node, Processor processor, Graph graph, ByteStateManager manager) {
         int nodeIndex = manager.indexOf(node);
         int processorIndex = manager.indexOf(processor);
 
@@ -150,7 +143,7 @@ public class ByteState implements Comparable<ByteState> {
         }
 
         // TODO: figure out a way to speed up the DRT calculation
-        newState.cost = Math.max(newState.cost, newState.calculateDRT(newState.getFreeNodes()));
+        newState.cost = Math.max(newState.cost, newState.calculateDRT(newState.getFreeNodes(manager), graph, manager));
 
         return newState;
     }
@@ -161,7 +154,7 @@ public class ByteState implements Comparable<ByteState> {
      *
      * @return a list of nodes that can be scheduled
      */
-    public List<Node> getFreeNodes() {
+    public List<Node> getFreeNodes(ByteStateManager manager) {
         List<Node> out = new ArrayList<>();
         for (int i = 0; i < processorIndices.length; ++i) {
             if (isFree(i))
@@ -175,7 +168,7 @@ public class ByteState implements Comparable<ByteState> {
      *
      * @return a map of node to start time
      */
-    public Map<Node, Integer> getStartTimes() {
+    public Map<Node, Integer> getStartTimes(ByteStateManager manager) {
         Map<Node, Integer> out = new HashMap<>();
         for (int i = 0; i < startTimes.length; ++i) {
             int time = startTimes[i];
@@ -191,7 +184,7 @@ public class ByteState implements Comparable<ByteState> {
      *
      * @return a map of node to processor
      */
-    public Map<Node, Processor> getProcessors() {
+    public Map<Node, Processor> getProcessors(ByteStateManager manager) {
         Map<Node, Processor> out = new HashMap<>();
         for (int i = 0; i < processorIndices.length; ++i) {
             int index = processorIndices[i];
@@ -225,7 +218,7 @@ public class ByteState implements Comparable<ByteState> {
      *
      * @return a Schedule representing the ByteState
      */
-    public Schedule toSchedule() {
+    public Schedule toSchedule(Graph graph, ByteStateManager manager) {
         Map<Node, Processor> processors = new HashMap<>();
         List<Pair<Node, Integer>> nodes = new ArrayList<>();
         for (int i = 0; i < startTimes.length; ++i) {
@@ -281,10 +274,10 @@ public class ByteState implements Comparable<ByteState> {
     /**
      * Used to calculate the DRT (data ready time) of a list of free nodes.
      */
-    private int calculateDRT(List<Node> freeNodes) {
+    private int calculateDRT(List<Node> freeNodes, Graph graph, ByteStateManager manager) {
         int drt = 0;
         for (Node n : freeNodes) {
-            drt = Math.max(drt, calculateDRT(n) + graph.getBottomLevel(n));
+            drt = Math.max(drt, calculateDRT(n, graph, manager) + graph.getBottomLevel(n));
         }
         return drt;
     }
@@ -292,7 +285,7 @@ public class ByteState implements Comparable<ByteState> {
     /**
      * Used to calculate the DRT (data ready time) of a single free node.
      */
-    private int calculateDRT(Node node) {
+    private int calculateDRT(Node node, Graph graph, ByteStateManager manager) {
         int drt = 0;
         for (Processor processor : manager.getProcessors()) {
             int processorDRT = 0;
@@ -322,8 +315,8 @@ public class ByteState implements Comparable<ByteState> {
      * Ordering is applied if the resulting sorted nodes have decreasing out-going edge
      * costs. Ordering is enforced via virtual edges.
      */
-    public void order() {
-        List<Node> freeNodes = getFreeNodes();
+    public void order(Graph graph, ByteStateManager manager) {
+        List<Node> freeNodes = getFreeNodes(manager);
         if (freeNodes.size() < 2) return;
 
         Map<Node, Integer> outCosts = new HashMap<>();

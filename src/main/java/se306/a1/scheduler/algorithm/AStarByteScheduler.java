@@ -12,14 +12,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class AStarByteScheduler extends Scheduler {
-
+	ByteStateManager stateManager;
+	
 	@Override
 	protected void createSchedule() throws ScheduleException {
-		ByteStateManager stateManager = new ByteStateManager(graph, processors, isVisualised);
+		stateManager = new ByteStateManager(graph, processors, isVisualised);
 		// Adds a new state for each entry node on a processor
 		for (Node node : graph.getEntryNodes()) {
 			ByteState s = new ByteState(stateManager, graph);
-			stateManager.queue(s.scheduleTask(node, stateManager.getProcessor(0)));
+			stateManager.queue(s.scheduleTask(node, stateManager.getProcessor(0), graph, stateManager));
 		}
 
 		ExecutorService executor = Executors.newFixedThreadPool(cores);
@@ -34,7 +35,7 @@ public class AStarByteScheduler extends Scheduler {
 			e.printStackTrace();
 		}
 
-		schedule = stateManager.getOptimal().toSchedule();
+		schedule = stateManager.getOptimal().toSchedule(graph, stateManager);
 	}
 
 	private void runSequential(ByteStateManager manager) {
@@ -42,12 +43,12 @@ public class AStarByteScheduler extends Scheduler {
 			ByteState current = manager.dequeue();
 			if (current == null)
 				continue;
-			current.order();
-			List<Node> freeNodes = current.getFreeNodes();
+			current.order(graph, stateManager);
+			List<Node> freeNodes = current.getFreeNodes(stateManager);
 
 			for (Node node : freeNodes) {
 				for (Processor processor : manager.getProcessors()) {
-					ByteState next = current.scheduleTask(node, processor);
+					ByteState next = current.scheduleTask(node, processor, graph, stateManager);
 					manager.queue(next);
 				}
 			}

@@ -64,7 +64,7 @@ public class ByteStateManager {
 
     public synchronized boolean hasOptimal() {
         ByteState top = states.peek();
-        return top != null && top.getFreeNodes().size() == 0;
+        return top != null && top.getFreeNodes(this).size() == 0;
     }
 
     public synchronized ByteState getOptimal() {
@@ -201,7 +201,7 @@ public class ByteStateManager {
                 visualiser.updateCurrentState(latestState);
             }
 
-            if (latestState.getFreeNodes().isEmpty()) {
+            if (latestState.getFreeNodes(this).isEmpty()) {
                 visualiser.updateCurrentState(latestState);
                 task.cancel(true);
             }

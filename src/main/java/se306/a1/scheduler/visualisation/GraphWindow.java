@@ -99,7 +99,8 @@ public class GraphWindow {
         currentNodes = new HashSet<>();
         currentEdges = new HashSet<>();
 
-        Set<Node> scheduled = currentState.getStartTimes().keySet();
+        //TODO set the manager in this class
+        Set<Node> scheduled = currentState.getStartTimes(null).keySet();
         for (Node parent : scheduled) {
             visualisedGraph.getNode(parent.getLabel()).setAttribute("ui.class", "marked");
             currentNodes.add(parent.getLabel());

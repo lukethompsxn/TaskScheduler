@@ -39,8 +39,8 @@ public class ProcessorWindow extends JPanel {
     }
 
     private void buildVisual() {
-        Map<Node, Integer> startTimes = state.getStartTimes();
-        Map<Node, Processor> processors = state.getProcessors();
+        Map<Node, Integer> startTimes = state.getStartTimes(manager);
+        Map<Node, Processor> processors = state.getProcessors(manager);
 
         for (Node n : processors.keySet()) {
             Processor p = processors.get(n);
