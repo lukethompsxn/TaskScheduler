@@ -19,6 +19,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * This class is used to manage the visualisation interaction with the algorithm
@@ -57,13 +60,15 @@ public class Visualiser {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH + 15, HEIGHT);
 
-//        Platform.runLater(new Runnable() {
-//            @Override
-//            public void run() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
                 Application.launch(GUILauncher.class);
                 controller = GUILauncher.getController();
-//            }
-//        });
+            }
+        });
+
 
     }
 
@@ -100,6 +105,7 @@ public class Visualiser {
 //
 //        frame.add(p2);
 //        frame.setVisible(true);
+
         controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
 
 //        try {
