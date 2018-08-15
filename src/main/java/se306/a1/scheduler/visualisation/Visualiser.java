@@ -60,13 +60,13 @@ public class Visualiser {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH + 15, HEIGHT);
 
-        ExecutorService executor = Executors.newScheduledThreadPool(2);
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                Application.launch(GUILauncher.class);
-            }
-        });
+//        ExecutorService executor = Executors.newScheduledThreadPool(2);
+//        executor.submit(new Runnable() {
+//            @Override
+//            public void run() {
+//                Application.launch(GUILauncher.class);
+//            }
+//        });
     }
 
     /**
@@ -102,9 +102,12 @@ public class Visualiser {
 //
 //        frame.add(p2);
 //        frame.setVisible(true);
-
-//       controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
-        controller.timeLabel.setText("hello");
+        Platform.runLater(() -> {
+            //controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
+            controller.timeLabel.setText("hello");
+        });
+        //controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
+        //controller.timeLabel.setText("hello");
         System.out.println("gg");
 //        try {
 //            Parent root = FXMLLoader.load(getClass().getResource("se306/a1/scheduler/visualisation/Visualiser.fxml"));
@@ -137,6 +140,7 @@ public class Visualiser {
     }
 
     private HashMap<String, String> prepareStats() {
+        System.out.println(graph.getAllNodes().size());
         stats.put("NODES", graph.getAllNodes().size() + "");
         stats.put("EDGES", graph.getEdgeCount() + "");
         stats.put("PROCESSORS", manager.getProcessors().size() + "");

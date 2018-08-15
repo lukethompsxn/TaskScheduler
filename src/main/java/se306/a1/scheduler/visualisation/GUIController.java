@@ -1,10 +1,12 @@
 package se306.a1.scheduler.visualisation;
 
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import se306.a1.scheduler.Main;
 
 import javax.swing.*;
 import java.net.URL;
@@ -48,9 +50,22 @@ public class GUIController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("test");
+        // start running the algorithm
+        Task task = new Task<Void>() {
+            @Override
+            public Void call() {
+                Main.runVisualise();
+                return null;
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.start();
+
     }
 
     public void updateView(Map<String, String> stats, JComponent graph, JComponent processor) {
+        System.out.println("test");
         SwingNode processorNode = new SwingNode();
         SwingNode graphNode = new SwingNode();
         processorNode.setContent(processor);
