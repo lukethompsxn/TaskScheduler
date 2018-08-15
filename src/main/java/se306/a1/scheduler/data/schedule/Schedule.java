@@ -16,7 +16,6 @@ public class Schedule {
     private final Map<Node, Processor> scheduledTasks;
     private final List<Processor> processors;
     private int length;
-    private int cost;
 
     /**
      * Constructor for Schedule which generates a specified number of processors
@@ -28,7 +27,6 @@ public class Schedule {
         scheduledTasks = new HashMap<>();
         processors = new ArrayList<>();
         length = 0;
-        cost = 0;
 
         for (int i = 1; i <= numProcessors; i++) {
             processors.add(new Processor("" + i));
