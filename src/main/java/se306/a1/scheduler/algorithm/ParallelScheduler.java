@@ -4,103 +4,89 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.manager.ByteStateManager;
 import se306.a1.scheduler.manager.StateManager;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
 public class ParallelScheduler extends Scheduler{
 	Schedule top;
-	StateManager stateManager = new StateManager(graph);
+	ByteStateManager stateManager;
+	boolean isDone = false;
+
+	public ParallelScheduler() throws ScheduleException {
+		
+	}
 
 	@Override
 	protected void createSchedule() throws ScheduleException {
-		// Greedy heuristic as an upper-bound
-		int greedy = new BasicScheduler().run(graph, processors, cores, isVisualised).getLength();
-
+		stateManager = new ByteStateManager(graph, processors, isVisualised);
+		
 		// Adds a new state for each entry node on a processor
 		for (Node node : graph.getEntryNodes()) {
-			Schedule s = new Schedule(
-					new HashMap<>(),
-					new HashSet<>(graph.getEntryNodes()),
-					processors,
-					graph,
-					0,
-					0);
-
-			s.addScheduledTask(node, 0);
-			stateManager.queue(s);
+			ByteState s = new ByteState(stateManager, graph);
+			stateManager.queue(s.scheduleTask(node, stateManager.getProcessor(0)));
 		}
-
-		top = stateManager.dequeue();
 
 		//create a thread pool to manage the threads computing the runtimes.
 		ExecutorService p = Executors.newCachedThreadPool();
-		ArrayList<Future<Schedule>> futures = new ArrayList<>();
+		ArrayList<Future<List<ByteState>>> futures = new ArrayList<>();
 
+		ExecutorService threadPool = Executors.newFixedThreadPool(cores);
+
+		for(int i = 0; i < cores; i++) {
+			Callable<List<ByteState>> r = new StateThread();
+
+			Future<List<ByteState>> future = (Future<List<ByteState>>) p.submit(r);
+			futures.add(future);
+
+		}
+
+		List<ByteState> endStates = new ArrayList<>();
+		
 		while (true) {
-			//schedule all the threads.
-			for(int i = 0; i < cores; i++) {
-				Runnable thread = new Runnable() {
-
-					@Override
-					public void run() {
-						List<Processor> topProcessors = top.getProcessors();
-
-			            // For all unscheduled nodes
-			            for (Node node : top.getUnscheduledTasks()) {
-			                if (!top.isScheduled(graph.getParents(node))) continue;
-
-			                // If parents are scheduled then schedule node on every processor
-			                for (Processor processor : topProcessors) {
-			                    List<Processor> processors = new ArrayList<>(topProcessors);
-			                    Processor newProcessor = new Processor(processor);
-
-			                    processors.remove(processor);
-			                    processors.add(newProcessor);
-
-			                    Schedule schedule = new Schedule(
-			                            new HashMap<>(top.getScheduledTasks()),
-			                            new HashSet<>(top.getUnscheduledTasks()),
-			                            processors,
-			                            graph,
-			                            top.getLength(),
-			                            top.getCost()
-			                    );
-
-			                    try {
-									schedule.addScheduledTask(node, newProcessor, getStartTime(node, top, newProcessor));
-								} catch (ScheduleException e) {
-									e.printStackTrace();
-								}
-
-			                    // If schedule length takes longer than greedy, ignore
-			                    if (schedule.getLength() > greedy) continue;
-			                    stateManager.queue(schedule);
-			                }
-			            }
-			            top = stateManager.dequeue();
-					}
-
-				};
-
-				Future<Schedule> future = (Future<Schedule>) p.submit(thread);
-				futures.add(future);
-			}
-			
 			//check futures to see if any have returned.
-			for(Future<Schedule> f : futures) {
+			for(Future<List<ByteState>> f : futures) {
 				if(f.isDone()) {
 					try {
-						Schedule s = (Schedule) f.get();
-						
-						
+						List<ByteState> s = (List<ByteState>) f.get();
+
+						if(isDone) {
+							threadPool.shutdown();
+							endStates.addAll(s);
+							if(endStates.size() == cores) {
+								int min = Integer.MAX_VALUE;
+								ByteState minState = null;
+								
+								for(ByteState b : endStates) {
+									if(b.getCost() < min) {
+										min = b.getCost();
+										minState = b;
+									}
+								}
+								
+								schedule = minState.toSchedule();
+							}
+						} else {
+							//re-add new schedules to the state manager.
+							for(ByteState b : s) {
+								stateManager.queue(b);
+							}
+							
+							//start the new thread up
+							threadPool.submit(new StateThread());
+						}
+
+						futures.remove(f);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -112,5 +98,37 @@ public class ParallelScheduler extends Scheduler{
 			}
 		}
 	}
+	
+	//callable to run on seperate threads.
+	private class StateThread implements Callable<List<ByteState>> {
 
+		ByteStateManager state = new ByteStateManager(stateManager);
+
+		@Override
+		public List<ByteState> call() throws Exception {
+			List<ByteState> output = new ArrayList<>();
+
+			ByteState current = state.dequeue();
+			current.order();
+			List<Node> freeNodes = current.getFreeNodes();
+
+			ByteState optimal;
+
+			if (freeNodes.isEmpty()) {
+				optimal = current;
+				isDone = true;
+				output.add(optimal);
+				return output;
+			}
+
+			for (Node node : freeNodes) {
+				for (Processor processor : stateManager.getProcessors()) {
+					ByteState next = current.scheduleTask(node, processor);
+					output.add(next);
+				}
+			}
+
+			return output;
+		}					
+	}
 }

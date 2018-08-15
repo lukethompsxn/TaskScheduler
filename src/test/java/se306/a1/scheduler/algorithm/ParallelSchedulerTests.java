@@ -1,13 +1,7 @@
 package se306.a1.scheduler.algorithm;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import se306.a1.scheduler.data.graph.Graph;
-import se306.a1.scheduler.data.schedule.Schedule;
-import se306.a1.scheduler.support.GXLGraph;
-import se306.a1.scheduler.util.exception.GraphException;
-import se306.a1.scheduler.util.exception.ScheduleException;
-import se306.a1.scheduler.util.parse.GraphParser;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,11 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-public class AStarSchedulerTests {
-    private static Map<Graph, Integer> timedGraphs2Proc = new HashMap<>();
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.support.GXLGraph;
+import se306.a1.scheduler.util.exception.GraphException;
+import se306.a1.scheduler.util.exception.ScheduleException;
+import se306.a1.scheduler.util.parse.GraphParser;
+
+public class ParallelSchedulerTests {
+	private static Map<Graph, Integer> timedGraphs2Proc = new HashMap<>();
     private static Map<Graph, Integer> timedGraphs4Proc = new HashMap<>();
     private static List<GXLGraph> gxlGraphs = new ArrayList<>();
 
@@ -45,7 +46,7 @@ public class AStarSchedulerTests {
     public void testTimedGraphs2ProcByte() throws ScheduleException {
         final int processors = 2;
         for (Graph g : timedGraphs2Proc.keySet()) {
-            Schedule s = new AStarByteScheduler().run(g, processors, 1, false);
+            Schedule s = new ParallelScheduler().run(g, processors, 4, false);
             assertTrue(SchedulerTestHelper.isValid(g, s));
             assertTrue(timedGraphs2Proc.get(g).equals(s.getLength()));
         }
@@ -55,7 +56,7 @@ public class AStarSchedulerTests {
     public void testTimedGraphs4ProcByte() throws ScheduleException {
         final int processors = 4;
         for (Graph g : timedGraphs4Proc.keySet()) {
-            Schedule s = new AStarByteScheduler().run(g, processors, 1, false);
+            Schedule s = new ParallelScheduler().run(g, processors, 4, false);
             assertTrue(SchedulerTestHelper.isValid(g, s));
             assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
         }
@@ -68,7 +69,7 @@ public class AStarSchedulerTests {
             System.out.println("[Testing]\t" + g.getGraph().getName());
 
             long start = System.nanoTime();
-            Schedule s = new AStarByteScheduler().run(g.getGraph(), g.getNumProcessors(), 1, true);
+            Schedule s = new ParallelScheduler().run(g.getGraph(), g.getNumProcessors(), 4, true);
             long end = System.nanoTime();
 
             assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s));
@@ -79,7 +80,7 @@ public class AStarSchedulerTests {
 
             if (g.getSequentialLength() != -1) {
                 start = System.nanoTime();
-                Schedule s_sequential = new AStarByteScheduler().run(g.getGraph(), 1, 1, false);
+                Schedule s_sequential = new ParallelScheduler().run(g.getGraph(), 1, 4, false);
                 end = System.nanoTime();
 
                 assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s_sequential));

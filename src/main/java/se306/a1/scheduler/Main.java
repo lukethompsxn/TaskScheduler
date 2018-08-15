@@ -4,6 +4,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se306.a1.scheduler.algorithm.AStarByteScheduler;
+import se306.a1.scheduler.algorithm.ParallelScheduler;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.Schedule;
 import se306.a1.scheduler.util.InputConfig;
@@ -27,7 +28,8 @@ public class Main {
 
             Graph graph = GraphParser.parse(config.inputPath);
             long s = System.nanoTime();
-            Schedule schedule = new AStarByteScheduler().run(graph, config.processors, config.cores, config.isVisualised);
+            //Schedule schedule = new AStarByteScheduler().run(graph, config.processors, config.cores, config.isVisualised);
+            Schedule schedule = new ParallelScheduler().run(graph, config.processors, config.cores, config.isVisualised);
             logger.info((System.nanoTime() - s) / 1000);
 
             logger.info("Length: " + schedule.getLength());
