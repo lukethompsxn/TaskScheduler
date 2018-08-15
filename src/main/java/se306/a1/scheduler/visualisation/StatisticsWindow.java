@@ -28,10 +28,7 @@ public class StatisticsWindow extends JPanel {
         this.timeStart = Instant.now();
         guiController = new GUIController();
 
-        stats.put("NODES", graph.getAllNodes().size() + "");
-        stats.put("EDGES", graph.getEdgeCount() + "");
-        stats.put("PROCESSORS", manager.getProcessors().size() + "");
-        stats.put("THREADS", manager.getNumCores() + "");
+
 
         colors = new String[7];
         colors[0] = "#2E294E";
@@ -51,9 +48,7 @@ public class StatisticsWindow extends JPanel {
      */
     private void buildComponent() {
 
-        stats.put("QUEUE LENGTH", manager.getQueueLength() + "");
-        stats.put("STATES SEEN", manager.getNumStatesSeen() + "");
-        stats.put("RUN TIME", Duration.between(timeStart, Instant.now()).getSeconds() + "");
+
         //guiController.updateStats(stats);
     }
 

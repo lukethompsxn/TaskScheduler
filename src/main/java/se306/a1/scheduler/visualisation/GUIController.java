@@ -1,15 +1,13 @@
 package se306.a1.scheduler.visualisation;
 
-import javafx.concurrent.Task;
+import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import se306.a1.scheduler.Main;
-import se306.a1.scheduler.algorithm.AStarByteScheduler;
-import se306.a1.scheduler.data.schedule.Schedule;
+import javafx.scene.layout.Pane;
 
+import javax.swing.*;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -36,6 +34,12 @@ public class GUIController implements Initializable {
     @FXML
     private Label edgesLabel;
 
+    @FXML
+    private Pane processorPane;
+
+    @FXML
+    private Pane graphPane;
+
 
     public GUIController() {}
     public GUIController(GUILauncher launcher) {
@@ -44,19 +48,21 @@ public class GUIController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // start running the algorithm
-        Task task = new Task<Void>() {
-            @Override
-            public Void call() {
-                Main.run();
-                return null;
-            }
-        };
-        Thread thread = new Thread(task);
-        thread.start();
     }
 
-    public void updateStats(Map<String, String> stats) {
+    public void updateView(Map<String, String> stats, JComponent graph, JComponent processor) {
+        SwingNode processorNode = new SwingNode();
+        SwingNode graphNode = new SwingNode();
+        processorNode.setContent(processor);
+        graphNode.setContent(graph);
+        processorPane.getChildren().removeAll();
+        processorPane.getChildren().add(processorNode);
+        graphPane.getChildren().removeAll();
+        graphPane.getChildren().add(processorNode);
+        updateStats(stats);
+    }
+
+    private void updateStats(Map<String, String> stats) {
         for (String stat : stats.keySet()) {
             switch (stat) {
                 case "NODES": nodesLabel.setText(stats.get(stat));

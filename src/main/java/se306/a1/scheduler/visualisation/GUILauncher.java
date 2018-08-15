@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -13,7 +14,8 @@ import java.io.IOException;
 public class GUILauncher extends Application {
 
     private Stage primaryStage;
-    private BorderPane rootPane;
+    private Pane rootPane;
+    private static GUIController controller;
 
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -28,8 +30,9 @@ public class GUILauncher extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/Visualiser.fxml"));
 
-            GUIController controller = new GUIController(this);
+            controller = new GUIController(this);
             loader.setController(controller);
+
 
             rootPane = loader.load();
 
@@ -43,6 +46,10 @@ public class GUILauncher extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static GUIController getController() {
+        return controller;
     }
 
 }

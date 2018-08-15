@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.embed.swing.SwingNode?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -11,11 +17,26 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
-   <right>
-      <BorderPane prefHeight="627.0" prefWidth="188.0" BorderPane.alignment="CENTER">
-         <right>
-            <VBox prefHeight="627.0" prefWidth="212.0" spacing="5.0" style="-fx-background-color: #eee;" BorderPane.alignment="CENTER">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox layoutY="54.0" prefHeight="666.0" prefWidth="1080.0">
+         <children>
+            <TabPane prefHeight="666.0" prefWidth="868.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Processor Allocation">
+                     <content>
+                        <Pane fx:id="processorPane" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                </Tab>
+                <Tab text="Graph Hierarchy">
+                     <content>
+                        <Pane fx:id="graphPane" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+            <VBox prefHeight="627.0" prefWidth="212.0" spacing="5.0" style="-fx-background-color: #eee;">
                <children>
                   <AnchorPane maxHeight="80.0" maxWidth="238.0" prefHeight="80.0" prefWidth="170.0">
                      <children>
@@ -119,46 +140,17 @@
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
-               <BorderPane.margin>
-                  <Insets bottom="10.0" top="10.0" />
-               </BorderPane.margin>
             </VBox>
-         </right>
-      </BorderPane>
-   </right>
-   <top>
-      <AnchorPane prefHeight="72.0" prefWidth="1080.0" style="-fx-background-color: #eee;" BorderPane.alignment="CENTER">
+         </children>
+      </HBox>
+      <AnchorPane prefHeight="24.0" prefWidth="1080.0" style="-fx-background-color: #ffffff;">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="382.0" layoutY="4.0" text="Task Scheduler">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="10.0" text="Task Scheduler: Mission Control">
                <font>
-                  <Font size="48.0" />
+                  <Font size="29.0" />
                </font>
             </Label>
          </children>
-         <BorderPane.margin>
-            <Insets left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
       </AnchorPane>
-   </top>
-   <bottom>
-      <AnchorPane prefHeight="60.0" prefWidth="1080.0" style="-fx-background-color: #eee;" BorderPane.alignment="CENTER" />
-   </bottom>
-   <center>
-      <GridPane prefHeight="627.0" prefWidth="850.0" style="-fx-background-color: #eee;" BorderPane.alignment="CENTER">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="384.0" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="515.0" minHeight="10.0" prefHeight="457.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <SwingNode id="processorNode" />
-            <SwingNode id="graphNode" GridPane.rowIndex="1" />
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-      </GridPane>
-   </center>
-</BorderPane>
+   </children>
+</Pane>

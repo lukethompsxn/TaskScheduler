@@ -1,5 +1,7 @@
 package se306.a1.scheduler.visualisation;
 
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
@@ -13,6 +15,9 @@ import se306.a1.scheduler.manager.ByteStateManager;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -22,8 +27,10 @@ public class Visualiser {
     private ByteStateManager manager;
     private ByteState currentState;
     private Graph graph;
+    private HashMap<String, String> stats;
 
     private GraphWindow graphWindow;
+    private GUIController controller;
 
     private JFrame frame;
     private final int WIDTH;
@@ -31,12 +38,6 @@ public class Visualiser {
 
     private Random rand = new Random();
     private Color color = getRandomColor();
-
-    @FXML
-    private SwingNode processorNode;
-
-    @FXML
-    private SwingNode graphNode;
 
     /**
      * This is the constructor for Visualiser.
@@ -55,7 +56,15 @@ public class Visualiser {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH + 15, HEIGHT);
-//        frame.setVisible(true);
+
+//        Platform.runLater(new Runnable() {
+//            @Override
+//            public void run() {
+                Application.launch(GUILauncher.class);
+                controller = GUILauncher.getController();
+//            }
+//        });
+
     }
 
     /**
@@ -78,19 +87,20 @@ public class Visualiser {
      * the redrawing of the processor map visualisation.
      */
     private void drawComponents() {
-        final JFXPanel fxPanel = new JFXPanel();
-        JPanel p = new JPanel();
-        JPanel p2 = new JPanel();
-        p.setLayout(new GridLayout(2,0));
-        p2.setLayout(new GridLayout(0,2));
-
-        p.add(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
-        p.add(graphWindow.drawHighlighting(currentState));
-        p2.add(p);
-        p2.add(new StatisticsWindow(manager, graph));
-
-        frame.add(p2);
-        frame.setVisible(true);
+//        final JFXPanel fxPanel = new JFXPanel();
+//        JPanel p = new JPanel();
+//        JPanel p2 = new JPanel();
+//        p.setLayout(new GridLayout(2,0));
+//        p2.setLayout(new GridLayout(0,2));
+//
+//        p.add();
+//        p.add(graphWindow.drawHighlighting(currentState));
+//        p2.add(p);
+//        p2.add(new StatisticsWindow(manager, graph));
+//
+//        frame.add(p2);
+//        frame.setVisible(true);
+        controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
 
 //        try {
 //            Parent root = FXMLLoader.load(getClass().getResource("se306/a1/scheduler/visualisation/Visualiser.fxml"));
@@ -120,5 +130,16 @@ public class Visualiser {
         float g = rand.nextFloat() / 2f + 0.5f;
         float b = rand.nextFloat() / 2f + 0.5f;
         return new Color(r, g, b);
+    }
+
+    private HashMap<String, String> prepareStats() {
+        stats.put("NODES", graph.getAllNodes().size() + "");
+        stats.put("EDGES", graph.getEdgeCount() + "");
+        stats.put("PROCESSORS", manager.getProcessors().size() + "");
+        stats.put("THREADS", manager.getNumCores() + "");
+        stats.put("QUEUE LENGTH", manager.getQueueLength() + "");
+        stats.put("STATES SEEN", manager.getNumStatesSeen() + "");
+        stats.put("RUN TIME", 0 + "");
+        return stats;
     }
 }
