@@ -34,6 +34,8 @@ public class ByteStateManager {
 
     private boolean isVisualised;
     
+    public volatile boolean isDone = false;
+    
     private int numCores;
 
     private ByteState latestState;
