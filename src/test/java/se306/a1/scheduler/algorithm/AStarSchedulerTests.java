@@ -29,7 +29,7 @@ public class AStarSchedulerTests {
         timedGraphs2Proc.put(GraphParser.parse("input_graphs/Nodes_8_Random.dot"), 581);
         timedGraphs2Proc.put(GraphParser.parse("input_graphs/Nodes_9_SeriesParallel.dot"), 55);
         timedGraphs2Proc.put(GraphParser.parse("input_graphs/Nodes_10_Random.dot"), 50);
-//        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Nodes_11_OutTree.dot"), 350);
+        timedGraphs2Proc.put(GraphParser.parse("input_graphs/Nodes_11_OutTree.dot"), 350);
 
         timedGraphs4Proc.put(GraphParser.parse("input_graphs/Nodes_7_OutTree.dot"), 22);
         timedGraphs4Proc.put(GraphParser.parse("input_graphs/Nodes_8_Random.dot"), 581);
@@ -62,13 +62,33 @@ public class AStarSchedulerTests {
     }
 
     @Test
+    public void testTimedGraphs2ProcByteParallel() throws ScheduleException {
+        final int processors = 2;
+        for (Graph g : timedGraphs2Proc.keySet()) {
+            Schedule s = new AStarByteScheduler().run(g, processors, 4, false);
+            assertTrue(SchedulerTestHelper.isValid(g, s));
+            assertTrue(timedGraphs2Proc.get(g).equals(s.getLength()));
+        }
+    }
+
+    @Test
+    public void testTimedGraphs4ProcByteParallel() throws ScheduleException {
+        final int processors = 4;
+        for (Graph g : timedGraphs4Proc.keySet()) {
+            Schedule s = new AStarByteScheduler().run(g, processors, 4, false);
+            assertTrue(SchedulerTestHelper.isValid(g, s));
+            assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
+        }
+    }
+
+    @Test
     public void testGXLGraphsByte() throws ScheduleException {
         long firstStart = System.nanoTime();
         for (GXLGraph g : gxlGraphs) {
             System.out.println("[Testing]\t" + g.getGraph().getName());
 
             long start = System.nanoTime();
-            Schedule s = new AStarByteScheduler().run(g.getGraph(), g.getNumProcessors(), 1, true);
+            Schedule s = new AStarByteScheduler().run(g.getGraph(), g.getNumProcessors(), 4, false);
             long end = System.nanoTime();
 
             assertTrue(SchedulerTestHelper.isValid(g.getGraph(), s));

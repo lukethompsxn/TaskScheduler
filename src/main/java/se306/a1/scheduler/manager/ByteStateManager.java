@@ -21,33 +21,24 @@ import java.util.concurrent.TimeUnit;
  * to the scheduler based on heuristics.
  */
 public class ByteStateManager {
-	private final int numProcessors;
+    private static Logger logger = LogManager.getLogger(ByteStateManager.class.getSimpleName());
+
     private final Queue<ByteState> states;
     private final Set<Integer> seenStateHashes;
     private final List<Node> nodes;
     private final Map<Node, Integer> nodeIndices;
     private final List<Processor> processors;
     private final Map<Processor, Integer> processorIndices;
-    private int upperBound = Integer.MAX_VALUE;
-    protected final Graph graph;
+    private final Graph graph;
+    private final int numCores;
+
     private ScheduledFuture task;
-
-    private boolean isVisualised;
-    
-    public volatile boolean isDone = false;
-    
-    private int numCores;
-
     private ByteState latestState;
-
-    private static Logger logger = LogManager.getLogger(ByteStateManager.class.getSimpleName());
+    private int upperBound = Integer.MAX_VALUE;
 
     public ByteStateManager(Graph graph, int numProcessors, boolean isVisualised) throws ScheduleException {
         upperBound = new BasicScheduler().run(graph, numProcessors, 1, false).getLength();
 
-        this.numProcessors = numProcessors;
-        this.isVisualised = isVisualised;
-        
         states = new PriorityQueue<>();
         seenStateHashes = new HashSet<>();
         nodes = new ArrayList<>(graph.getAllNodes());
@@ -71,43 +62,16 @@ public class ByteStateManager {
         }
     }
 
-    public ByteStateManager(ByteStateManager stateManager) {
-    	upperBound = stateManager.getUpperBound();
-
-    	numProcessors = stateManager.numProcessors;
-    	
-        states = new PriorityQueue<>(stateManager.getStates());
-        seenStateHashes = new HashSet<>(stateManager.getSeenStateHashes());
-        nodes = new ArrayList<>(stateManager.graph.getAllNodes());
-        nodeIndices = new HashMap<>(stateManager.nodeIndices);
-        processors = new ArrayList<>(stateManager.getProcessors());
-        processorIndices = new HashMap<>(stateManager.processorIndices);
-        this.graph = stateManager.graph;
-        this.numCores = stateManager.getNumCores();
-
-        for (int i = 0; i < nodes.size(); ++i) {
-            nodeIndices.put(nodes.get(i), i);
-        }
-
-        for (int i = 0; i < stateManager.numProcessors; ++i) {
-            processors.add(new Processor("" + i));
-            processorIndices.put(processors.get(i), i);
-        }
-
-        if (stateManager.isVisualised) {
-            updaterService();
-        }
-	}
-    
-    private PriorityQueue<ByteState> getStates() {
-    	return (PriorityQueue<ByteState>) states;
-    }
-    
-    private HashSet<Integer> getSeenStateHashes() {
-    	return (HashSet<Integer>) seenStateHashes;
+    public synchronized boolean hasOptimal() {
+        ByteState top = states.peek();
+        return top != null && top.getFreeNodes().size() == 0;
     }
 
-	/**
+    public synchronized ByteState getOptimal() {
+        return states.peek();
+    }
+
+    /**
      * Get the array index of a specified node.
      *
      * @param n node to get index of
@@ -161,21 +125,27 @@ public class ByteStateManager {
      *
      * @return length of the priority queue
      */
-    public Integer getQueueLength() { return states.size(); }
+    public Integer getQueueLength() {
+        return states.size();
+    }
 
     /**
      * Gets the number of states which have been seen.
      *
      * @return number of seen states
      */
-    public Integer getNumStatesSeen() { return seenStateHashes.size(); }
+    public Integer getNumStatesSeen() {
+        return seenStateHashes.size();
+    }
 
     /**
      * Gets the number of cores which are being used.
      *
      * @return number of cores
      */
-    public int getNumCores() { return numCores; }
+    public int getNumCores() {
+        return numCores;
+    }
 
     /**
      * This method add a new schedule to the priority queue.
@@ -208,6 +178,13 @@ public class ByteStateManager {
     public synchronized ByteState dequeue() {
         latestState = states.peek();
         logger.info("Best Schedule Retrieved");
+
+        // don't allow any dequeues if a complete (possibly optimal) solution has been found
+        if (hasOptimal()) {
+            Thread.currentThread().interrupt();
+            return null;
+        }
+
         return states.poll();
     }
 
@@ -232,10 +209,6 @@ public class ByteStateManager {
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         task = executor.scheduleAtFixedRate(updateSchedule, 25, 50, TimeUnit.MILLISECONDS);
-    }
-    
-    private int getUpperBound() {
-    	return upperBound;
     }
 }
 

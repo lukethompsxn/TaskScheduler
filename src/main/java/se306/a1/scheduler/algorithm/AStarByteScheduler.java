@@ -7,6 +7,9 @@ import se306.a1.scheduler.manager.ByteStateManager;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class AStarByteScheduler extends Scheduler {
 
@@ -19,24 +22,39 @@ public class AStarByteScheduler extends Scheduler {
             stateManager.queue(s.scheduleTask(node, stateManager.getProcessor(0)));
         }
 
-        ByteState optimal;
-        while (true) {
-            ByteState current = stateManager.dequeue();
+        if (cores > 1) {
+            ExecutorService executor = Executors.newFixedThreadPool(cores);
+            for (int i = 0; i < cores; ++i) {
+                executor.execute(() -> runSequential(stateManager));
+            }
+            executor.shutdown();
+            try {
+                // wait for all threads to finish
+                executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            runSequential(stateManager);
+        }
+
+        schedule = stateManager.getOptimal().toSchedule();
+    }
+
+    private void runSequential(ByteStateManager manager) {
+        while (!manager.hasOptimal() && !Thread.currentThread().isInterrupted()) {
+            ByteState current = manager.dequeue();
+            if (current == null)
+                continue;
             current.order();
             List<Node> freeNodes = current.getFreeNodes();
 
-            if (freeNodes.isEmpty()) {
-                optimal = current;
-                break;
-            }
             for (Node node : freeNodes) {
-                for (Processor processor : stateManager.getProcessors()) {
+                for (Processor processor : manager.getProcessors()) {
                     ByteState next = current.scheduleTask(node, processor);
-                    stateManager.queue(next);
+                    manager.queue(next);
                 }
             }
         }
-
-        schedule = optimal.toSchedule();
     }
 }
