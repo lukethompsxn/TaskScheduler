@@ -21,7 +21,7 @@ import se306.a1.scheduler.util.exception.ScheduleException;
 public class ParallelScheduler extends Scheduler{
 	Schedule top;
 	ByteStateManager stateManager;
-	boolean isDone = false;
+	volatile boolean isDone = false;
 
 	public ParallelScheduler() throws ScheduleException {
 		
@@ -44,7 +44,7 @@ public class ParallelScheduler extends Scheduler{
 		ExecutorService threadPool = Executors.newFixedThreadPool(cores);
 
 		for(int i = 0; i < cores; i++) {
-			Callable<List<ByteState>> r = new StateThread();
+			Callable<List<ByteState>> r = new StateThread(stateManager);
 
 			Future<List<ByteState>> future = (Future<List<ByteState>>) p.submit(r);
 			futures.add(future);
@@ -55,7 +55,8 @@ public class ParallelScheduler extends Scheduler{
 		
 		while (true) {
 			//check futures to see if any have returned.
-			for(Future<List<ByteState>> f : futures) {
+			for(int i = 0; i < futures.size(); i++) {
+				Future<List<ByteState>> f = futures.get(i);
 				if(f.isDone()) {
 					try {
 						List<ByteState> s = (List<ByteState>) f.get();
@@ -83,7 +84,7 @@ public class ParallelScheduler extends Scheduler{
 							}
 							
 							//start the new thread up
-							threadPool.submit(new StateThread());
+							futures.add(threadPool.submit(new StateThread(stateManager)));
 						}
 
 						futures.remove(f);
@@ -101,14 +102,24 @@ public class ParallelScheduler extends Scheduler{
 	
 	//callable to run on seperate threads.
 	private class StateThread implements Callable<List<ByteState>> {
-
-		ByteStateManager state = new ByteStateManager(stateManager);
-
+		private ByteStateManager stateManager;
+		
+		public StateThread(ByteStateManager manager) {
+			this.stateManager = manager;
+		}
+		
+		
 		@Override
 		public List<ByteState> call() throws Exception {
 			List<ByteState> output = new ArrayList<>();
 
-			ByteState current = state.dequeue();
+			ByteState current = stateManager.dequeue();
+			
+			//if the priority queue is empty this thread should immediately terminate
+			if(current == null) {
+				return output;
+			}
+			
 			current.order();
 			List<Node> freeNodes = current.getFreeNodes();
 
