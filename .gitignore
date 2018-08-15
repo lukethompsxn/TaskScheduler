@@ -54,10 +54,6 @@ gradle-app.setting
 
 # Other
 *-output.dot
-<<<<<<< HEAD
 .example-input-graphs/
 /.apt_generated/
 
-=======
-/.apt_generated/
->>>>>>> astar-parallel
