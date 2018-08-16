@@ -15,20 +15,16 @@
    <children>
       <HBox layoutY="54.0" prefHeight="666.0" prefWidth="1080.0">
          <children>
-            <TabPane prefHeight="666.0" prefWidth="868.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" prefHeight="666.0" prefWidth="868.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="Processor Allocation">
+                <Tab fx:id="processorTab" text="Processor Allocation">
                      <content>
-                        <AnchorPane fx:id="processorPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="943.0">
-                           <children>
-                              <SwingNode fx:id="processorNode" />
-                           </children>
-                        </AnchorPane>
+                        <AnchorPane fx:id="processorPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="979.0" />
                      </content>
                 </Tab>
                 <Tab text="Graph Hierarchy">
                      <content>
-                        <AnchorPane fx:id="graphPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="979.0">
+                        <AnchorPane fx:id="graphPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="788.0">
                            <children>
                               <SwingNode fx:id="graphNode" />
                            </children>

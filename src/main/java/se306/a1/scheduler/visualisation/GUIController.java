@@ -6,14 +6,14 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import se306.a1.scheduler.Main;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
-import javax.swing.*;
-import java.awt.*;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +53,17 @@ public class GUIController implements Initializable {
     private SwingNode graphNode;
 
     @FXML
+    private Tab processorTab;
+
+    @FXML
     private SwingNode processorNode;
+
+    @FXML
+    private Pane processorPane2;
+
+    private ProcessorWindow _proWin;
+    private GraphWindow _graphWindow;
+    //private JComponent _jc;
 
     public GUIController() {}
     public GUIController(GUILauncher launcher) {
@@ -75,43 +85,49 @@ public class GUIController implements Initializable {
         thread.start();
     }
 
-    public void updateView(Map<String, String> stats, JComponent graph, JComponent processor) {
-        SwingNode processorNode = new SwingNode();
-        SwingNode graphNode = new SwingNode();
-        processorNode.setContent(processor);
-        graphNode.setContent(graph);
-        processorPane.getChildren().removeAll();
-        processorPane.getChildren().add(processorNode);
-        graphPane.getChildren().removeAll();
-        graphPane.getChildren().add(processorNode);
+    public void updateView(Map<String, String> stats, Pane processor) {
+//        SwingNode processorNode = new SwingNode();
+//        SwingNode graphNode = new SwingNode();
+//        processorNode.setContent(processor);
+//        graphNode.setContent(graph);
+//        processorPane.getChildren().removeAll();
+//        processorPane.getChildren().add(processorNode);
+//        graphPane.getChildren().removeAll();
+//        graphPane.getChildren().add(processorNode);
         updateStats(stats);
     }
 
+
     public void update(GraphWindow graphWindow, ByteState currentState, ByteStateManager manager, ByteState state, Color color, int width, int height, HashMap<String, String> stats) {
+        Pane pane = new ProcessorWindow(manager,state,color,width,height);
+        processorTab.setContent(pane);
         updateStats(stats);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                processorNode.setContent(new ProcessorWindow(manager, currentState, color, width, height));
-                processorNode.prefWidth(979);
-                graphNode.setContent(graphWindow.drawHighlighting(currentState));
-
-                AnchorPane.setTopAnchor(graphNode, 0d);
-                AnchorPane.setBottomAnchor(graphNode, 0d);
-                AnchorPane.setRightAnchor(graphNode, 0d);
-                AnchorPane.setLeftAnchor(graphNode, 0d);
-
-                //graphPane.getChildren().add(graphNode);
-
-                AnchorPane.setTopAnchor(processorNode, 0d);
-                AnchorPane.setBottomAnchor(processorNode, 0d);
-                AnchorPane.setRightAnchor(processorNode, 0d);
-                AnchorPane.setLeftAnchor(processorNode, 0d);
-
-                //processorPane.getChildren().add(processorNode);
-
-            }
-        });
+//        _graphWindow = graphWindow;
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                //processorNode.setContent(new ProcessorWindow(manager, currentState, color, width, height));
+//                //processorNode.prefWidth(979);
+//                //graphNode.setContent(graphWindow.drawHighlighting(currentState));
+//                _proWin = new ProcessorWindow(manager, currentState, color, width, height);
+//                graphWindow.drawHighlighting(currentState);
+//
+////                AnchorPane.setTopAnchor(graphNode, 0d);
+////                AnchorPane.setBottomAnchor(graphNode, 0d);
+////                AnchorPane.setRightAnchor(graphNode, 0d);
+////                AnchorPane.setLeftAnchor(graphNode, 0d);
+////
+////                //graphPane.getChildren().add(graphNode);
+////
+////                AnchorPane.setTopAnchor(processorNode, 0d);
+////                AnchorPane.setBottomAnchor(processorNode, 0d);
+////                AnchorPane.setRightAnchor(processorNode, 0d);
+////                AnchorPane.setLeftAnchor(processorNode, 0d);
+////
+////                //processorPane.getChildren().add(processorNode);
+//
+//            }
+//        });
     }
 
     private void updateStats(Map<String, String> stats) {

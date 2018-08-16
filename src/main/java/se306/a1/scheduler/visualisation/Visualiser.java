@@ -2,18 +2,15 @@ package se306.a1.scheduler.visualisation;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -35,7 +32,7 @@ public class Visualiser {
     private GraphWindow graphWindow;
     private static GUIController controller;
 
-    private JFrame frame;
+    //private JFrame frame;
     private final int WIDTH;
     private final int HEIGHT = 637;
 
@@ -56,8 +53,8 @@ public class Visualiser {
 
         WIDTH = 868; //Math.max(200, manager.getProcessors().size() * 50);
 
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        //frame = new JFrame();
+        //frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //frame.setSize(WIDTH + 15, HEIGHT);
 
         GUIController.setVisualiser(this);
@@ -86,7 +83,6 @@ public class Visualiser {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                System.out.println("drawing");
                 controller.update(graphWindow, currentState, manager, currentState, color, WIDTH, HEIGHT, prepareStats());
             }
         });
@@ -99,10 +95,10 @@ public class Visualiser {
      * @return Color object with randomly initialised RGB values
      */
     private Color getRandomColor() {
-        float r = rand.nextFloat() / 2f + 0.5f;
-        float g = rand.nextFloat() / 2f + 0.5f;
-        float b = rand.nextFloat() / 2f + 0.5f;
-        return new Color(r, g, b);
+        int r = (int) (rand.nextFloat() / 2f + 0.5f);
+        int g = (int) (rand.nextFloat() / 2f + 0.5f);
+        int b = (int) (rand.nextFloat() / 2f + 0.5f);
+        return Color.rgb(r, g, b);
     }
 
     private HashMap<String, String> prepareStats() {
