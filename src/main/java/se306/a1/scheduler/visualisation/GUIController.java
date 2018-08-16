@@ -1,10 +1,12 @@
 package se306.a1.scheduler.visualisation;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import se306.a1.scheduler.Main;
 import se306.a1.scheduler.data.schedule.ByteState;
@@ -42,10 +44,10 @@ public class GUIController implements Initializable {
     private Label edgesLabel;
 
     @FXML
-    private Pane processorPane;
+    private AnchorPane processorPane;
 
     @FXML
-    private Pane graphPane;
+    private AnchorPane graphPane;
 
     @FXML
     private SwingNode graphNode;
@@ -60,7 +62,7 @@ public class GUIController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("test");
+        System.out.println("start");
         // start running the algorithm
         Task task = new Task<Void>() {
             @Override
@@ -91,7 +93,23 @@ public class GUIController implements Initializable {
             @Override
             public void run() {
                 processorNode.setContent(new ProcessorWindow(manager, currentState, color, width, height));
+                processorNode.prefWidth(979);
                 graphNode.setContent(graphWindow.drawHighlighting(currentState));
+
+                AnchorPane.setTopAnchor(graphNode, 0d);
+                AnchorPane.setBottomAnchor(graphNode, 0d);
+                AnchorPane.setRightAnchor(graphNode, 0d);
+                AnchorPane.setLeftAnchor(graphNode, 0d);
+
+                //graphPane.getChildren().add(graphNode);
+
+                AnchorPane.setTopAnchor(processorNode, 0d);
+                AnchorPane.setBottomAnchor(processorNode, 0d);
+                AnchorPane.setRightAnchor(processorNode, 0d);
+                AnchorPane.setLeftAnchor(processorNode, 0d);
+
+                //processorPane.getChildren().add(processorNode);
+
             }
         });
     }

@@ -37,7 +37,7 @@ public class Visualiser {
 
     private JFrame frame;
     private final int WIDTH;
-    private final int HEIGHT = 720;
+    private final int HEIGHT = 637;
 
     private Random rand = new Random();
     private Color color = getRandomColor();
@@ -54,11 +54,11 @@ public class Visualiser {
         this.graph = graph;
         this.graphWindow = new GraphWindow(graph);
 
-        WIDTH = 1080; //Math.max(200, manager.getProcessors().size() * 50);
+        WIDTH = 868; //Math.max(200, manager.getProcessors().size() * 50);
 
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(WIDTH + 15, HEIGHT);
+        //frame.setSize(WIDTH + 15, HEIGHT);
 
         GUIController.setVisualiser(this);
     }
@@ -86,6 +86,7 @@ public class Visualiser {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                System.out.println("drawing");
                 controller.update(graphWindow, currentState, manager, currentState, color, WIDTH, HEIGHT, prepareStats());
             }
         });
@@ -106,7 +107,6 @@ public class Visualiser {
 
     private HashMap<String, String> prepareStats() {
         stats = new HashMap<>();
-        System.out.println(graph.getAllNodes().size());
         stats.put("NODES", graph.getAllNodes().size() + "");
         stats.put("EDGES", graph.getEdgeCount() + "");
         stats.put("PROCESSORS", manager.getProcessors().size() + "");

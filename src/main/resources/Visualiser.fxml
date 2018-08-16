@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.embed.swing.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.embed.swing.SwingNode?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox layoutY="54.0" prefHeight="666.0" prefWidth="1080.0">
          <children>
@@ -25,18 +19,20 @@
               <tabs>
                 <Tab text="Processor Allocation">
                      <content>
-                        <Pane fx:id="processorPane" prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane fx:id="processorPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="943.0">
                            <children>
                               <SwingNode fx:id="processorNode" />
-                           </children></Pane>
+                           </children>
+                        </AnchorPane>
                      </content>
                 </Tab>
                 <Tab text="Graph Hierarchy">
                      <content>
-                        <Pane fx:id="graphPane" prefHeight="200.0" prefWidth="200.0">
+                        <AnchorPane fx:id="graphPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="979.0">
                            <children>
-                              <SwingNode fx:id="graphNode" layoutX="158.0" layoutY="223.0" />
-                           </children></Pane>
+                              <SwingNode fx:id="graphNode" />
+                           </children>
+                        </AnchorPane>
                      </content>
                 </Tab>
               </tabs>
