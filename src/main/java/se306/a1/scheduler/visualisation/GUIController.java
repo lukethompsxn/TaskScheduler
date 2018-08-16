@@ -4,13 +4,18 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import se306.a1.scheduler.Main;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
-import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 import java.util.HashMap;
@@ -18,6 +23,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
+    private GraphicsContext gc;
 
     @FXML
     public Label timeLabel;
@@ -66,15 +72,15 @@ public class GUIController implements Initializable {
         thread.start();
     }
 
-    public void updateView(Map<String, String> stats, JComponent graph, JComponent processor) {
-        SwingNode processorNode = new SwingNode();
-        SwingNode graphNode = new SwingNode();
-        processorNode.setContent(processor);
-        graphNode.setContent(graph);
-        processorPane.getChildren().removeAll();
-        processorPane.getChildren().add(processorNode);
-        graphPane.getChildren().removeAll();
-        graphPane.getChildren().add(processorNode);
+    public void updateView(Map<String, String> stats, Pane processor) {
+//        SwingNode processorNode = new SwingNode();
+//        SwingNode graphNode = new SwingNode();
+//        processorNode.setContent(processor);
+//        graphNode.setContent(graph);
+//        processorPane.getChildren().removeAll();
+//        processorPane.getChildren().add(processorNode);
+//        graphPane.getChildren().removeAll();
+//        graphPane.getChildren().add(processorNode);
         updateStats(stats);
     }
 
@@ -82,7 +88,15 @@ public class GUIController implements Initializable {
         graphPane.getChildren().add(graphWindow.getViewPanel());
     }
 
+    public void setup() {
+        Canvas cs = new Canvas(1080, 720);
+        this.gc = cs.getGraphicsContext2D();
+        processorPane.getChildren().add(cs);
+    }
+
+
     public void update(GraphWindow graphWindow, ByteState currentState, ByteStateManager manager, ByteState state, Color color, int width, int height, HashMap<String, String> stats) {
+        new ProcessorWindow(manager,state,color,width,height).draw(gc);
         updateStats(stats);
         graphWindow.drawHighlighting(currentState);
     }

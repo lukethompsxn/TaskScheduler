@@ -1,12 +1,20 @@
 package se306.a1.scheduler.visualisation;
 
 import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -66,11 +74,18 @@ public class Visualiser {
      *
      * @return Color object with randomly initialised RGB values
      */
+//    private Color getRandomColor() {
+//        float r = rand.nextFloat() / 2f + 0.5f;
+//        float g = rand.nextFloat() / 2f + 0.5f;
+//        float b = rand.nextFloat() / 2f + 0.5f;
+//        return new Color(r, g, b);
+//    }
+
     private Color getRandomColor() {
-        float r = rand.nextFloat() / 2f + 0.5f;
-        float g = rand.nextFloat() / 2f + 0.5f;
-        float b = rand.nextFloat() / 2f + 0.5f;
-        return new Color(r, g, b);
+        int r = (int) (rand.nextFloat() / 2f + 0.5f);
+        int g = (int) (rand.nextFloat() / 2f + 0.5f);
+        int b = (int) (rand.nextFloat() / 2f + 0.5f);
+        return Color.rgb(r, g, b);
     }
 
     private HashMap<String, String> prepareStats() {
