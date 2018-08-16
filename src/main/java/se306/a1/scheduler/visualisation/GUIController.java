@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import se306.a1.scheduler.Main;
+import se306.a1.scheduler.manager.ByteStateManager;
 
 import javax.swing.*;
 import java.net.URL;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
+    private static Visualiser visualiser;
 
     @FXML
     public Label timeLabel;
@@ -95,5 +97,9 @@ public class GUIController implements Initializable {
 
             }
         }
+    }
+
+    public static void setVisualiser(Visualiser v) {
+        visualiser = v;
     }
 }

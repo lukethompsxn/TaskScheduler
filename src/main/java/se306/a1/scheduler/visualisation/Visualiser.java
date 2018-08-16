@@ -60,6 +60,8 @@ public class Visualiser {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(WIDTH + 15, HEIGHT);
 
+        GUIController.setVisualiser(this);
+
 //        ExecutorService executor = Executors.newScheduledThreadPool(2);
 //        executor.submit(new Runnable() {
 //            @Override
@@ -102,13 +104,13 @@ public class Visualiser {
 //
 //        frame.add(p2);
 //        frame.setVisible(true);
-        Platform.runLater(() -> {
-            //controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
-            controller.timeLabel.setText("hello");
-        });
+//        Platform.runLater(() -> {
+//            controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
+//            controller.timeLabel.setText("hello");
+//        });
         //controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
         //controller.timeLabel.setText("hello");
-        System.out.println("gg");
+//        System.out.println("gg");
 //        try {
 //            Parent root = FXMLLoader.load(getClass().getResource("se306/a1/scheduler/visualisation/Visualiser.fxml"));
 //            Scene scene = new Scene(root, 1080, 720);
@@ -140,6 +142,7 @@ public class Visualiser {
     }
 
     private HashMap<String, String> prepareStats() {
+        stats = new HashMap<>();
         System.out.println(graph.getAllNodes().size());
         stats.put("NODES", graph.getAllNodes().size() + "");
         stats.put("EDGES", graph.getEdgeCount() + "");
