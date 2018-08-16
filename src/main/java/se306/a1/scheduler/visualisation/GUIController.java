@@ -1,10 +1,11 @@
 package se306.a1.scheduler.visualisation;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
@@ -14,6 +15,7 @@ import se306.a1.scheduler.Main;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
     private static Visualiser visualiser;
+    private GraphicsContext gc;
 
     @FXML
     public Label timeLabel;
@@ -97,10 +100,15 @@ public class GUIController implements Initializable {
         updateStats(stats);
     }
 
+    public void setup() {
+        Canvas cs = new Canvas(1080, 720);
+        this.gc = cs.getGraphicsContext2D();
+        processorPane.getChildren().add(cs);
+    }
+
 
     public void update(GraphWindow graphWindow, ByteState currentState, ByteStateManager manager, ByteState state, Color color, int width, int height, HashMap<String, String> stats) {
-        Pane pane = new ProcessorWindow(manager,state,color,width,height);
-        processorTab.setContent(pane);
+        new ProcessorWindow(manager,state,color,width,height).draw(gc);
         updateStats(stats);
 //        _graphWindow = graphWindow;
 //        SwingUtilities.invokeLater(new Runnable() {

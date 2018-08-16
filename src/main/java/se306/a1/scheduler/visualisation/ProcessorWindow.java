@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class ProcessorWindow extends Pane {
+public class ProcessorWindow {
     private ByteStateManager manager;
     private ByteState state;
     private Map<Processor, Map<Node, Integer>> scheduleTimes;
@@ -54,9 +54,9 @@ public class ProcessorWindow extends Pane {
         PROCESSORS = manager.getProcessors().size();
         WIDTH = width / PROCESSORS;
         HEIGHT = height;
-        canvas = new Canvas(getWidth(), getHeight());
 
         buildVisual();
+
     }
 
     private void buildVisual() {
@@ -72,11 +72,9 @@ public class ProcessorWindow extends Pane {
         }
     }
 
-    @Override
-    public void layoutChildren() {
-        System.out.println("layoutchildren");
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+    public void draw(GraphicsContext gc) {
+        System.out.println("layoutchildren");
 
         int yOffset = 30;
 
@@ -91,7 +89,7 @@ public class ProcessorWindow extends Pane {
 
         //Clears panel
 //        g.clearRect(0, 0, getWidth(), getHeight());
-        gc.clearRect(0, 0, getWidth(), getHeight());
+        gc.clearRect(0, 0, 1080, 720);
 
         //Draw each processor
         for (Processor processor : scheduleTimes.keySet()) {

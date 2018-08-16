@@ -57,7 +57,7 @@ public class Visualiser {
         //frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //frame.setSize(WIDTH + 15, HEIGHT);
 
-        GUIController.setVisualiser(this);
+        Platform.runLater(() -> controller.setup());
     }
 
     /**
