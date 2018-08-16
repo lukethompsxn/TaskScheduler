@@ -101,7 +101,7 @@ public class ProcessorWindow {
 //                        yOffset + startTime * scale,
 //                        WIDTH,
 //                        node.getCost() * scale);
-                gc.setFill(getRandomColor(manager.indexOf(node)));
+                gc.setFill(getRandomColor(manager.indexOf(node), color));
                 gc.fillRect(xPos,
                         yOffset + startTime * scale,
                         WIDTH,
@@ -121,13 +121,13 @@ public class ProcessorWindow {
         }
     }
 
-    private Color getRandomColor(int val) {
+    private static Color getRandomColor(int val, Color color) {
         //Minimum of % 8 / 12 for largest color diff
-        int r = (int) (color.getRed() * (1 - val % 8 / 16f) / 255);
-        int g = (int) (color.getGreen() * (1 - val % 8 / 16f) / 255);
-        int b = (int) (color.getBlue() * (1 - val % 8 / 16f) / 255);
+        double r = color.getRed() * (1 - val % 8 / 16f);
+        double g = color.getGreen() * (1 - val % 8 / 16f);
+        double b = color.getBlue() * (1 - val % 8 / 16f);
 
-        return Color.rgb(r, g, b);
+        return Color.color(r, g, b);
     }
 
     public void reportSize(String s, Font myFont) {

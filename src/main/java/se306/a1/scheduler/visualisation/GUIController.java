@@ -71,7 +71,7 @@ public class GUIController implements Initializable {
 
     public void setup(GraphWindow graphWindow) {
         graphPane.getChildren().add(graphWindow.getViewPanel());
-        Canvas cs = new Canvas(1080, 720); // TODO adjust these to what they should be @joel
+        Canvas cs = new Canvas(868, 666); // TODO adjust these to what they should be @joel
         this.gc = cs.getGraphicsContext2D();
         processorPane.getChildren().add(cs);
     }

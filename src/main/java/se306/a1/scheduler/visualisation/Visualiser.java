@@ -32,7 +32,7 @@ public class Visualiser {
     private static GUIController controller;
 
     private final int WIDTH;
-    private final int HEIGHT = 637;
+    private final int HEIGHT = 666;
 
     private Random rand = new Random();
     private Color color = getRandomColor();
