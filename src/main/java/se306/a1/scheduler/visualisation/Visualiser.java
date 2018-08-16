@@ -13,6 +13,7 @@ import se306.a1.scheduler.manager.ByteStateManager;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -36,6 +37,8 @@ public class Visualiser {
     private Random rand = new Random();
     private Color color = getRandomColor();
 
+    private Instant startTime;
+
     /**
      * This is the constructor for Visualiser.
      * It takes graph as a parameter as this is required for base in the
@@ -48,6 +51,7 @@ public class Visualiser {
         this.graph = graph;
         this.graphWindow = new GraphWindow(graph);
 
+        startTime = Instant.now();
         WIDTH = 868;
 
         Platform.runLater(() -> controller.setup(graphWindow));
@@ -90,7 +94,7 @@ public class Visualiser {
         stats.put("THREADS", manager.getNumCores() + "");
         stats.put("QUEUE LENGTH", manager.getQueueLength() + "");
         stats.put("STATES SEEN", manager.getNumStatesSeen() + "");
-        stats.put("RUN TIME", 0 + "");
+        stats.put("RUN TIME", Duration.between(startTime, Instant.now()).toString().replaceAll("PT", "").replaceAll("S","") + "s");
         return stats;
     }
 
