@@ -4,11 +4,10 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.fx_viewer.FxViewPanel;
 import org.graphstream.ui.fx_viewer.FxViewer;
-import org.graphstream.ui.javafx.FxGraphRenderer;
-import org.graphstream.ui.view.Viewer;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
+
 import java.util.*;
 
 public class GraphWindow {
@@ -87,7 +86,6 @@ public class GraphWindow {
                 }
             }
         }
-//        visualisedGraph.display(false);
     }
 
     /**
@@ -126,6 +124,12 @@ public class GraphWindow {
         }
     }
 
+    /**
+     * This method is used to return the view panel which contains the graph
+     * object.
+     *
+     * @return fxViewPanel containing graph
+     */
     public FxViewPanel getViewPanel() {
         FxViewer fxViewer = new FxViewer(visualisedGraph, FxViewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         return (FxViewPanel) fxViewer.addDefaultView(false);

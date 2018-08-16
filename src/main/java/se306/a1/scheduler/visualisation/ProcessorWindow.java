@@ -1,15 +1,7 @@
 package se306.a1.scheduler.visualisation;
 
-import com.sun.javafx.tk.FontMetrics;
-import com.sun.javafx.tk.Toolkit;
 import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
-import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -20,12 +12,6 @@ import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.manager.ByteStateManager;
 
-import javafx.scene.*;
-import javafx.scene.paint.*;
-import javafx.scene.canvas.*;
-
-//import java.awt.*;
-//import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -73,8 +59,6 @@ public class ProcessorWindow {
 
 
     public void draw(GraphicsContext gc) {
-        System.out.println("layoutchildren");
-
         int yOffset = 30;
 
         //Dynamically change scale if too high, default scale = 5

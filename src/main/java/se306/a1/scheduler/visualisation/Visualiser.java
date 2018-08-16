@@ -50,7 +50,7 @@ public class Visualiser {
 
         WIDTH = 868;
 
-        Platform.runLater(() -> controller.initialisePanes(graphWindow));
+        Platform.runLater(() -> controller.setup(graphWindow));
     }
 
     /**
@@ -68,24 +68,18 @@ public class Visualiser {
         });
     }
 
+    // TODO get colors working @joel
     /**
      * This method returns a random colour where its RGB values are all between
      * 0.5 and 1, i.e. 'lighter/brighter' colours.
      *
      * @return Color object with randomly initialised RGB values
      */
-//    private Color getRandomColor() {
-//        float r = rand.nextFloat() / 2f + 0.5f;
-//        float g = rand.nextFloat() / 2f + 0.5f;
-//        float b = rand.nextFloat() / 2f + 0.5f;
-//        return new Color(r, g, b);
-//    }
-
     private Color getRandomColor() {
-        int r = (int) (rand.nextFloat() / 2f + 0.5f);
-        int g = (int) (rand.nextFloat() / 2f + 0.5f);
-        int b = (int) (rand.nextFloat() / 2f + 0.5f);
-        return Color.rgb(r, g, b);
+        double r = rand.nextFloat() / 2f + 0.5f;
+        double g = rand.nextFloat() / 2f + 0.5f;
+        double b = rand.nextFloat() / 2f + 0.5f;
+        return new Color(r, g, b, 1);
     }
 
     private HashMap<String, String> prepareStats() {

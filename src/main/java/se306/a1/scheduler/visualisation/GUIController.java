@@ -53,14 +53,10 @@ public class GUIController implements Initializable {
     private AnchorPane graphPane;
 
     public GUIController() {}
-    public GUIController(GUILauncher launcher) {
-
-    }
+    public GUIController(GUILauncher launcher) { }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("start");
-        // start running the algorithm
         Task task = new Task<Void>() {
             @Override
             public Void call() {
@@ -72,24 +68,10 @@ public class GUIController implements Initializable {
         thread.start();
     }
 
-    public void updateView(Map<String, String> stats, Pane processor) {
-//        SwingNode processorNode = new SwingNode();
-//        SwingNode graphNode = new SwingNode();
-//        processorNode.setContent(processor);
-//        graphNode.setContent(graph);
-//        processorPane.getChildren().removeAll();
-//        processorPane.getChildren().add(processorNode);
-//        graphPane.getChildren().removeAll();
-//        graphPane.getChildren().add(processorNode);
-        updateStats(stats);
-    }
 
-    public void initialisePanes(GraphWindow graphWindow) {
+    public void setup(GraphWindow graphWindow) {
         graphPane.getChildren().add(graphWindow.getViewPanel());
-    }
-
-    public void setup() {
-        Canvas cs = new Canvas(1080, 720);
+        Canvas cs = new Canvas(1080, 720); // TODO adjust these to what they should be @joel
         this.gc = cs.getGraphicsContext2D();
         processorPane.getChildren().add(cs);
     }
