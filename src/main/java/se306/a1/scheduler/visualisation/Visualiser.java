@@ -61,14 +61,6 @@ public class Visualiser {
         frame.setSize(WIDTH + 15, HEIGHT);
 
         GUIController.setVisualiser(this);
-
-//        ExecutorService executor = Executors.newScheduledThreadPool(2);
-//        executor.submit(new Runnable() {
-//            @Override
-//            public void run() {
-//                Application.launch(GUILauncher.class);
-//            }
-//        });
     }
 
     /**
@@ -91,41 +83,12 @@ public class Visualiser {
      * the redrawing of the processor map visualisation.
      */
     private void drawComponents() {
-//        final JFXPanel fxPanel = new JFXPanel();
-//        JPanel p = new JPanel();
-//        JPanel p2 = new JPanel();
-//        p.setLayout(new GridLayout(2,0));
-//        p2.setLayout(new GridLayout(0,2));
-//
-//        p.add();
-//        p.add(graphWindow.drawHighlighting(currentState));
-//        p2.add(p);
-//        p2.add(new StatisticsWindow(manager, graph));
-//
-//        frame.add(p2);
-//        frame.setVisible(true);
-//        Platform.runLater(() -> {
-//            controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
-//            controller.timeLabel.setText("hello");
-//        });
-        //controller.updateView(prepareStats(), graphWindow.drawHighlighting(currentState), new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
-        //controller.timeLabel.setText("hello");
-//        System.out.println("gg");
-//        try {
-//            Parent root = FXMLLoader.load(getClass().getResource("se306/a1/scheduler/visualisation/Visualiser.fxml"));
-//            Scene scene = new Scene(root, 1080, 720);
-//            processorNode.setContent(new ProcessorWindow(manager, currentState, color, WIDTH, HEIGHT));
-//            graphNode.setContent(graphWindow.drawHighlighting(currentState));
-//            fxPanel.setScene(scene);
-//
-//            frame.add(fxPanel);
-//            frame.setVisible(true);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                controller.update(graphWindow, currentState, manager, currentState, color, WIDTH, HEIGHT, prepareStats());
+            }
+        });
     }
 
     /**

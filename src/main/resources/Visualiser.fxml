@@ -17,7 +17,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox layoutY="54.0" prefHeight="666.0" prefWidth="1080.0">
@@ -26,12 +25,18 @@
               <tabs>
                 <Tab text="Processor Allocation">
                      <content>
-                        <Pane fx:id="processorPane" prefHeight="200.0" prefWidth="200.0" />
+                        <Pane fx:id="processorPane" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <SwingNode fx:id="processorNode" />
+                           </children></Pane>
                      </content>
                 </Tab>
                 <Tab text="Graph Hierarchy">
                      <content>
-                        <Pane fx:id="graphPane" prefHeight="200.0" prefWidth="200.0" />
+                        <Pane fx:id="graphPane" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <SwingNode fx:id="graphNode" layoutX="158.0" layoutY="223.0" />
+                           </children></Pane>
                      </content>
                 </Tab>
               </tabs>

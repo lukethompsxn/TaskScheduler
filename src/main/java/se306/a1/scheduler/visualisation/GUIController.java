@@ -7,10 +7,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import se306.a1.scheduler.Main;
+import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -44,6 +47,11 @@ public class GUIController implements Initializable {
     @FXML
     private Pane graphPane;
 
+    @FXML
+    private SwingNode graphNode;
+
+    @FXML
+    private SwingNode processorNode;
 
     public GUIController() {}
     public GUIController(GUILauncher launcher) {
@@ -63,11 +71,9 @@ public class GUIController implements Initializable {
         };
         Thread thread = new Thread(task);
         thread.start();
-
     }
 
     public void updateView(Map<String, String> stats, JComponent graph, JComponent processor) {
-        System.out.println("test");
         SwingNode processorNode = new SwingNode();
         SwingNode graphNode = new SwingNode();
         processorNode.setContent(processor);
@@ -77,6 +83,17 @@ public class GUIController implements Initializable {
         graphPane.getChildren().removeAll();
         graphPane.getChildren().add(processorNode);
         updateStats(stats);
+    }
+
+    public void update(GraphWindow graphWindow, ByteState currentState, ByteStateManager manager, ByteState state, Color color, int width, int height, HashMap<String, String> stats) {
+        updateStats(stats);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                processorNode.setContent(new ProcessorWindow(manager, currentState, color, width, height));
+                graphNode.setContent(graphWindow.drawHighlighting(currentState));
+            }
+        });
     }
 
     private void updateStats(Map<String, String> stats) {

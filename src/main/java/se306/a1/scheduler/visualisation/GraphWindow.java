@@ -125,6 +125,7 @@ public class GraphWindow {
         }
 
         Viewer viewer = new Viewer(visualisedGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+
         return viewer.addDefaultView(false);
 
     }
