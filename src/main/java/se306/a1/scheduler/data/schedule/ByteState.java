@@ -22,7 +22,6 @@ public class ByteState implements Comparable<ByteState> {
     private final byte[] processorIndices;
     private final int[] earliestStartTimes;
     private final byte[] free;
-
     private int cost;
     private int length;
     private int idleTime;

@@ -1,13 +1,11 @@
 package se306.a1.scheduler.visualisation;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import se306.a1.scheduler.Main;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
@@ -20,7 +18,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
-    private static Visualiser visualiser;
 
     @FXML
     public Label timeLabel;
@@ -48,12 +45,6 @@ public class GUIController implements Initializable {
 
     @FXML
     private AnchorPane graphPane;
-
-    @FXML
-    private SwingNode graphNode;
-
-    @FXML
-    private SwingNode processorNode;
 
     public GUIController() {}
     public GUIController(GUILauncher launcher) {
@@ -87,31 +78,13 @@ public class GUIController implements Initializable {
         updateStats(stats);
     }
 
+    public void initialisePanes(GraphWindow graphWindow) {
+        graphPane.getChildren().add(graphWindow.getViewPanel());
+    }
+
     public void update(GraphWindow graphWindow, ByteState currentState, ByteStateManager manager, ByteState state, Color color, int width, int height, HashMap<String, String> stats) {
         updateStats(stats);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                processorNode.setContent(new ProcessorWindow(manager, currentState, color, width, height));
-                processorNode.prefWidth(979);
-                graphNode.setContent(graphWindow.drawHighlighting(currentState));
-
-                AnchorPane.setTopAnchor(graphNode, 0d);
-                AnchorPane.setBottomAnchor(graphNode, 0d);
-                AnchorPane.setRightAnchor(graphNode, 0d);
-                AnchorPane.setLeftAnchor(graphNode, 0d);
-
-                //graphPane.getChildren().add(graphNode);
-
-                AnchorPane.setTopAnchor(processorNode, 0d);
-                AnchorPane.setBottomAnchor(processorNode, 0d);
-                AnchorPane.setRightAnchor(processorNode, 0d);
-                AnchorPane.setLeftAnchor(processorNode, 0d);
-
-                //processorPane.getChildren().add(processorNode);
-
-            }
-        });
+        graphWindow.drawHighlighting(currentState);
     }
 
     private void updateStats(Map<String, String> stats) {
@@ -132,9 +105,5 @@ public class GUIController implements Initializable {
 
             }
         }
-    }
-
-    public static void setVisualiser(Visualiser v) {
-        visualiser = v;
     }
 }

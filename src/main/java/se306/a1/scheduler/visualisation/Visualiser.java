@@ -1,27 +1,14 @@
 package se306.a1.scheduler.visualisation;
 
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.embed.swing.SwingNode;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * This class is used to manage the visualisation interaction with the algorithm
@@ -35,7 +22,6 @@ public class Visualiser {
     private GraphWindow graphWindow;
     private static GUIController controller;
 
-    private JFrame frame;
     private final int WIDTH;
     private final int HEIGHT = 637;
 
@@ -54,13 +40,9 @@ public class Visualiser {
         this.graph = graph;
         this.graphWindow = new GraphWindow(graph);
 
-        WIDTH = 868; //Math.max(200, manager.getProcessors().size() * 50);
+        WIDTH = 868;
 
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //frame.setSize(WIDTH + 15, HEIGHT);
-
-        GUIController.setVisualiser(this);
+        Platform.runLater(() -> controller.initialisePanes(graphWindow));
     }
 
     /**
@@ -73,22 +55,8 @@ public class Visualiser {
      */
     public void updateCurrentState(ByteState state) {
         this.currentState = state;
-
-        graphWindow.drawHighlighting(currentState);
-        drawComponents();
-    }
-
-    /**
-     * This method is called whenever the current schedule is updated to handle
-     * the redrawing of the processor map visualisation.
-     */
-    private void drawComponents() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("drawing");
-                controller.update(graphWindow, currentState, manager, currentState, color, WIDTH, HEIGHT, prepareStats());
-            }
+        Platform.runLater(() -> {
+            controller.update(graphWindow, currentState, manager, currentState, color, WIDTH, HEIGHT, prepareStats());
         });
     }
 

@@ -48,9 +48,6 @@ public class GUILauncher extends Application {
             e.printStackTrace();
         }
     }
-//
-//    public static GUIController getController() {
-//        return loader.getController();
-//    }
+
 
 }

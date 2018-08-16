@@ -2,12 +2,13 @@ package se306.a1.scheduler.visualisation;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.fx_viewer.FxViewPanel;
+import org.graphstream.ui.fx_viewer.FxViewer;
+import org.graphstream.ui.javafx.FxGraphRenderer;
 import org.graphstream.ui.view.Viewer;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
-
 import java.util.*;
 
 public class GraphWindow {
@@ -93,7 +94,7 @@ public class GraphWindow {
      * This method is called whenever the current schedule is updated to handle
      * the redrawing of the highlighted visualisation.
      */
-    public ViewPanel drawHighlighting(ByteState currentState) {
+    public void drawHighlighting(ByteState currentState) {
         previousNodes = new HashSet<>(currentNodes);
         previousEdges = new HashSet<>(currentEdges);
         currentNodes = new HashSet<>();
@@ -114,20 +115,20 @@ public class GraphWindow {
 
         for (String s : previousNodes) {
             if (!currentNodes.contains(s)) {
-                visualisedGraph.getNode(s).changeAttribute("ui.class", "seen");
+                visualisedGraph.getNode(s).setAttribute("ui.class", "seen");
             }
         }
 
         for (String s : previousEdges) {
             if (!currentEdges.contains(s)) {
-                visualisedGraph.getEdge(s).changeAttribute("ui.class", "seen");
+                visualisedGraph.getEdge(s).setAttribute("ui.class", "seen");
             }
         }
+    }
 
-        Viewer viewer = new Viewer(visualisedGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
-
-        return viewer.addDefaultView(false);
-
+    public FxViewPanel getViewPanel() {
+        FxViewer fxViewer = new FxViewer(visualisedGraph, FxViewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        return (FxViewPanel) fxViewer.addDefaultView(false);
     }
 
     /**

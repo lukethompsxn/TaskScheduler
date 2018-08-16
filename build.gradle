@@ -15,8 +15,10 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
     compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
     compile group: 'com.paypal.digraph', name: 'digraph-parser', version: '1.0'
-    compile group: 'org.graphstream', name: 'gs-core', version: '1.3'
+//    compile group: 'com.github.graphstream', name: 'gs-core', version: '2.0-alpha'
     compile group: 'org.graphstream', name: 'gs-ui', version: '1.3'
+    compile files('gs-ui-javafx-2.0-alpha.jar')
+    compile files('gs-core-2.0-alpha.jar')
 
 }
 
