@@ -41,7 +41,6 @@ public class ProcessorWindow {
     private final int PROCESSORS;
     private final int WIDTH;
     private final int HEIGHT;
-    private Canvas canvas;
     private Bounds bounds;
 
     ProcessorWindow(ByteStateManager manager, ByteState state, Color color, int width, int height) {
@@ -137,12 +136,6 @@ public class ProcessorWindow {
             }
         }
     }
-
-    //TODO implement this to save on remaking processor panels
-//    @Override
-//    public void repaint() {
-//        paintComponent(getGraphics());
-//    }
 
     private Color getRandomColor(int val) {
         //Minimum of % 8 / 12 for largest color diff
