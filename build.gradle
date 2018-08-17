@@ -17,6 +17,7 @@ dependencies {
     compile group: 'org.graphstream', name: 'gs-ui', version: '1.3'
     compile files('res/extlibs/gs-core-2.0-alpha.jar')
     compile files('res/extlibs/gs-ui-javafx-2.0-alpha.jar')
+    compile files('res/extlibs/jfoenix-8.0.7.jar')
 
 }
 

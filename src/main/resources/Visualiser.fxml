@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.embed.swing.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.embed.swing.SwingNode?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" stylesheets="Visualiser.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox layoutY="54.0" prefHeight="666.0" prefWidth="1080.0">
+      <HBox prefHeight="720.0" prefWidth="1080.0">
          <children>
-            <TabPane fx:id="tabPane" prefHeight="666.0" prefWidth="868.0" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
+            <JFXTabPane prefHeight="720.0" prefWidth="928.0">
+               <tabs>
                 <Tab fx:id="processorTab" text="Processor Allocation">
                      <content>
                         <AnchorPane fx:id="processorPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="979.0" />
@@ -26,111 +32,110 @@
                         </AnchorPane>
                      </content>
                 </Tab>
-              </tabs>
-            </TabPane>
-            <GridPane prefHeight="570.0" prefWidth="213.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+               </tabs>
+            </JFXTabPane>
+            <VBox prefHeight="720.0" prefWidth="165.0">
                <children>
-                  <Label fx:id="edgesLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
-                     <font>
-                        <Font name="SF UI Display Light" size="48.0" />
-                     </font>
-                  </Label>
-                  <Label styleClass="heavy-label" text="Total Edges" GridPane.rowIndex="5" GridPane.valignment="TOP">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="nodesLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-                     <font>
-                        <Font name="SF UI Display Light" size="48.0" />
-                     </font>
-                  </Label>
-                  <Label text="Total Nodes" GridPane.rowIndex="4" GridPane.valignment="TOP">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="queueLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                     <font>
-                        <Font name="SF UI Display Light" size="48.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Label>
-                  <Label styleClass="heavy-label" text="Queue Length" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label styleClass="heavy-label" text="Run Time" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-                     <font>
-                        <Font name="SF UI Display Bold" size="13.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="timeLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                     <font>
-                        <Font name="SF UI Display Light" size="48.0" />
-                     </font>
-                  </Label>
-                  <Label styleClass="heavy-label" text="States Seen" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
-                     <font>
-                        <Font name="SF UI Display Bold" size="13.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="statesLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                     <font>
-                        <Font name="SF UI Display Light" size="48.0" />
-                     </font>
-                  </Label>
-                  <Label styleClass="heavy-lab\el" text="Threads" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="TOP">
-                     <font>
-                        <Font name="SF UI Display Bold" size="13.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="threadsLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-                     <font>
-                        <Font name="SF UI Display Light" size="48.0" />
-                     </font>
-                  </Label>
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="200.0" />
+                  <GridPane prefHeight="666.0" prefWidth="254.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="edgesLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label styleClass="heavy-label" text="Total Edges" GridPane.rowIndex="5" GridPane.valignment="TOP">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label fx:id="nodesLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label text="Total Nodes" GridPane.rowIndex="4" GridPane.valignment="TOP">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label fx:id="queueLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </Label>
+                        <Label styleClass="heavy-label" text="Queue Length" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label styleClass="heavy-label" text="Run Time" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                           <font>
+                              <Font name="SF UI Display Bold" size="13.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label fx:id="timeLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label styleClass="heavy-label" text="States Seen" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                           <font>
+                              <Font name="SF UI Display Bold" size="13.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label fx:id="statesLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label styleClass="heavy-lab\el" text="Threads" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="TOP">
+                           <font>
+                              <Font name="SF UI Display Bold" size="13.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label fx:id="threadsLabel" alignment="CENTER" contentDisplay="CENTER" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </GridPane>
                </children>
-            </GridPane>
+            </VBox>
          </children>
       </HBox>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#34495e" height="60.0" layoutX="-4.0" layoutY="-5.0" stroke="BLACK" strokeType="INSIDE" width="1088.0" />
-      <Text fill="WHITE" layoutX="6.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Task Scheduler: Mission Control">
-         <font>
-            <Font name="Monospaced Bold" size="21.0" />
-         </font>
-      </Text>
    </children>
 </Pane>

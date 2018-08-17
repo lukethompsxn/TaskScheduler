@@ -32,7 +32,7 @@ public class GraphWindow {
 
     private static final String styleSheet =
             "node {" +
-                    "   fill-color: #839192;" +
+                    " fill-color: #839192;" +
                     " size: 20px, 20px;" +
                     " shape: circle;" +
                     " stroke-mode: plain;" +
@@ -55,7 +55,10 @@ public class GraphWindow {
                     "edge.seen {" +
                     "   fill-color: #D68910;" +
                     "   size: 2px;" +
-                    "}";
+                    "}" +
+                    "graph {" +
+                            "fill-color: #2A2E37;" +
+            "}";
 
     /**
      * This method is used to draw the initial tree of nodes and edges which
