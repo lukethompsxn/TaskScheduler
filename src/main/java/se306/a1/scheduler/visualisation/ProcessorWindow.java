@@ -74,6 +74,19 @@ public class ProcessorWindow {
 //        g.clearRect(0, 0, getWidth(), getHeight());
         gc.clearRect(0, 0, 1080, 720);
 
+        for (Processor processor : manager.getProcessors()) {
+            int numProc = Integer.parseInt(processor.getName());
+            //x-shift based on which processor it is
+            int xPos = numProc * WIDTH;
+
+            String text = "Processor " + numProc;
+            //Rectangle2D rect = new Rectangle2D(1,1,)
+            reportSize(text, gc.getFont());
+
+            gc.strokeLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
+            gc.strokeText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2);
+        }
+
         //Draw each processor
         for (Processor processor : scheduleTimes.keySet()) {
 
@@ -81,15 +94,16 @@ public class ProcessorWindow {
             //x-shift based on which processor it is
             int xPos = numProc * WIDTH;
 
-            String text = "proc " + numProc;
+            String text = "Processor " + numProc;
             //Rectangle2D rect = new Rectangle2D(1,1,)
             reportSize(text, gc.getFont());
 
             //Processor name/number & line separator
 //            g.drawLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
 //            g.drawString(text, xPos + WIDTH / 2 - (int) (rect.getWidth() / 2), yOffset / 2);
-            gc.strokeLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
-            gc.strokeText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2);
+//            gc.strokeLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
+//            gc.strokeText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2);
+
 
             //Draws each scheduled task
             for (Map.Entry<Node, Integer> entry : scheduleTimes.get(processor).entrySet()) {
