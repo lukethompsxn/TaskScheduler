@@ -39,21 +39,21 @@ public class GraphWindow {
                     " stroke-color: black;" +
                     "}" +
                     "node.marked {" +
-                    "   fill-color: #28B463;" +
+                    "   fill-color: #7FE7FF;" +
                     "}" +
                     "node.seen {" +
-                    "   fill-color: #D68910;" +
+                    "   fill-color: #FE2A97;" +
                     "}" +
                     "edge {" +
                     "   fill-color: #839192;" +
                     "   size: 2px;" +
                     "}" +
                     "edge.marked {" +
-                    "   fill-color: #28B463;" +
+                    "   fill-color: #7FE7FF;" +
                     "   size: 2px;" +
                     "}" +
                     "edge.seen {" +
-                    "   fill-color: #D68910;" +
+                    "   fill-color: #FE2A97;" +
                     "   size: 2px;" +
                     "}" +
                     "graph {" +
