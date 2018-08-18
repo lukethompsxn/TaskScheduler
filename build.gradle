@@ -18,7 +18,6 @@ dependencies {
     compile files('res/extlibs/gs-core-2.0-alpha.jar')
     compile files('res/extlibs/gs-ui-javafx-2.0-alpha.jar')
     compile files('res/extlibs/jfoenix-8.0.7.jar')
-
 }
 
 jar {
@@ -30,6 +29,10 @@ jar {
         exclude 'META-INF/*.SF'
         exclude 'META-INF/*.DSA'
         exclude 'META-INF/*.RSA'
+    }
+
+    into 'res', {
+        from 'res'
     }
 }
 

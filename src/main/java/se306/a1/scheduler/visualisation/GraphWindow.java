@@ -30,36 +30,6 @@ public class GraphWindow {
         drawTree();
     }
 
-    private static final String styleSheet =
-            "node {" +
-                    " fill-color: #839192;" +
-                    " size: 20px, 20px;" +
-                    " shape: circle;" +
-                    " stroke-mode: plain;" +
-                    " stroke-color: black;" +
-                    "}" +
-                    "node.marked {" +
-                    "   fill-color: #7FE7FF;" +
-                    "}" +
-                    "node.seen {" +
-                    "   fill-color: #FE2A97;" +
-                    "}" +
-                    "edge {" +
-                    "   fill-color: #839192;" +
-                    "   size: 2px;" +
-                    "}" +
-                    "edge.marked {" +
-                    "   fill-color: #7FE7FF;" +
-                    "   size: 2px;" +
-                    "}" +
-                    "edge.seen {" +
-                    "   fill-color: #FE2A97;" +
-                    "   size: 2px;" +
-                    "}" +
-                    "graph {" +
-                            "fill-color: #2A2E37;" +
-            "}";
-
     /**
      * This method is used to draw the initial tree of nodes and edges which
      * make up the graph.
@@ -68,7 +38,7 @@ public class GraphWindow {
         int z = 0;
 
         visualisedGraph = new MultiGraph("Graph");
-        visualisedGraph.setAttribute("ui.stylesheet", styleSheet);
+        visualisedGraph.setAttribute("ui.stylesheet", "url('GraphWindow.css')");
 
         determineLevels();
 
