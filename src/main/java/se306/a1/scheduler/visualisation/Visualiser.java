@@ -41,7 +41,7 @@ public class Visualiser {
     public Visualiser(ByteStateManager manager, se306.a1.scheduler.data.graph.Graph graph) {
         this.manager = manager;
         this.graph = graph;
-        this.graphWindow = new GraphWindow(graph);
+        this.graphWindow = new GraphWindow(graph, manager);
 
         startTime = Instant.now();
 

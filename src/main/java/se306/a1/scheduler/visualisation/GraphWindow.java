@@ -7,6 +7,7 @@ import org.graphstream.ui.fx_viewer.FxViewer;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
+import se306.a1.scheduler.manager.ByteStateManager;
 
 import java.util.*;
 
@@ -15,15 +16,17 @@ public class GraphWindow {
     private Graph visualisedGraph;
     private Map<Node, Integer> nodeLevels;
     private Map<Integer, Integer> levels;
+    private ByteStateManager manager;
     private Set<String> previousNodes;
     private Set<String> previousEdges;
     private Set<String> currentNodes = new HashSet<>();
     private Set<String> currentEdges = new HashSet<>();
 
-    public GraphWindow(se306.a1.scheduler.data.graph.Graph graphData) {
+    public GraphWindow(se306.a1.scheduler.data.graph.Graph graphData, ByteStateManager manager) {
         this.graphData = graphData;
         nodeLevels = new HashMap<>();
         levels = new HashMap<>();
+        this.manager = manager;
 
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
@@ -71,8 +74,7 @@ public class GraphWindow {
         currentNodes = new HashSet<>();
         currentEdges = new HashSet<>();
 
-        //TODO set the manager in this class
-        Set<Node> scheduled = currentState.getStartTimes(null).keySet();
+        Set<Node> scheduled = currentState.getStartTimes(manager).keySet();
         for (Node parent : scheduled) {
             visualisedGraph.getNode(parent.getLabel()).setAttribute("ui.class", "marked");
             currentNodes.add(parent.getLabel());

@@ -4,7 +4,6 @@ import javafx.application.Application;
 import org.apache.commons.cli.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import scala.App;
 import se306.a1.scheduler.algorithm.AStarByteScheduler;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.Schedule;
