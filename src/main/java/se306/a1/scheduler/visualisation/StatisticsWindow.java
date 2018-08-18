@@ -20,16 +20,15 @@ public class StatisticsWindow extends JPanel {
     private static final int WIDTH = 140;
     private static final int HEIGHT = 63;
     private static final int X_OFFESET = 125;
+    private GUIController guiController;
 
     public StatisticsWindow(ByteStateManager manager, Graph graph) {
         this.manager = manager;
         this.stats = new HashMap<>();
         this.timeStart = Instant.now();
+        guiController = new GUIController();
 
-        stats.put("NODES", graph.getAllNodes().size() + "");
-        stats.put("EDGES", graph.getEdgeCount() + "");
-        stats.put("PROCESSORS", manager.getProcessors().size() + "");
-        stats.put("THREADS", manager.getNumCores() + "");
+
 
         colors = new String[7];
         colors[0] = "#2E294E";
@@ -48,9 +47,9 @@ public class StatisticsWindow extends JPanel {
      * It is called every time a new state is pushed to visualiser
      */
     private void buildComponent() {
-        stats.put("QUEUE LENGTH", manager.getQueueLength() + "");
-        stats.put("STATES SEEN", manager.getNumStatesSeen() + "");
-        stats.put("RUN TIME", Duration.between(timeStart, Instant.now()).getSeconds() + "");
+
+
+        //guiController.updateStats(stats);
     }
 
     @Override

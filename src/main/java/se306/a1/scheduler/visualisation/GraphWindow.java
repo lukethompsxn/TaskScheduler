@@ -2,8 +2,8 @@ package se306.a1.scheduler.visualisation;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.ui.swingViewer.ViewPanel;
-import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.fx_viewer.FxViewPanel;
+import org.graphstream.ui.fx_viewer.FxViewer;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
@@ -30,33 +30,6 @@ public class GraphWindow {
         drawTree();
     }
 
-    private static final String styleSheet =
-            "node {" +
-                    "   fill-color: #839192;" +
-                    " size: 20px, 20px;" +
-                    " shape: circle;" +
-                    " stroke-mode: plain;" +
-                    " stroke-color: black;" +
-                    "}" +
-                    "node.marked {" +
-                    "   fill-color: #28B463;" +
-                    "}" +
-                    "node.seen {" +
-                    "   fill-color: #D68910;" +
-                    "}" +
-                    "edge {" +
-                    "   fill-color: #839192;" +
-                    "   size: 2px;" +
-                    "}" +
-                    "edge.marked {" +
-                    "   fill-color: #28B463;" +
-                    "   size: 2px;" +
-                    "}" +
-                    "edge.seen {" +
-                    "   fill-color: #D68910;" +
-                    "   size: 2px;" +
-                    "}";
-
     /**
      * This method is used to draw the initial tree of nodes and edges which
      * make up the graph.
@@ -65,7 +38,7 @@ public class GraphWindow {
         int z = 0;
 
         visualisedGraph = new MultiGraph("Graph");
-        visualisedGraph.setAttribute("ui.stylesheet", styleSheet);
+        visualisedGraph.setAttribute("ui.stylesheet", "url('GraphWindow.css')");
 
         determineLevels();
 
@@ -86,14 +59,13 @@ public class GraphWindow {
                 }
             }
         }
-//        visualisedGraph.display(false);
     }
 
     /**
      * This method is called whenever the current schedule is updated to handle
      * the redrawing of the highlighted visualisation.
      */
-    public ViewPanel drawHighlighting(ByteState currentState) {
+    public void drawHighlighting(ByteState currentState) {
         previousNodes = new HashSet<>(currentNodes);
         previousEdges = new HashSet<>(currentEdges);
         currentNodes = new HashSet<>();
@@ -115,19 +87,26 @@ public class GraphWindow {
 
         for (String s : previousNodes) {
             if (!currentNodes.contains(s)) {
-                visualisedGraph.getNode(s).changeAttribute("ui.class", "seen");
+                visualisedGraph.getNode(s).setAttribute("ui.class", "seen");
             }
         }
 
         for (String s : previousEdges) {
             if (!currentEdges.contains(s)) {
-                visualisedGraph.getEdge(s).changeAttribute("ui.class", "seen");
+                visualisedGraph.getEdge(s).setAttribute("ui.class", "seen");
             }
         }
+    }
 
-        Viewer viewer = new Viewer(visualisedGraph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
-        return viewer.addDefaultView(false);
-
+    /**
+     * This method is used to return the view panel which contains the graph
+     * object.
+     *
+     * @return fxViewPanel containing graph
+     */
+    public FxViewPanel getViewPanel() {
+        FxViewer fxViewer = new FxViewer(visualisedGraph, FxViewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        return (FxViewPanel) fxViewer.addDefaultView(false);
     }
 
     /**
