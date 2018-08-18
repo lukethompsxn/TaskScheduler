@@ -25,6 +25,9 @@ public class ProcessorWindow {
     private Map<Processor, Map<Node, Integer>> scheduleTimes;
 
     private Color color;
+    private static final String COLOR = "40ABB4";
+    private static final String FILL_COLOR = "FBFCFC";
+    private static final String STROKE_COLOR = "303038";
     private Font font;
 
     private final int PROCESSORS;
@@ -37,16 +40,16 @@ public class ProcessorWindow {
         this.state = state;
         scheduleTimes = new HashMap<>();
 
-        this.color = Color.web("40ABB4");
+        this.color = Color.web(COLOR);
 
         PROCESSORS = manager.getProcessors().size();
         WIDTH = width / PROCESSORS;
         HEIGHT = height;
-        try {
-            font = Font.loadFont(new FileInputStream(new File("res/fonts/OpenSans-Light.ttf")), 12);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            font = Font.loadFont(new FileInputStream(new File("/res/fonts/OpenSans-Light.ttf")), 12);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
         buildVisual();
 
@@ -77,7 +80,11 @@ public class ProcessorWindow {
      */
     public void draw(GraphicsContext gc) {
         int yOffset = 30;
-        gc.setFont(font);
+
+        if (font != null) {
+            gc.setFont(font);
+        }
+
 
         //Dynamically change scale if too high, default scale = 5
         int scale = 15;
@@ -105,8 +112,8 @@ public class ProcessorWindow {
                 getBound(text, gc.getFont());
             }
 
-            gc.setFill(Color.web("#FBFCFC"));
-            gc.setStroke(Color.web("#303038"));
+            gc.setFill(Color.web(FILL_COLOR));
+            gc.setStroke(Color.web(STROKE_COLOR));
             gc.strokeLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
             gc.fillText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2 + 4);
         }

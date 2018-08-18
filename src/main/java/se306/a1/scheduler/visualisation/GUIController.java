@@ -90,7 +90,6 @@ public class GUIController implements Initializable {
      */
     public void update(GraphWindow graphWindow, ByteState currentState, ByteStateManager manager, ByteState state,
                        Color color, int width, int height, HashMap<String, String> stats) {
-
         new ProcessorWindow(manager,state,color,width,height).draw(gc);
         updateStats(stats);
         graphWindow.drawHighlighting(currentState);
