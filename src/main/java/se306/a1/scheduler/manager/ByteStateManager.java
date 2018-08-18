@@ -197,12 +197,10 @@ public class ByteStateManager {
         final Visualiser visualiser = new Visualiser(this, graph);
 
         Runnable updateSchedule = () -> {
-            if (latestState != null) {
+            if (!hasOptimal()) {
                 visualiser.updateCurrentState(latestState);
-            }
-
-            if (latestState.getFreeNodes(this).isEmpty()) {
-                visualiser.updateCurrentState(latestState);
+            } else {
+                visualiser.updateCurrentState(getOptimal());
                 task.cancel(true);
             }
         };
