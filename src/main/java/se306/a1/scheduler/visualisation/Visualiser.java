@@ -1,19 +1,11 @@
 package se306.a1.scheduler.visualisation;
 
 import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -31,8 +23,8 @@ public class Visualiser {
     private GraphWindow graphWindow;
     private static GUIController controller;
 
-    private final int WIDTH;
-    private final int HEIGHT = 666;
+    private final int WIDTH = 875;
+    private final int HEIGHT = 637;
 
     private Random rand = new Random();
     private Color color = getRandomColor();
@@ -52,7 +44,6 @@ public class Visualiser {
         this.graphWindow = new GraphWindow(graph);
 
         startTime = Instant.now();
-        WIDTH = 868;
 
         Platform.runLater(() -> controller.setup(graphWindow));
     }
@@ -72,7 +63,6 @@ public class Visualiser {
         });
     }
 
-    // TODO get colors working @joel
     /**
      * This method returns a random colour where its RGB values are all between
      * 0.5 and 1, i.e. 'lighter/brighter' colours.

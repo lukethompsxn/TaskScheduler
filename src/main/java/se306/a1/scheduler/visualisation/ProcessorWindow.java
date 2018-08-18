@@ -14,13 +14,14 @@ import se306.a1.scheduler.manager.ByteStateManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
+/**
+ * This class allows for the Processors and their corresponding tasks to be displayed to the GUI.
+ */
 public class ProcessorWindow {
     private ByteStateManager manager;
     private ByteState state;
     private Map<Processor, Map<Node, Integer>> scheduleTimes;
-    private Random rand = new Random();
 
     private Color color;
 
@@ -29,7 +30,7 @@ public class ProcessorWindow {
     private final int HEIGHT;
     private Bounds bounds;
 
-    ProcessorWindow(ByteStateManager manager, ByteState state, Color color, int width, int height) {
+    public ProcessorWindow(ByteStateManager manager, ByteState state, Color color, int width, int height) {
         this.manager = manager;
         this.state = state;
         scheduleTimes = new HashMap<>();
@@ -44,6 +45,10 @@ public class ProcessorWindow {
 
     }
 
+    /**
+     * This method builds up the HashMap scheduledTimes in order to have the required processor and task information
+     * available to be able to more easily display them.
+     */
     private void buildVisual() {
         Map<Node, Integer> startTimes = state.getStartTimes();
         Map<Node, Processor> processors = state.getProcessors();
@@ -57,7 +62,12 @@ public class ProcessorWindow {
         }
     }
 
-
+    /**
+     * This method takes a GraphicContext object and uses this in order to print the processors aspect
+     * of the GUI. This is done by taking the number of processors and their assigned tasks and dynamically
+     * calculating their positions to be displayed.
+     * @param gc a GraphicContext object used to paint processors tab in GUI
+     */
     public void draw(GraphicsContext gc) {
         int yOffset = 30;
 
@@ -67,74 +77,74 @@ public class ProcessorWindow {
             scale = HEIGHT / state.getLength();
         }
 
-        //Graphics2D g2d = (Graphics2D) gc;
-        //FontMetrics fm = Toolkit.getToolkit().getFontLoader().getFontMetrics(gc.getFont());
-
         //Clears panel
-//        g.clearRect(0, 0, getWidth(), getHeight());
         gc.clearRect(0, 0, 1080, 720);
 
+        // Draws each processor
         for (Processor processor : manager.getProcessors()) {
             int numProc = Integer.parseInt(processor.getName());
             //x-shift based on which processor it is
             int xPos = numProc * WIDTH;
 
-            String text = "Processor " + numProc;
-            //Rectangle2D rect = new Rectangle2D(1,1,)
-            reportSize(text, gc.getFont());
+            String text;
+
+            // If more 11 processors shortens the processor name
+            if (manager.getProcessors().size() > 11) {
+                text = "Pro " + numProc;
+                getBound(text, gc.getFont());
+            } else {
+                text = "Processor " + numProc;
+                getBound(text, gc.getFont());
+            }
 
             gc.strokeLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
-            gc.strokeText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2);
+            gc.strokeText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2 + 4);
         }
 
-        //Draw each processor
+        // Draws each scheduled task to its corresponding processor
         for (Processor processor : scheduleTimes.keySet()) {
 
             int numProc = Integer.parseInt(processor.getName());
+
             //x-shift based on which processor it is
             int xPos = numProc * WIDTH;
 
-            String text = "Processor " + numProc;
-            //Rectangle2D rect = new Rectangle2D(1,1,)
-            reportSize(text, gc.getFont());
-
-            //Processor name/number & line separator
-//            g.drawLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
-//            g.drawString(text, xPos + WIDTH / 2 - (int) (rect.getWidth() / 2), yOffset / 2);
-//            gc.strokeLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
-//            gc.strokeText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2);
-
-
-            //Draws each scheduled task
             for (Map.Entry<Node, Integer> entry : scheduleTimes.get(processor).entrySet()) {
                 Node node = entry.getKey();
                 int startTime = entry.getValue();
 
-//                g.setColor(getRandomColor(manager.indexOf(node)));
-//                g.fillRect(xPos,
-//                        yOffset + startTime * scale,
-//                        WIDTH,
-//                        node.getCost() * scale);
+                // Select a color for the task to be drawn
                 gc.setFill(getRandomColor(manager.indexOf(node), color));
+
+                // Draws task
                 gc.fillRect(xPos,
                         yOffset + startTime * scale,
                         WIDTH,
                         node.getCost() * scale);
 
-//                g.setColor(Color.black);
-//                rect = fm.getStringBounds(node.getLabel(), g2d);
                 gc.setFill(Color.BLACK);
 
-//                g.drawString(node.getLabel(),
-//                        xPos + WIDTH / 2 - (int) (rect.getWidth() / 2),
-//                        yOffset + startTime * scale + node.getCost() * scale / 2 + (int) rect.getHeight() / 2);
+                int xPosProcessorName;
+                if (manager.getProcessors().size() > 11) {
+                    xPosProcessorName = xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2) + 9;
+                } else {
+                    xPosProcessorName = xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2) + 26;
+                }
+
+                // Draws task name
                 gc.strokeText(node.getLabel(),
-                        xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2),
+                        xPosProcessorName,
                         yOffset + startTime * scale + node.getCost() * scale / 2 + (int) bounds.getHeight() / 2);
             }
         }
     }
 
+    /**
+     * This method
+     * @param val the index value of a node
+     * @param color the base color
+     * @return the color to display the current task
+     */
     private static Color getRandomColor(int val, Color color) {
         //Minimum of % 8 / 12 for largest color diff
         double r = color.getRed() * (1 - val % 8 / 16f);
@@ -144,17 +154,20 @@ public class ProcessorWindow {
         return Color.color(r, g, b);
     }
 
-    public void reportSize(String s, Font myFont) {
-        Text text = new Text(s);
-        text.setFont(myFont);
+    /**
+     * This method calculates the bounding area of a line of text, i.e if the string was in a box it would locate the
+     * positions of its four corners.
+     * @param string the line of text which its bounds are required
+     * @param font the font of the input text
+     */
+    private void getBound(String string, Font font) {
+        Text text = new Text(string);
+        text.setFont(font);
         Bounds tb = text.getBoundsInLocal();
-        Rectangle stencil = new Rectangle(
-                tb.getMinX(), tb.getMinY(), tb.getWidth(), tb.getHeight()
-        );
+        Rectangle stencil = new Rectangle(tb.getMinX(), tb.getMinY(), tb.getWidth(), tb.getHeight());
 
         Shape intersection = Shape.intersect(text, stencil);
 
-        Bounds ib = intersection.getBoundsInLocal();
-        bounds = ib;
+        bounds = intersection.getBoundsInLocal();
     }
 }
