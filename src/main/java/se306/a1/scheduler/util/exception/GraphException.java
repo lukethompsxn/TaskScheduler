@@ -6,5 +6,7 @@ package se306.a1.scheduler.util.exception;
  * @author Luke Thompson
  */
 public class GraphException extends Exception {
-    public GraphException(String e) { super(e); }
+    public GraphException(String e) {
+        super(e);
+    }
 }

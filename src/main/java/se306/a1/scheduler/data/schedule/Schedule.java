@@ -55,7 +55,7 @@ public class Schedule {
      * @param processor the processor which the node (task) is scheduled on
      * @param startTime the starting time of the task to be added to the processor
      */
-    public void addScheduledTask(Node node, Processor processor, int startTime) throws ScheduleException {
+    public void addScheduledTask(Node node, Processor processor, int startTime) {
         scheduledTasks.put(node, processor);
         processor.schedule(node, startTime);
 
@@ -118,17 +118,6 @@ public class Schedule {
      */
     public Collection<Node> getTasks(Processor p) {
         return p.getScheduledTasks();
-    }
-
-    /**
-     * This method returns a boolean based on whether the task passed in has
-     * already been scheduled on a processor.
-     *
-     * @param node the node which is being checked for scheduling status
-     * @return a boolean which is true if node has been scheduled, otherwise false
-     */
-    public boolean isScheduled(Node node) {
-        return scheduledTasks.containsKey(node);
     }
 
     /**

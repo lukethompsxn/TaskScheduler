@@ -141,7 +141,6 @@ public class ByteState implements Comparable<ByteState> {
                 newState.setFree(childIndex, true);
         }
 
-        // TODO: figure out a way to speed up the DRT calculation
         newState.cost = Math.max(newState.cost, newState.calculateDRT(newState.getFreeNodes(manager), graph, manager));
 
         return newState;

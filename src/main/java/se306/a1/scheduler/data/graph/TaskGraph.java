@@ -83,14 +83,6 @@ public class TaskGraph implements Graph {
     }
 
     @Override
-    public boolean containsEdge(Node parent, Node child) {
-        if (edgeCosts.get(parent).get(child) == null) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public Integer getBottomLevel(Node node) {
         return bottomLevels.get(node);
     }

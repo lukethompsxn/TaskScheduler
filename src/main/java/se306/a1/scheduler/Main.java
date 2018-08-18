@@ -13,7 +13,7 @@ import se306.a1.scheduler.util.exception.GraphException;
 import se306.a1.scheduler.util.exception.ScheduleException;
 import se306.a1.scheduler.util.parse.CLIParser;
 import se306.a1.scheduler.util.parse.GraphParser;
-import se306.a1.scheduler.visualisation.GUILauncher;
+import se306.a1.scheduler.visualisation.controller.GUILauncher;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,19 +21,17 @@ import java.io.IOException;
 
 public class Main {
 
-    private static String[] _args;
-    private static InputConfig _config;
+    private static InputConfig config;
     private static Logger logger = LogManager.getLogger(Main.class.getSimpleName());
 
     public static void main(String[] args) {
         try {
-            _args = args;
-            _config = CLIParser.getCLIParserInst().parseCLI(_args);
+            config = CLIParser.getCLIParserInst().parseCLI(args);
 
-            logger.info(_config.inputPath);
-            logger.info(_config.outputPath);
+            logger.info(config.inputPath);
+            logger.info(config.outputPath);
 
-            if (_config.isVisualised) {
+            if (config.isVisualised) {
                 Application.launch(GUILauncher.class);
             } else {
                 run();
@@ -47,17 +45,20 @@ public class Main {
 
     }
 
+    /**
+     * This method is used to execute the algorithm.
+     */
     public static void run() {
         try {
 
-            Graph graph = GraphParser.parse(_config.inputPath);
+            Graph graph = GraphParser.parse(config.inputPath);
             long s = System.nanoTime();
-            Schedule schedule = new AStarByteScheduler().run(graph,_config.processors, _config.cores, _config.isVisualised);
+            Schedule schedule = new AStarByteScheduler().run(graph,config.processors, config.cores, config.isVisualised);
             logger.info((System.nanoTime() - s) / 1000);
 
             logger.info("Length: " + schedule.getLength());
 
-            GraphParser.generateOutput(schedule, graph, _config.outputPath);
+            GraphParser.generateOutput(schedule, graph, config.outputPath);
         } catch (FileNotFoundException fe) {
             System.out.println("File not found");
             CLIParser.getCLIParserInst().printHelp();

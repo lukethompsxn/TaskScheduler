@@ -1,13 +1,17 @@
-package se306.a1.scheduler.visualisation;
+package se306.a1.scheduler.visualisation.controller;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import se306.a1.scheduler.visualisation.Visualiser;
 
 import java.io.IOException;
 
+/**
+ * This class used to launch the JavaFX GUI and set the controller class.
+ */
 public class GUILauncher extends Application {
 
     private Stage primaryStage;

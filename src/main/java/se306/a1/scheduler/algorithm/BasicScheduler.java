@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class is a basic implementation of a scheduler, and will produce an unoptimised schedule by greedily
- * assigning the tasks to the processors.
+ * This class is a basic implementation of a scheduler, and will produce an
+ * unoptimised schedule by greedily assigning the tasks to the processors.
  *
  * @author Rodger Gu, Zhi Qiao, Abhinav Behal, Luke Thompson
  */
@@ -57,6 +57,8 @@ public class BasicScheduler extends Scheduler {
     /**
      * This method is given a list of visible tasks and then computes
      * and schedules the cheapest possible task.
+     *
+     * @param nodes collection of visible tasks
      */
     private Node computeCheapest(Collection<Node> nodes) throws ScheduleException {
         Node cheapest = null;

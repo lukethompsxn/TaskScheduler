@@ -1,4 +1,4 @@
-package se306.a1.scheduler.visualisation;
+package se306.a1.scheduler.visualisation.view;
 
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,12 +12,12 @@ import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.manager.ByteStateManager;
 
-import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class allows for the Processors and their corresponding tasks to be displayed to the GUI.
+ * This class allows for the Processors and their corresponding tasks to be
+ * displayed to the GUI.
  */
 public class ProcessorWindow {
     private ByteStateManager manager;
@@ -28,14 +28,13 @@ public class ProcessorWindow {
     private static final String COLOR = "40ABB4";
     private static final String FILL_COLOR = "FBFCFC";
     private static final String STROKE_COLOR = "303038";
-    private Font font;
 
     private final int PROCESSORS;
     private final int WIDTH;
     private final int HEIGHT;
     private Bounds bounds;
 
-    public ProcessorWindow(ByteStateManager manager, ByteState state, Color color, int width, int height) {
+    public ProcessorWindow(ByteStateManager manager, ByteState state, int width, int height) {
         this.manager = manager;
         this.state = state;
         scheduleTimes = new HashMap<>();
@@ -45,11 +44,6 @@ public class ProcessorWindow {
         PROCESSORS = manager.getProcessors().size();
         WIDTH = width / PROCESSORS;
         HEIGHT = height;
-//        try {
-//            font = Font.loadFont(new FileInputStream(new File("/res/fonts/OpenSans-Light.ttf")), 12);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
 
         buildVisual();
 
@@ -76,36 +70,27 @@ public class ProcessorWindow {
      * This method takes a GraphicContext object and uses this in order to print the processors aspect
      * of the GUI. This is done by taking the number of processors and their assigned tasks and dynamically
      * calculating their positions to be displayed.
+     *
      * @param gc a GraphicContext object used to paint processors tab in GUI
      */
     public void draw(GraphicsContext gc) {
         int yOffset = 30;
 
-        if (font != null) {
-            gc.setFont(font);
-        }
-
-
-        //Dynamically change scale if too high, default scale = 5
         int scale = 15;
         if (state.getLength() * scale > HEIGHT) {
             scale = HEIGHT / state.getLength();
         }
 
-        //Clears panel
         gc.clearRect(0, 0, 1080, 720);
 
-        // Draws each processor
         for (Processor processor : manager.getProcessors()) {
             int numProc = Integer.parseInt(processor.getName());
-            //x-shift based on which processor it is
             int xPos = numProc * WIDTH;
 
             String text;
 
-            // If more 11 processors shortens the processor name
             if (manager.getProcessors().size() > 11) {
-                text = "Pro " + numProc;
+                text = "P" + numProc;
                 getBound(text, gc.getFont());
             } else {
                 text = "Processor " + numProc;
@@ -118,22 +103,18 @@ public class ProcessorWindow {
             gc.fillText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2 + 4);
         }
 
-        // Draws each scheduled task to its corresponding processor
         for (Processor processor : scheduleTimes.keySet()) {
 
             int numProc = Integer.parseInt(processor.getName());
 
-            //x-shift based on which processor it is
             int xPos = numProc * WIDTH;
 
             for (Map.Entry<Node, Integer> entry : scheduleTimes.get(processor).entrySet()) {
                 Node node = entry.getKey();
                 int startTime = entry.getValue();
 
-                // Select a color for the task to be drawn
                 gc.setFill(getRandomColor(manager.indexOf(node), color));
 
-                // Draws task
                 gc.fillRect(xPos,
                         yOffset + startTime * scale,
                         WIDTH,
@@ -148,7 +129,6 @@ public class ProcessorWindow {
                     xPosProcessorName = xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2) + 26;
                 }
 
-                // Draws task name
                 gc.fillText(node.getLabel(),
                         xPosProcessorName,
                         yOffset + startTime * scale + node.getCost() * scale / 2 + (int) bounds.getHeight() / 2);
@@ -158,7 +138,8 @@ public class ProcessorWindow {
 
     /**
      * This method
-     * @param val the index value of a node
+     *
+     * @param val   the index value of a node
      * @param color the base color
      * @return the color to display the current task
      */
@@ -174,8 +155,9 @@ public class ProcessorWindow {
     /**
      * This method calculates the bounding area of a line of text, i.e if the string was in a box it would locate the
      * positions of its four corners.
+     *
      * @param string the line of text which its bounds are required
-     * @param font the font of the input text
+     * @param font   the font of the input text
      */
     private void getBound(String string, Font font) {
         Text text = new Text(string);

@@ -65,15 +65,6 @@ public interface Graph {
      */
     Integer getCost(Node parent, Node child);
 
-    /**
-     * Determines whether the graph contains an edge between a given
-     * parent and child.
-     *
-     * @param parent parent node in the link
-     * @param child  child node in the link
-     * @return
-     */
-    boolean containsEdge(Node parent, Node child);
 
     /**
      * Gets the bottom level of the given node, which is the cost of the
@@ -84,5 +75,10 @@ public interface Graph {
      */
     Integer getBottomLevel(Node node);
 
+    /**
+     * Gets the number of edges which are contained in the graph.
+     *
+     * @return number of edges in graph as integer
+     */
     Integer getEdgeCount();
 }

@@ -1,4 +1,4 @@
-package se306.a1.scheduler.visualisation;
+package se306.a1.scheduler.visualisation.view;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -11,6 +11,11 @@ import se306.a1.scheduler.manager.ByteStateManager;
 
 import java.util.*;
 
+/**
+ * This class represents the graph tree hierarchy visualisation. It handles the
+ * interactions with GraphStream library and carries out the creation of the
+ * visualised graph and highlighting.
+ */
 public class GraphWindow {
     private se306.a1.scheduler.data.graph.Graph graphData;
     private Graph visualisedGraph;

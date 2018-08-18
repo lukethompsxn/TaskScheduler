@@ -7,5 +7,7 @@ package se306.a1.scheduler.util.exception;
  * @author Luke Thompson
  */
 public class ScheduleException extends Exception {
-    public ScheduleException(String e) { super(e); }
+    public ScheduleException(String e) {
+        super(e);
+    }
 }

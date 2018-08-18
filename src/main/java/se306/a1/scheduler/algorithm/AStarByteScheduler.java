@@ -12,45 +12,55 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This is the A* implementation of the scheduler. It produces an optimal schedule
+ * and minimises the seen states using a cost function and pruning.
+ */
 public class AStarByteScheduler extends Scheduler {
 
-	@Override
-	protected Schedule createSchedule() throws ScheduleException {
-		ByteStateManager stateManager = new ByteStateManager(graph, processors, isVisualised);
-		// Adds a new state for each entry node on a processor
-		for (Node node : graph.getEntryNodes()) {
-			ByteState s = new ByteState(stateManager, graph);
-			stateManager.queue(s.scheduleTask(node, stateManager.getProcessor(0), graph, stateManager));
-		}
+    @Override
+    protected Schedule createSchedule() throws ScheduleException {
+        ByteStateManager stateManager = new ByteStateManager(graph, processors, isVisualised, cores);
+        // Adds a new state for each entry node on a processor
+        for (Node node : graph.getEntryNodes()) {
+            ByteState s = new ByteState(stateManager, graph);
+            stateManager.queue(s.scheduleTask(node, stateManager.getProcessor(0), graph, stateManager));
+        }
 
-		ExecutorService executor = Executors.newFixedThreadPool(cores);
-		for (int i = 0; i < cores; ++i) {
-			executor.execute(() -> runSequential(stateManager));
-		}
-		executor.shutdown();
-		try {
-			// wait for all threads to finish
-			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return stateManager.getOptimal().toSchedule(graph, stateManager);
-	}
+        ExecutorService executor = Executors.newFixedThreadPool(cores);
+        for (int i = 0; i < cores; ++i) {
+            executor.execute(() -> runSequential(stateManager));
+        }
+        executor.shutdown();
+        try {
+            // Wait for all threads to finish
+            executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return stateManager.getOptimal().toSchedule(graph, stateManager);
+    }
 
-	private void runSequential(ByteStateManager manager) {
-		while (!manager.hasOptimal() && !Thread.currentThread().isInterrupted()) {
-			ByteState current = manager.dequeue();
-			if (current == null)
-				continue;
-			current.order(graph, manager);
-			List<Node> freeNodes = current.getFreeNodes(manager);
+    /**
+     * This method is the actual A* algorithm which uses the ByteStateManager to
+     * manage the different generated schedules.
+     *
+     * @param manager
+     */
+    private void runSequential(ByteStateManager manager) {
+        while (!manager.hasOptimal() && !Thread.currentThread().isInterrupted()) {
+            ByteState current = manager.dequeue();
+            if (current == null)
+                continue;
+            current.order(graph, manager);
+            List<Node> freeNodes = current.getFreeNodes(manager);
 
-			for (Node node : freeNodes) {
-				for (Processor processor : manager.getProcessors()) {
-					ByteState next = current.scheduleTask(node, processor, graph, manager);
-					manager.queue(next);
-				}
-			}
-		}
-	}
+            for (Node node : freeNodes) {
+                for (Processor processor : manager.getProcessors()) {
+                    ByteState next = current.scheduleTask(node, processor, graph, manager);
+                    manager.queue(next);
+                }
+            }
+        }
+    }
 }

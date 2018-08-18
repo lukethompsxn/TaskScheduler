@@ -1,18 +1,18 @@
 package se306.a1.scheduler.visualisation;
 
 import javafx.application.Platform;
-import javafx.scene.paint.Color;
 import se306.a1.scheduler.data.graph.Graph;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.manager.ByteStateManager;
+import se306.a1.scheduler.visualisation.controller.GUIController;
+import se306.a1.scheduler.visualisation.view.GraphWindow;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.Random;
 
 /**
- * This class is used to manage the visualisation interaction with the algorithm
+ * This class is used to manage the visualisation interaction with the algorithm.
  */
 public class Visualiser {
     private ByteStateManager manager;
@@ -25,9 +25,6 @@ public class Visualiser {
 
     private final int WIDTH = 875;
     private final int HEIGHT = 637;
-
-    private Random rand = new Random();
-    private Color color = getRandomColor();
 
     private Instant startTime;
 
@@ -59,23 +56,16 @@ public class Visualiser {
     public void updateCurrentState(ByteState state) {
         this.currentState = state;
         Platform.runLater(() -> {
-            controller.update(graphWindow, currentState, manager, currentState, color, WIDTH, HEIGHT, prepareStats());
+            controller.update(graphWindow, currentState, manager, currentState, WIDTH, HEIGHT, prepareStats());
         });
     }
 
     /**
-     * This method returns a random colour where its RGB values are all between
-     * 0.5 and 1, i.e. 'lighter/brighter' colours.
+     * This method is used tp prepase the stats hashmap based on information from
+     * the graph and the manager.
      *
-     * @return Color object with randomly initialised RGB values
+     * @return hashmap representing the stats at the current state
      */
-    private Color getRandomColor() {
-        double r = rand.nextFloat() / 2f + 0.5f;
-        double g = rand.nextFloat() / 2f + 0.5f;
-        double b = rand.nextFloat() / 2f + 0.5f;
-        return new Color(r, g, b, 1);
-    }
-
     private HashMap<String, String> prepareStats() {
         stats = new HashMap<>();
         stats.put("NODES", graph.getAllNodes().size() + "");
@@ -84,10 +74,16 @@ public class Visualiser {
         stats.put("THREADS", manager.getNumCores() + "");
         stats.put("QUEUE LENGTH", manager.getQueueLength() + "");
         stats.put("STATES SEEN", manager.getNumStatesSeen() + "");
-        stats.put("RUN TIME", Duration.between(startTime, Instant.now()).toString().replaceAll("PT", "").replaceAll("S","").replaceAll("M", ":") + "s");
+        stats.put("RUN TIME", Duration.between(startTime, Instant.now()).toString().replaceAll("PT", "").replaceAll("S", "").replaceAll("M", ":") + "s");
         return stats;
     }
 
+    /**
+     * This method is used to set the controller in this Visualiser from the
+     * GUILauncher.
+     *
+     * @param ctrlr the controller for the visualisation
+     */
     public static void setController(GUIController ctrlr) {
         controller = ctrlr;
     }

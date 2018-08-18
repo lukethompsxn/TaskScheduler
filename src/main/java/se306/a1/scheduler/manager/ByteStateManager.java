@@ -34,9 +34,9 @@ public class ByteStateManager {
 
     private ScheduledFuture task;
     private ByteState latestState;
-    private int upperBound = Integer.MAX_VALUE;
+    private int upperBound;
 
-    public ByteStateManager(Graph graph, int numProcessors, boolean isVisualised) throws ScheduleException {
+    public ByteStateManager(Graph graph, int numProcessors, boolean isVisualised, int numCores) throws ScheduleException {
         upperBound = new BasicScheduler().run(graph, numProcessors, 1, false).getLength();
 
         states = new PriorityQueue<>();
@@ -46,7 +46,7 @@ public class ByteStateManager {
         processors = new ArrayList<>();
         processorIndices = new HashMap<>();
         this.graph = graph;
-        this.numCores = 4;
+        this.numCores = numCores;
 
         for (int i = 0; i < nodes.size(); ++i) {
             nodeIndices.put(nodes.get(i), i);
@@ -62,11 +62,21 @@ public class ByteStateManager {
         }
     }
 
+    /**
+     * This method is used to determine whether the queue has an optimal schedule.
+     *
+     * @return boolean; true = has optimal, false otherwise
+     */
     public synchronized boolean hasOptimal() {
         ByteState top = states.peek();
         return top != null && top.getFreeNodes(this).size() == 0;
     }
 
+    /**
+     * Gets the optimal schedule.
+     *
+     * @return the byte state which is the optimal schedule
+     */
     public synchronized ByteState getOptimal() {
         return states.peek();
     }
@@ -206,7 +216,7 @@ public class ByteStateManager {
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        task = executor.scheduleAtFixedRate(updateSchedule, 25, 100, TimeUnit.MILLISECONDS);
+        task = executor.scheduleAtFixedRate(updateSchedule, 0, 100, TimeUnit.MILLISECONDS);
     }
 }
 
