@@ -153,8 +153,8 @@ public class GraphWindow {
             for (Node parent : graphData.getParents(node)) {
 
                 if (nodeLevels.containsKey(parent)) {
-                    if (nodeLevels.get(parent) < nodeLevels.get(node) + 1) {
-                        nodeLevels.put(parent, nodeLevels.get(node) + 1);
+                    if (nodeLevels.get(parent) < nodeLevels.get(node) + 2) {
+                        nodeLevels.put(parent, nodeLevels.get(node) + 2);
                         queue.add(parent);
 
                         if (nodeLevels.get(parent) > maxLevel) {
@@ -162,7 +162,7 @@ public class GraphWindow {
                         }
                     }
                 } else {
-                    nodeLevels.put(parent, nodeLevels.get(node) + 1);
+                    nodeLevels.put(parent, nodeLevels.get(node) + 2);
                     queue.add(parent);
 
                     if (nodeLevels.get(parent) > maxLevel) {
@@ -208,6 +208,6 @@ public class GraphWindow {
             levels.put(level, num - 2);
             num = num - 1;
         }
-        return (0 - num) / 2;
+        return (0 - num);
     }
 }

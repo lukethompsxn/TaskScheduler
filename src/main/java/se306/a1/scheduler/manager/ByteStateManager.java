@@ -208,7 +208,7 @@ public class ByteStateManager {
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        task = executor.scheduleAtFixedRate(updateSchedule, 25, 50, TimeUnit.MILLISECONDS);
+        task = executor.scheduleAtFixedRate(updateSchedule, 25, 100, TimeUnit.MILLISECONDS);
     }
 }
 

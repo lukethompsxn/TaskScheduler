@@ -3,6 +3,7 @@ package se306.a1.scheduler.algorithm;
 import se306.a1.scheduler.data.graph.Node;
 import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
 import se306.a1.scheduler.manager.ByteStateManager;
 import se306.a1.scheduler.util.exception.ScheduleException;
 
@@ -12,11 +13,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class AStarByteScheduler extends Scheduler {
-	ByteStateManager stateManager;
-	
+
 	@Override
-	protected void createSchedule() throws ScheduleException {
-		stateManager = new ByteStateManager(graph, processors, isVisualised);
+	protected Schedule createSchedule() throws ScheduleException {
+		ByteStateManager stateManager = new ByteStateManager(graph, processors, isVisualised);
 		// Adds a new state for each entry node on a processor
 		for (Node node : graph.getEntryNodes()) {
 			ByteState s = new ByteState(stateManager, graph);
@@ -34,8 +34,7 @@ public class AStarByteScheduler extends Scheduler {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		schedule = stateManager.getOptimal().toSchedule(graph, stateManager);
+		return stateManager.getOptimal().toSchedule(graph, stateManager);
 	}
 
 	private void runSequential(ByteStateManager manager) {
@@ -43,12 +42,12 @@ public class AStarByteScheduler extends Scheduler {
 			ByteState current = manager.dequeue();
 			if (current == null)
 				continue;
-			current.order(graph, stateManager);
-			List<Node> freeNodes = current.getFreeNodes(stateManager);
+			current.order(graph, manager);
+			List<Node> freeNodes = current.getFreeNodes(manager);
 
 			for (Node node : freeNodes) {
 				for (Processor processor : manager.getProcessors()) {
-					ByteState next = current.scheduleTask(node, processor, graph, stateManager);
+					ByteState next = current.scheduleTask(node, processor, graph, manager);
 					manager.queue(next);
 				}
 			}
