@@ -64,7 +64,7 @@ public class GUIController implements Initializable {
         Task task = new Task<Void>() {
             @Override
             public Void call() {
-                Main.runVisualise();
+                Main.run();
                 return null;
             }
         };

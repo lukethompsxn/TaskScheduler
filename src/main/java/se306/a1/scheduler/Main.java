@@ -37,7 +37,7 @@ public class Main {
             if (_config.isVisualised) {
                 Application.launch(GUILauncher.class);
             } else {
-                runVisualise();
+                run();
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class Main {
 
     }
 
-    public static void runVisualise() {
+    public static void run() {
         try {
 
             Graph graph = GraphParser.parse(_config.inputPath);

@@ -84,7 +84,7 @@ public class Visualiser {
         stats.put("THREADS", manager.getNumCores() + "");
         stats.put("QUEUE LENGTH", manager.getQueueLength() + "");
         stats.put("STATES SEEN", manager.getNumStatesSeen() + "");
-        stats.put("RUN TIME", Duration.between(startTime, Instant.now()).toString().replaceAll("PT", "").replaceAll("S","") + "s");
+        stats.put("RUN TIME", Duration.between(startTime, Instant.now()).toString().replaceAll("PT", "").replaceAll("S","").replaceAll("M", ":") + "s");
         return stats;
     }
 

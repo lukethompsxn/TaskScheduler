@@ -31,7 +31,7 @@ public class GUILauncher extends Application {
             Scene scene = new Scene(rootPane, 1080, 720);
             primaryStage.setScene(scene);
 
-            primaryStage.setOnCloseRequest(event -> System.exit(0)); // TODO find a better way to exit
+            primaryStage.setOnCloseRequest(event -> System.exit(0));
             primaryStage.show();
 
         } catch (IOException e) {

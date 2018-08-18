@@ -1,7 +1,9 @@
 * {
-    -fx-primary : #2A2E37;
+    -fx-primary : #2D2D35;
+    /*-fx-primary : #2A2E37;*/
     -fx-secondary : #FBFCFC;
     -fx-primarytext : #FBFCFC;
+    -fx-labeltext: #7FE7FF;
 }
 
 .tab {
@@ -27,7 +29,6 @@
     -fx-font-size: 12pt;
 }
 
-
 .text-field
 {
     -fx-text-fill: -fx-primarytext;
@@ -49,8 +50,15 @@
     -fx-font-size: 10pt;
 }
 
-.label {
+.data {
+    -fx-text-fill: -fx-labeltext;
+    -fx-effect: dropshadow(three-pass-box, -fx-labeltext, 2, 0, 0, 0);
+
+}
+
+.datalabel {
     -fx-text-fill: -fx-secondary;
+
 }
 
 .tab-main{
@@ -68,6 +76,19 @@
     -fx-fill: -fx-secondary;
     -fx-font-size: 14pt;
     -fx-text-alignment: center;
+}
+
+#stats {
+    -fx-background-color: #303038;
+}
+
+.jfx-tab-pane .tab-selected-line
+{
+    -fx-border-color: #40ABB4;
+}
+
+.jfx-tab-pane .tab-header-area .jfx-rippler{
+    -jfx-rippler-fill: #40ABB4;
 }
 
 .jfx-layout-heading

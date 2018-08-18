@@ -12,6 +12,7 @@ import se306.a1.scheduler.data.schedule.ByteState;
 import se306.a1.scheduler.data.schedule.Processor;
 import se306.a1.scheduler.manager.ByteStateManager;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class ProcessorWindow {
     private Map<Processor, Map<Node, Integer>> scheduleTimes;
 
     private Color color;
+    private Font font;
 
     private final int PROCESSORS;
     private final int WIDTH;
@@ -35,11 +37,16 @@ public class ProcessorWindow {
         this.state = state;
         scheduleTimes = new HashMap<>();
 
-        this.color = color;
+        this.color = Color.web("40ABB4");
 
         PROCESSORS = manager.getProcessors().size();
         WIDTH = width / PROCESSORS;
         HEIGHT = height;
+        try {
+            font = Font.loadFont(new FileInputStream(new File("res/fonts/OpenSans-Light.ttf")), 12);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         buildVisual();
 
@@ -70,9 +77,10 @@ public class ProcessorWindow {
      */
     public void draw(GraphicsContext gc) {
         int yOffset = 30;
+        gc.setFont(font);
 
         //Dynamically change scale if too high, default scale = 5
-        int scale = 5;
+        int scale = 15;
         if (state.getLength() * scale > HEIGHT) {
             scale = HEIGHT / state.getLength();
         }
@@ -97,8 +105,10 @@ public class ProcessorWindow {
                 getBound(text, gc.getFont());
             }
 
+            gc.setFill(Color.web("#FBFCFC"));
+            gc.setStroke(Color.web("#303038"));
             gc.strokeLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
-            gc.strokeText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2 + 4);
+            gc.fillText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2 + 4);
         }
 
         // Draws each scheduled task to its corresponding processor
@@ -132,7 +142,7 @@ public class ProcessorWindow {
                 }
 
                 // Draws task name
-                gc.strokeText(node.getLabel(),
+                gc.fillText(node.getLabel(),
                         xPosProcessorName,
                         yOffset + startTime * scale + node.getCost() * scale / 2 + (int) bounds.getHeight() / 2);
             }
