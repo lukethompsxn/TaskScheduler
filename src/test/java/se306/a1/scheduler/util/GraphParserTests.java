@@ -4,6 +4,7 @@ import com.paypal.digraph.parser.GraphEdge;
 import com.paypal.digraph.parser.GraphNode;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import se306.a1.scheduler.algorithm.AStarByteScheduler;
 import se306.a1.scheduler.algorithm.BasicScheduler;
 import se306.a1.scheduler.data.graph.Edge;
 import se306.a1.scheduler.data.graph.Graph;
@@ -98,7 +99,7 @@ public class GraphParserTests {
         final String outputPath = "test-output.dot";
         for (String inputPath : answers.keySet()) {
             Graph g = GraphParser.parse(inputPath);
-            Schedule s = new BasicScheduler().run(g, 1, 2, false);
+            Schedule s = new AStarByteScheduler().run(g, 1, 2, false);
             GraphParser.generateOutput(s, g, outputPath);
             ParsedOutput parsedOutput = parseOutput(outputPath);
 
