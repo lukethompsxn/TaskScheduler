@@ -1,42 +1,33 @@
 package se306.a1.scheduler.algorithm;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import se306.a1.scheduler.data.*;
-import se306.a1.scheduler.util.ScheduleException;
+import se306.a1.scheduler.data.graph.Edge;
+import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.ScheduleException;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class is a basic implementation of a scheduler, and will produce an unoptimised schedule by greedily
- * assigning the tasks to the processors.
+ * This class is a basic implementation of a scheduler, and will produce an
+ * unoptimised schedule by greedily assigning the tasks to the processors.
  *
  * @author Rodger Gu, Zhi Qiao, Abhinav Behal, Luke Thompson
  */
-public class BasicScheduler implements Scheduler {
-
-    // Logger for runtime logging
-    private static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
+public class BasicScheduler extends Scheduler {
 
     private Schedule schedule;
-    private Graph graph;
-
-    @Override
-    public Schedule run(Graph graph, int numProcessors, int numCores) throws ScheduleException {
-        schedule = new Schedule(numProcessors);
-        this.graph = graph;
-
-        createSchedule();
-        return schedule;
-    }
 
     /**
      * This method traverses the graph and creates the schedule.
+     *
      * @throws ScheduleException if an error occurs when scheduling nodes
      */
-    private void createSchedule() throws ScheduleException {
+    @Override
+    protected Schedule createSchedule() throws ScheduleException {
+        schedule = new Schedule(processors);
         Set<Node> unscheduledNodes = new HashSet<>(graph.getEntryNodes());
         Set<Node> scheduledNodes = new HashSet<>();
         Node currentNode;
@@ -58,13 +49,16 @@ public class BasicScheduler implements Scheduler {
             logger.info("Scheduled:\t" + scheduledNodes);
             logger.info("Unscheduled:\t" + unscheduledNodes);
         }
+
         logger.info(schedule.getProcessors());
+        return schedule;
     }
 
     /**
      * This method is given a list of visible tasks and then computes
      * and schedules the cheapest possible task.
-     * @throws ScheduleException if an error occurs when scheduling nodes
+     *
+     * @param nodes collection of visible tasks
      */
     private Node computeCheapest(Collection<Node> nodes) throws ScheduleException {
         Node cheapest = null;

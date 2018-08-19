@@ -1,8 +1,10 @@
 package se306.a1.scheduler.algorithm;
 
-import se306.a1.scheduler.data.Graph;
-import se306.a1.scheduler.data.Schedule;
-import se306.a1.scheduler.util.ScheduleException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.ScheduleException;
 
 /**
  * This class represents an abstract scheduler.
@@ -11,20 +13,40 @@ import se306.a1.scheduler.util.ScheduleException;
  *
  * @author Luke Thompson
  */
-public interface Scheduler {
+public abstract class Scheduler {
+
+    // Logger for runtime logging
+    protected static Logger logger = LogManager.getLogger(BasicScheduler.class.getSimpleName());
+
+    protected Graph graph;
+    protected int processors;
+    protected int cores;
+    protected boolean isVisualised;
 
     /**
      * Initialises and executes the algorithm.
-     * This method will take config parameters and execute the corresponding
-     * algorithm implementation according to supplied parameters.
+     * This method will setup config parameters, manage parsing, then executes
+     * the corresponding algorithm implementation as parameters supplied.
+     * The hook method createSchedule is called before returning  the schedule.
      *
-     * @param graph         graph containing nodes (tasks)
+     * @param graph         graph containing tasks
      * @param numProcessors number of processors to be run on
-     * @param numCores      number of cores to be multi-threaded on (optional)
-     * @return the calculated schedule of nodes (tasks) on processors
-     * @throws ScheduleException if an error occurs when scheduling nodes
+     * @param numCores      number of cores to be run on (optional)
+     * @throws ScheduleException if there is a scheduling error
      */
-    Schedule run(Graph graph,
-                 int numProcessors,
-                 int numCores) throws ScheduleException;
+    public Schedule run(Graph graph, int numProcessors, int numCores, boolean isVisualised) throws ScheduleException {
+        this.graph = graph;
+        this.processors = numProcessors;
+        this.cores = numCores;
+        this.isVisualised = isVisualised;
+
+        return createSchedule();
+    }
+
+    /**
+     * Hook method to build the schedule which subclasses must implement.
+     *
+     * @throws ScheduleException if there is a scheduling error
+     */
+    protected abstract Schedule createSchedule() throws ScheduleException;
 }

@@ -11,7 +11,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -29,6 +28,7 @@ hs_err_pid*
 *.classpath
 .settings/
 *.project
+*.factorypath
 
 # Builds
 build/
@@ -53,3 +53,7 @@ gradle-app.setting
 
 # Other
 *-output.dot
+.example-input-graphs/
+/.apt_generated/
+
+scheduler.jar

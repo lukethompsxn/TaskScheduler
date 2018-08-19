@@ -2,11 +2,18 @@ package se306.a1.scheduler.util;
 
 import com.paypal.digraph.parser.GraphEdge;
 import com.paypal.digraph.parser.GraphNode;
-import javafx.util.Pair;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import se306.a1.scheduler.algorithm.AStarByteScheduler;
 import se306.a1.scheduler.algorithm.BasicScheduler;
-import se306.a1.scheduler.data.*;
+import se306.a1.scheduler.data.graph.Edge;
+import se306.a1.scheduler.data.graph.Graph;
+import se306.a1.scheduler.data.graph.Node;
+import se306.a1.scheduler.data.schedule.Processor;
+import se306.a1.scheduler.data.schedule.Schedule;
+import se306.a1.scheduler.util.exception.GraphException;
+import se306.a1.scheduler.util.exception.ScheduleException;
+import se306.a1.scheduler.util.parse.GraphParser;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,8 +56,8 @@ public class GraphParserTests {
     @Test
     public void testGraphParsing() throws IOException, GraphException {
         for (Map.Entry<String, Pair<Integer, Integer>> e : answers.entrySet()) {
-            int nodeCount = e.getValue().getKey();
-            int edgeCount = e.getValue().getValue();
+            int nodeCount = e.getValue().first();
+            int edgeCount = e.getValue().second();
 
             Graph g = GraphParser.parse(e.getKey());
             Set<Node> nodes = new HashSet<>();
@@ -92,7 +99,7 @@ public class GraphParserTests {
         final String outputPath = "test-output.dot";
         for (String inputPath : answers.keySet()) {
             Graph g = GraphParser.parse(inputPath);
-            Schedule s = new BasicScheduler().run(g, 1, 2);
+            Schedule s = new AStarByteScheduler().run(g, 1, 2, false);
             GraphParser.generateOutput(s, g, outputPath);
             ParsedOutput parsedOutput = parseOutput(outputPath);
 

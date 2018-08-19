@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" stylesheets="Visualiser.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="720.0" prefWidth="1080.0">
+         <children>
+            <JFXTabPane prefHeight="720.0" prefWidth="928.0">
+               <tabs>
+                <Tab fx:id="processorTab" text="Processor Allocation">
+                     <content>
+                        <AnchorPane fx:id="processorPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="979.0" />
+                     </content>
+                </Tab>
+                <Tab text="Graph Hierarchy">
+                     <content>
+                        <AnchorPane fx:id="graphPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="788.0">
+                           <children>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                </Tab>
+               </tabs>
+            </JFXTabPane>
+            <VBox prefHeight="720.0" prefWidth="165.0">
+               <children>
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="50.0" fitWidth="200.0" layoutX="49.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../res/misc/Vaporware_Transparent.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <Pane id="stats" prefHeight="720.0" prefWidth="200.0">
+                     <children>
+                        <GridPane id="gridpane" prefHeight="666.0" prefWidth="200.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label fx:id="edgesLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="data" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font name="Open Sans Light" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label styleClass="datalabel" text="Total Edges" GridPane.rowIndex="5" GridPane.valignment="TOP">
+                                 <font>
+                                    <Font name="Open Sans Light" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="nodesLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="data" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font name="Open Sans Light" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label styleClass="datalabel" text="Total Nodes" GridPane.rowIndex="4" GridPane.valignment="TOP">
+                                 <font>
+                                    <Font name="Open Sans Light" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="queueLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="data" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font name="Open Sans Light" size="30.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label styleClass="datalabel" text="Queue Length" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                 <font>
+                                    <Font name="Open Sans Light" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label styleClass="datalabel" text="Run Time" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                                 <font>
+                                    <Font name="Open Sans Light" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="timeLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="data" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font name="Open Sans Light" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label styleClass="datalabel" text="States Seen" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                 <font>
+                                    <Font name="Open Sans Light" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="statesLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="data" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font name="Open Sans Light" size="30.0" />
+                                 </font>
+                              </Label>
+                              <Label styleClass="datalabel" text="Threads" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="TOP">
+                                 <font>
+                                    <Font name="Open Sans Light" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="threadsLabel" alignment="CENTER" contentDisplay="CENTER" styleClass="data" text="0" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font name="Open Sans Light" size="30.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</Pane>
