@@ -82,9 +82,9 @@ public class Visualiser {
      * This method is used to set the controller in this Visualiser from the
      * GUILauncher.
      *
-     * @param ctrlr the controller for the visualisation
+     * @param controller the controller for the visualisation
      */
-    public static void setController(GUIController ctrlr) {
-        controller = ctrlr;
+    public static void setController(GUIController controller) {
+        Visualiser.controller = controller;
     }
 }

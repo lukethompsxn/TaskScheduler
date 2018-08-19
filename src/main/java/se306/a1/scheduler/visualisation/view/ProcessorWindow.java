@@ -1,6 +1,7 @@
 package se306.a1.scheduler.visualisation.view;
 
 import javafx.geometry.Bounds;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -19,19 +20,19 @@ import java.util.Map;
  * This class allows for the Processors and their corresponding tasks to be
  * displayed to the GUI.
  */
-public class ProcessorWindow {
+public class ProcessorWindow extends Canvas {
     private ByteStateManager manager;
     private ByteState state;
     private Map<Processor, Map<Node, Integer>> scheduleTimes;
 
     private Color color;
     private static final String COLOR = "40ABB4";
-    private static final String FILL_COLOR = "FBFCFC";
+    private static final String FILL_COLOR = "FCFCFC";
     private static final String STROKE_COLOR = "303038";
+    private static final String FADED_WHITE = "FFFFFFAA";
 
     private final int PROCESSORS;
-    private final int WIDTH;
-    private final int HEIGHT;
+    private final int PROCWIDTH;
     private Bounds bounds;
 
     public ProcessorWindow(ByteStateManager manager, ByteState state, int width, int height) {
@@ -42,11 +43,12 @@ public class ProcessorWindow {
         this.color = Color.web(COLOR);
 
         PROCESSORS = manager.getProcessors().size();
-        WIDTH = width / PROCESSORS;
-        HEIGHT = height;
+        PROCWIDTH = Math.min(width / PROCESSORS, 175);
+
+        setWidth(width);
+        setHeight(height);
 
         buildVisual();
-
     }
 
     /**
@@ -74,18 +76,29 @@ public class ProcessorWindow {
      * @param gc a GraphicContext object used to paint processors tab in GUI
      */
     public void draw(GraphicsContext gc) {
+        int xOffset = 0;
         int yOffset = 30;
 
-        int scale = 15;
-        if (state.getLength() * scale > HEIGHT) {
-            scale = HEIGHT / state.getLength();
+        if (PROCWIDTH * PROCESSORS < getWidth()) {
+            xOffset = (int) (getWidth() / 2 - PROCWIDTH * PROCESSORS / 2);
         }
 
-        gc.clearRect(0, 0, 1080, 720);
+        int[] scales = {5, 10, 20, 40};
+        double scale = 1;
+        for (int scaleVal : scales) {
+            if (state.getLength() * scaleVal > getHeight()) {
+                scale = getHeight() / state.getLength();
+                break;
+            } else {
+                scale = scaleVal;
+            }
+        }
+
+        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
         for (Processor processor : manager.getProcessors()) {
             int numProc = Integer.parseInt(processor.getName());
-            int xPos = numProc * WIDTH;
+            int xPos = numProc * PROCWIDTH + xOffset;
 
             String text;
 
@@ -99,51 +112,52 @@ public class ProcessorWindow {
 
             gc.setFill(Color.web(FILL_COLOR));
             gc.setStroke(Color.web(STROKE_COLOR));
-            gc.strokeLine(xPos, yOffset, (numProc + 1) * WIDTH, yOffset);
-            gc.fillText(text, xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2), yOffset / 2 + 4);
+            gc.strokeLine(xPos, yOffset, (numProc + 1) * PROCWIDTH, yOffset);
+            gc.fillText(text,
+                    xPos + PROCWIDTH / 2 - (int) (bounds.getWidth() / 2),
+                    yOffset / 2 + (int) (bounds.getHeight() / 2));
         }
 
         for (Processor processor : scheduleTimes.keySet()) {
-
             int numProc = Integer.parseInt(processor.getName());
-
-            int xPos = numProc * WIDTH;
+            int xPos = numProc * PROCWIDTH + xOffset;
 
             for (Map.Entry<Node, Integer> entry : scheduleTimes.get(processor).entrySet()) {
                 Node node = entry.getKey();
                 int startTime = entry.getValue();
 
-                gc.setFill(getRandomColor(manager.indexOf(node), color));
-
+                gc.setFill(getColor(manager.indexOf(node), color));
                 gc.fillRect(xPos,
                         yOffset + startTime * scale,
-                        WIDTH,
+                        PROCWIDTH,
                         node.getCost() * scale);
 
-                gc.setFill(Color.BLACK);
+                gc.setStroke(Color.web(FADED_WHITE));
+                gc.strokeRect(xPos,
+                        yOffset + startTime * scale,
+                        PROCWIDTH,
+                        node.getCost() * scale);
 
-                int xPosProcessorName;
-                if (manager.getProcessors().size() > 11) {
-                    xPosProcessorName = xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2) + 9;
-                } else {
-                    xPosProcessorName = xPos + WIDTH / 2 - (int) (bounds.getWidth() / 2) + 26;
-                }
+                getBound(node.getLabel(), gc.getFont());
+                int xPosProcessorName = xPos + PROCWIDTH / 2 - (int) (bounds.getWidth() / 2);
 
-                gc.fillText(node.getLabel(),
+                gc.strokeText(node.getLabel(),
                         xPosProcessorName,
-                        yOffset + startTime * scale + node.getCost() * scale / 2 + (int) bounds.getHeight() / 2);
+                        yOffset + startTime * scale + node.getCost() * scale / 2 + bounds.getHeight() / 2);
+
+                gc.setFill(Color.BLACK);
             }
         }
     }
 
     /**
-     * This method
+     * This method gets a new color based on the one that is passed in.
      *
      * @param val   the index value of a node
      * @param color the base color
      * @return the color to display the current task
      */
-    private static Color getRandomColor(int val, Color color) {
+    private static Color getColor(int val, Color color) {
         //Minimum of % 8 / 12 for largest color diff
         double r = color.getRed() * (1 - val % 8 / 16f);
         double g = color.getGreen() * (1 - val % 8 / 16f);

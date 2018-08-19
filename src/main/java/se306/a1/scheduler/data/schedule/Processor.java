@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * This class represents a processor and manages the tasks allocated to it.
  *
- * @author Rodger Gu, Abhinav Behal
+ * @author Rodger Gu, Abhinav Behal, Zhi Qiao
  */
 public class Processor {
     private final Map<Node, Integer> startTimes;
@@ -25,17 +25,6 @@ public class Processor {
         startTimes = new HashMap<>();
         this.name = name;
         this.earliestStartTime = 0;
-    }
-
-    /**
-     * Creates a copy of the processor that is passed in.
-     *
-     * @param processor processor object to be copied
-     */
-    public Processor(Processor processor) {
-        this.startTimes = new HashMap<>(processor.startTimes);
-        this.name = processor.name;
-        this.earliestStartTime = processor.earliestStartTime;
     }
 
     /**

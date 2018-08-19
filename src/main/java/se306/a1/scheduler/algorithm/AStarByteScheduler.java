@@ -45,16 +45,19 @@ public class AStarByteScheduler extends Scheduler {
      * This method is the actual A* algorithm which uses the ByteStateManager to
      * manage the different generated schedules.
      *
-     * @param manager
+     * @param manager ByteStateManager which manages and orders the queue of states
      */
     private void runSequential(ByteStateManager manager) {
-        while (!manager.hasOptimal() && !Thread.currentThread().isInterrupted()) {
+        while (!manager.hasComplete() && !Thread.currentThread().isInterrupted()) {
             ByteState current = manager.dequeue();
             if (current == null)
                 continue;
+
+            // Applies task ordering and get free nodes
             current.order(graph, manager);
             List<Node> freeNodes = current.getFreeNodes(manager);
 
+            // For all free nodes, put them on each processor and add to queue
             for (Node node : freeNodes) {
                 for (Processor processor : manager.getProcessors()) {
                     ByteState next = current.scheduleTask(node, processor, graph, manager);

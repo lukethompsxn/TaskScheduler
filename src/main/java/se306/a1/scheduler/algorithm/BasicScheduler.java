@@ -34,10 +34,8 @@ public class BasicScheduler extends Scheduler {
 
         while (!unscheduledNodes.isEmpty()) {
             currentNode = computeCheapest(unscheduledNodes);
-            logger.info(currentNode + " : " + currentNode.getCost());
 
             for (Edge edge : graph.getEdges(currentNode)) {
-                logger.info(edge);
                 if (!scheduledNodes.contains(edge.getChild())) {
                     unscheduledNodes.add(edge.getChild());
                 }

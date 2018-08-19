@@ -63,11 +63,12 @@ public class ByteStateManager {
     }
 
     /**
-     * This method is used to determine whether the queue has an optimal schedule.
+     * This method is used to determine whether the queue has a complete and
+     * finished schedule.
      *
-     * @return boolean; true = has optimal, false otherwise
+     * @return true if has complete state, false otherwise
      */
-    public synchronized boolean hasOptimal() {
+    public synchronized boolean hasComplete() {
         ByteState top = states.peek();
         return top != null && top.getFreeNodes(this).size() == 0;
     }
@@ -190,7 +191,7 @@ public class ByteStateManager {
         logger.info("Best Schedule Retrieved");
 
         // don't allow any dequeues if a complete (possibly optimal) solution has been found
-        if (hasOptimal()) {
+        if (hasComplete()) {
             Thread.currentThread().interrupt();
             return null;
         }
@@ -207,7 +208,7 @@ public class ByteStateManager {
         final Visualiser visualiser = new Visualiser(this, graph);
 
         Runnable updateSchedule = () -> {
-            if (!hasOptimal()) {
+            if (!hasComplete()) {
                 visualiser.updateCurrentState(latestState);
             } else {
                 visualiser.updateCurrentState(getOptimal());

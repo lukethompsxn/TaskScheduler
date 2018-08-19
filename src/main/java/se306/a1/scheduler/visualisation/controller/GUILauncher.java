@@ -13,16 +13,11 @@ import java.io.IOException;
  * This class used to launch the JavaFX GUI and set the controller class.
  */
 public class GUILauncher extends Application {
-
-    private Stage primaryStage;
-    private Pane rootPane;
-
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Task Scheduler");
+        primaryStage.setTitle("Task Scheduler");
+        primaryStage.setResizable(false);
         try {
-
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/Visualiser.fxml"));
 
@@ -30,18 +25,15 @@ public class GUILauncher extends Application {
             loader.setController(controller);
             Visualiser.setController(controller);
 
-            rootPane = loader.load();
+            Pane rootPane = loader.load();
 
             Scene scene = new Scene(rootPane, 1080, 720);
             primaryStage.setScene(scene);
 
             primaryStage.setOnCloseRequest(event -> System.exit(0));
             primaryStage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 }

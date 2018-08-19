@@ -80,7 +80,7 @@ public class AStarSchedulerTests {
             assertTrue(timedGraphs4Proc.get(g).equals(s.getLength()));
         }
     }
-//
+
     @Test
     public void testGXLGraphsByte() throws ScheduleException {
         long firstStart = System.nanoTime();

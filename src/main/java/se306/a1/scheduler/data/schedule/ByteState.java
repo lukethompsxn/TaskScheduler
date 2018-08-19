@@ -348,14 +348,12 @@ public class ByteState implements Comparable<ByteState> {
                 parentMap.put(node, parents.get(0));
         }
 
-        //Sort and build virtual edges
+        // Sort virtual edges
         freeNodes.sort((a, b) -> {
             // DRT
-            //List<Node> aParents = graph.getParents(a);
             Node aParent = parentMap.get(a);
             int incomingA = aParent == null ? 0 : startTimes[manager.indexOf(aParent)] + aParent.getCost() + graph.getCost(aParent, a);
 
-            //List<Node> bParents = graph.getParents(b);
             Node bParent = parentMap.get(b);
             int incomingB = bParent == null ? 0 : startTimes[manager.indexOf(bParent)] + bParent.getCost() + graph.getCost(bParent, b);
 
@@ -371,7 +369,7 @@ public class ByteState implements Comparable<ByteState> {
             return comparison;
         });
 
-        // Verify if decreasing outgoing
+        // Verify if ordered nodes are in decreasing outgoing costs
         int max = Integer.MAX_VALUE;
         for (Node node : freeNodes) {
             if (outCosts.get(node) <= max)

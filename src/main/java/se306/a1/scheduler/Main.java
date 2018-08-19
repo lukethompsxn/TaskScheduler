@@ -53,7 +53,7 @@ public class Main {
 
             Graph graph = GraphParser.parse(config.inputPath);
             long s = System.nanoTime();
-            Schedule schedule = new AStarByteScheduler().run(graph,config.processors, config.cores, config.isVisualised);
+            Schedule schedule = new AStarByteScheduler().run(graph, config.processors, config.cores, config.isVisualised);
             logger.info((System.nanoTime() - s) / 1000);
 
             logger.info("Length: " + schedule.getLength());
