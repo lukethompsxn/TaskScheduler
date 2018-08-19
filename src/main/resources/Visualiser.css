@@ -1,8 +1,10 @@
 * {
-    -fx-primary : #2D2D35;
-    -fx-secondary : #FBFCFC;
-    -fx-primarytext : #FBFCFC;
+    -fx-primary: #2D2D35;
+    -fx-secondary: #FBFCFC;
+    -fx-primarytext: #FBFCFC;
     -fx-labeltext: #7FE7FF;
+    -fx-seenlabel: #FE2A97;
+    -fx-unseenlabel: #839192;
 }
 
 .tab {
@@ -10,19 +12,19 @@
     -fx-pref-height: 50px;
 }
 
-.root{
+.root {
     -fx-background-color: -fx-primary;
 }
 
-.tab{
+.tab {
     -fx-background-color: -fx-primary;
 }
 
-.tab-header-background{
+.tab-header-background {
     -fx-background-color: -fx-primary;
 }
 
-.tab-label{
+.tab-label {
     -fx-text-fill: -fx-secondary;
     -fx-font-size: 10pt;
 }
@@ -30,46 +32,62 @@
 .data {
     -fx-text-fill: -fx-labeltext;
     -fx-effect: dropshadow(three-pass-box, -fx-labeltext, 2, 0, 0, 0);
-
 }
 
-.datalabel {
+#currentLabel {
+    -fx-text-fill: -fx-labeltext;
+    -fx-effect: dropshadow(three-pass-box, -fx-labeltext, 2, 0, 0, 0);
+}
+
+#seenLabel {
+    -fx-text-fill: -fx-seenlabel;
+    -fx-effect: dropshadow(three-pass-box, -fx-seenlabel, 2, 0, 0, 0);
+}
+
+#unseenLabel {
+    -fx-text-fill: -fx-unseenlabel;
+    -fx-effect: dropshadow(three-pass-box, -fx-unseenlabel, 2, 0, 0, 0);
+}
+
+.legendLabel {
+    -fx-font-size: 1.5em;
+}
+
+.dataLabel {
     -fx-text-fill: -fx-secondary;
-
 }
 
-.tab-main{
-    -fx-pref-height : 60;
-    -fx-max-height : 60;
+.tab-main {
+    -fx-pref-height: 60;
+    -fx-max-height: 60;
 }
 
 #stats {
     -fx-background-color: #303038;
 }
 
-.jfx-tab-pane .tab-selected-line
-{
+.jfx-tab-pane .tab-selected-line {
     -fx-border-color: #40ABB4;
 }
 
-.jfx-tab-pane .tab-header-area .jfx-rippler{
+.jfx-tab-pane .tab-header-area .jfx-rippler {
     -jfx-rippler-fill: #40ABB4;
 }
 
-.jfx-layout-heading
-{
+.jfx-layout-heading {
     -fx-background-color: -fx-color-1;
 }
-.jfx-layout-heading .label
-{
+
+.jfx-layout-heading .label {
     -fx-text-fill: white;
     -fx-font-size: 12pt;
 }
-.jfx-layout-body, .jfx-layout-actions{
+
+.jfx-layout-body, .jfx-layout-actions {
     -fx-background-color: -fx-primary;
 }
-.jfx-layout-body .label
-{
+
+.jfx-layout-body .label {
     -fx-text-fill: white;
     -fx-padding: 20px 0 0 0;
 }
