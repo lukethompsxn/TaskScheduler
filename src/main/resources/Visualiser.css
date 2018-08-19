@@ -34,6 +34,10 @@
     -fx-effect: dropshadow(three-pass-box, -fx-labeltext, 2, 0, 0, 0);
 }
 
+#legend {
+    -fx-padding: 50px 25px;
+}
+
 #currentLabel {
     -fx-text-fill: -fx-labeltext;
     -fx-effect: dropshadow(three-pass-box, -fx-labeltext, 2, 0, 0, 0);

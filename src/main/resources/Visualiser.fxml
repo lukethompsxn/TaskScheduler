@@ -18,13 +18,14 @@
                 </AnchorPane>
             </Tab>
             <Tab text="Graph Hierarchy">
-                <AnchorPane fx:id="graphPane" maxWidth="1920" prefHeight="637.0" prefWidth="788.0">
-                    <VBox layoutX="650" layoutY="50" alignment="CENTER_RIGHT">
+                <StackPane>
+                    <AnchorPane fx:id="graphPane" maxWidth="1920" prefHeight="637.0" prefWidth="788.0"/>
+                    <VBox id="legend" alignment="TOP_RIGHT">
                         <Label id="currentLabel" styleClass="legendLabel" text="Currently Scheduled"/>
                         <Label id="seenLabel" styleClass="legendLabel" text="Previously Scheduled"/>
                         <Label id="unseenLabel" styleClass="legendLabel" text="Unseen"/>
                     </VBox>
-                </AnchorPane>
+                </StackPane>
             </Tab>
         </JFXTabPane>
         <VBox prefHeight="720.0" prefWidth="165.0">
