@@ -18,6 +18,9 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * This testing class is for testing the AStar Scheduler implementation.
+ */
 public class AStarSchedulerTests {
     private static Map<Graph, Integer> timedGraphs2Proc = new HashMap<>();
     private static Map<Graph, Integer> timedGraphs4Proc = new HashMap<>();
@@ -41,6 +44,11 @@ public class AStarSchedulerTests {
         gxlGraphs = SchedulerTestHelper.parseGXLGraphs(SchedulerTestHelper.GraphType.TEN_NODES);
     }
 
+    /**
+     * Tests graphs using 2 processors
+     *
+     * @throws ScheduleException
+     */
     @Test
     public void testTimedGraphs2ProcByte() throws ScheduleException {
         final int processors = 2;
@@ -51,6 +59,11 @@ public class AStarSchedulerTests {
         }
     }
 
+    /**
+     * Tests graphs using 4 processors
+     *
+     * @throws ScheduleException
+     */
     @Test
     public void testTimedGraphs4ProcByte() throws ScheduleException {
         final int processors = 4;
@@ -61,6 +74,11 @@ public class AStarSchedulerTests {
         }
     }
 
+    /**
+     * Test graphs using 2 processors in parallel
+     *
+     * @throws ScheduleException
+     */
     @Test
     public void testTimedGraphs2ProcByteParallel() throws ScheduleException {
         final int processors = 2;
@@ -71,6 +89,11 @@ public class AStarSchedulerTests {
         }
     }
 
+    /**
+     * Test graphs using 4 processors in parallel
+     *
+     * @throws ScheduleException
+     */
     @Test
     public void testTimedGraphs4ProcByteParallel() throws ScheduleException {
         final int processors = 4;
@@ -81,6 +104,11 @@ public class AStarSchedulerTests {
         }
     }
 
+    /**
+     * Tests all GXL graphs
+     *
+     * @throws ScheduleException
+     */
     @Test
     public void testGXLGraphsByte() throws ScheduleException {
         long firstStart = System.nanoTime();

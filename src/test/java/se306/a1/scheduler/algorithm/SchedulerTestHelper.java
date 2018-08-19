@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.stream.Stream;
 
+/**
+ * This class is a helper class for tests.
+ */
 public class SchedulerTestHelper {
     private static List<GXLGraph> gxlGraphs = new ArrayList<>();
     private static List<Graph> graphs = new ArrayList<>();
@@ -59,6 +62,12 @@ public class SchedulerTestHelper {
         }
     }
 
+    /**
+     * This method is used for parsing all graphs contained in the input_graphs
+     * folder into a graph object.
+     *
+     * @return list of graph objects
+     */
     public static List<Graph> parseGraphs() {
         graphs = new ArrayList<>();
 
@@ -79,6 +88,13 @@ public class SchedulerTestHelper {
         return graphs;
     }
 
+    /**
+     * This method is used for parsing all the GXL graphs into a list of
+     * GXLGraph objects which contain data needed for mutiple tests.
+     *
+     * @param filter
+     * @return
+     */
     public static List<GXLGraph> parseGXLGraphs(GraphType filter) {
         gxlGraphs = new ArrayList<>();
 
@@ -104,6 +120,14 @@ public class SchedulerTestHelper {
         return gxlGraphs;
     }
 
+    /**
+     * This method is used for testing whether the generated schedule is valid.
+     *
+     * @param g graph representing nodes and edges
+     * @param s the produced schedule
+     * @return boolean representing validity; true = valid, false otherwise
+     * @throws ScheduleException
+     */
     public static boolean isValid(Graph g, Schedule s) throws ScheduleException {
         Queue<Node> nodes = new LinkedList<>(g.getEntryNodes());
         while (!nodes.isEmpty()) {

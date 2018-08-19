@@ -28,10 +28,16 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
 
+/**
+ * This testing class is used to test graph parser tests
+ */
 public class GraphParserTests {
     private static final Map<String, Pair<Integer, Integer>> answers = new HashMap<>();
     private static final List<String> cycleGraphs = new ArrayList<>();
 
+    /**
+     * This method is used to prepare the answers hashmap
+     */
     @BeforeClass
     public static void setUp() {
         answers.put("input_graphs/Nodes_7_OutTree.dot", new Pair<>(7, 6));
@@ -52,7 +58,12 @@ public class GraphParserTests {
         }
     }
 
-
+    /**
+     * Tests the graph parser
+     *
+     * @throws IOException
+     * @throws GraphException
+     */
     @Test
     public void testGraphParsing() throws IOException, GraphException {
         for (Map.Entry<String, Pair<Integer, Integer>> e : answers.entrySet()) {
@@ -79,6 +90,11 @@ public class GraphParserTests {
         }
     }
 
+    /**
+     * Tests fail scenario when graph contains a cycle
+     *
+     * @throws IOException
+     */
     @Test
     public void testCycleGraphParsing() throws IOException {
         for (String path : cycleGraphs) {
@@ -92,7 +108,8 @@ public class GraphParserTests {
     }
 
     /**
-     * This test only tests the values written to file, not the syntax of the output
+     * Tests the output generation of the .dot file. This test only tests the
+     * values written to file, not the syntax of the output
      */
     @Test
     public void testOutputGeneration() throws IOException, GraphException, ScheduleException {
@@ -130,6 +147,13 @@ public class GraphParserTests {
         }
     }
 
+    /**
+     * Helper method to parsing the generated .dot file into mock objects.
+     *
+     * @param path output file path
+     * @return parsed output object
+     * @throws FileNotFoundException
+     */
     private ParsedOutput parseOutput(String path) throws FileNotFoundException {
         com.paypal.digraph.parser.GraphParser parser =
                 new com.paypal.digraph.parser.GraphParser(new FileInputStream(path));
@@ -158,6 +182,9 @@ public class GraphParserTests {
         return parsedOutput;
     }
 
+    /**
+     * Mock object used to represent the parsed info from the generated output.
+     */
     public class ParsedOutput {
         Map<String, MockNode> nodes = new HashMap<>();
         Map<Pair<String, String>, MockEdge> edges = new HashMap<>();

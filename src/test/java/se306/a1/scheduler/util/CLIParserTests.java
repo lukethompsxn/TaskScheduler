@@ -14,13 +14,14 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static se306.a1.scheduler.util.parse.CLIParser.getCLIParserInst;
 
+/**
+ * This testing class is used for testing the CLIParser
+ */
 public class CLIParserTests {
 
-    @BeforeClass
-    public static void setUp() {
-
-    }
-
+    /**
+     * Tests when the inputs are only the compulsory inputs
+     */
     @Test
     public void testOnlyRequiredInputs() {
         String[] testArgs = {"test.dot", "4"};
@@ -40,6 +41,9 @@ public class CLIParserTests {
         }
     }
 
+    /**
+     * Tests when a compulsory argument is missing
+     */
     @Test
     public void testMissingRequiredInputs1() {
         String[] testArgs = {"test.dot"};
@@ -54,6 +58,9 @@ public class CLIParserTests {
         }
     }
 
+    /**
+     * Tests when a compulsory argument is missing
+     */
     @Test
     public void testMissingRequiredInputs2() {
         String[] testArgs = {"4"};
@@ -68,6 +75,9 @@ public class CLIParserTests {
         }
     }
 
+    /**
+     * Tests when optional arguments are supplied
+     */
     @Test
     public void testWithExtraInputs() {
         String[] testArgs = {"test.dot", "3", "-v", "-p", "4"};
@@ -87,6 +97,9 @@ public class CLIParserTests {
         }
     }
 
+    /**
+     * Tests fail scenario of unrequired additional argument params
+     */
     @Test
     public void testOptionsWithUnneededValues() {
         String[] testArgs = {"test.dot", "3", "-v", "3", "-p", "4"};
@@ -99,6 +112,9 @@ public class CLIParserTests {
         }
     }
 
+    /**
+     * Tests fail scenario of unknown option
+     */
     @Test
     public void testUnknownExtraInput() {
         String[] testArgs = {"test.dot", "3", "-d"};
@@ -110,6 +126,9 @@ public class CLIParserTests {
         }
     }
 
+    /**
+     * Tests fail scenario of invalid output path
+     */
     @Test
     public void testInvalidOutputPath() {
         List<String[]> testArgs = new ArrayList<>();
@@ -130,16 +149,22 @@ public class CLIParserTests {
         }
     }
 
+    /**
+     * Tests various output path scenarios incl. specials chars
+     *
+     * @throws ParseException
+     * @throws CLIException
+     */
     @Test
     public void testOutputPath() throws ParseException, CLIException {
-        String[] s1 = new String[]{"test.dot", "3", "-o",  "/a/b/c/test.dot"};
-        String[] s2 = new String[]{"test.dot", "3", "-o",  "/test.dot"};
-        String[] s3 = new String[]{"test.dot", "3", "-o",  "test.dot"};
-        String[] s4 = new String[]{"test.dot", "3", "-o",  "a/b/c/test.dot"};
-        String[] s5 = new String[]{"test.dot", "3", "-o",  "../a/b/c/test.dot"};
-        String[] s6 = new String[]{"test.dot", "3", "-o",  "test"};
-        String[] s7 = new String[]{"test.dot", "3", "-o",  "test\\abc\\wew.dot"};
-        String[] s8 = new String[]{"test.dot", "3", "-o",  "\\test\\wew\\abc.dot"};
+        String[] s1 = new String[]{"test.dot", "3", "-o", "/a/b/c/test.dot"};
+        String[] s2 = new String[]{"test.dot", "3", "-o", "/test.dot"};
+        String[] s3 = new String[]{"test.dot", "3", "-o", "test.dot"};
+        String[] s4 = new String[]{"test.dot", "3", "-o", "a/b/c/test.dot"};
+        String[] s5 = new String[]{"test.dot", "3", "-o", "../a/b/c/test.dot"};
+        String[] s6 = new String[]{"test.dot", "3", "-o", "test"};
+        String[] s7 = new String[]{"test.dot", "3", "-o", "test\\abc\\wew.dot"};
+        String[] s8 = new String[]{"test.dot", "3", "-o", "\\test\\wew\\abc.dot"};
         InputConfig config1 = CLIParser.getCLIParserInst().parseCLI(s1);
         InputConfig config2 = CLIParser.getCLIParserInst().parseCLI(s2);
         InputConfig config3 = CLIParser.getCLIParserInst().parseCLI(s3);
