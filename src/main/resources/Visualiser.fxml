@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTabPane?>
-<?import javafx.embed.swing.SwingNode?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
@@ -23,43 +22,6 @@
                      <content>
                         <AnchorPane fx:id="graphPane" maxWidth="1.7976931348623157E308" prefHeight="637.0" prefWidth="788.0">
                            <children>
-                              <SwingNode fx:id="graphNode" />
-                               <HBox alignment="CENTER" layoutX="321.0" layoutY="600.0" prefHeight="69.0" prefWidth="159.0">
-                                   <children>
-                                       <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="100.0" prefWidth="139.0" spacing="4.0">
-                                           <children>
-                                               <Label styleClass="datalabel" text="Currently Scheduled">
-                                                   <font>
-                                                       <Font size="14.0" />
-                                                   </font></Label>
-                                               <Label styleClass="datalabel" text="Previously Scheduled">
-                                                   <font>
-                                                       <Font size="14.0" />
-                                                   </font></Label>
-                                               <Label styleClass="datalabel" text="Yet to be Scheduled">
-                                                   <font>
-                                                       <Font size="14.0" />
-                                                   </font></Label>
-                                           </children>
-                                           <HBox.margin>
-                                               <Insets />
-                                           </HBox.margin>
-                                       </VBox>
-                                       <VBox alignment="CENTER" prefHeight="82.0" prefWidth="25.0" spacing="8.0">
-                                           <children>
-                                               <Circle fill="#7fe7ff" radius="8.0" stroke="BLACK" strokeType="INSIDE">
-                                                   <VBox.margin>
-                                                       <Insets />
-                                                   </VBox.margin></Circle>
-                                               <Circle fill="#fe2a97" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-                                               <Circle fill="#839192" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-                                           </children>
-                                           <HBox.margin>
-                                               <Insets />
-                                           </HBox.margin>
-                                       </VBox>
-                                   </children>
-                               </HBox>
                            </children>
                         </AnchorPane>
                      </content>
