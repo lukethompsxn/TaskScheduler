@@ -14,7 +14,7 @@
 
 
 ### About TaskScheduler
-TaskScheduler is a java command line application which takes an input graph and a number of processors. It then generates a schedule for executing these tasks which is the optimal scheduling allocation and order. The algorithm is implemented using a AStar scheduler using various pruning methods.
+TaskScheduler is a java command line application which takes an input graph and a number of processors. It then generates a schedule for executing these tasks which is the optimal scheduling allocation and order. The algorithm is implemented using an AStar algorithm using various pruning methods.
 
 
 ### How To Run TaskScheduler
