@@ -45,6 +45,10 @@ jar {
     into 'res', {
         from 'res'
     }
+
+    into 'licenses', {
+        from 'licenses'
+    }
 }
 
 run {
