@@ -39,6 +39,11 @@ Optional :
 -o OUPUT output file is named OUTPUT (default is INPUT-output.dot)
 ```
 
+### Project Information
+The project wiki home pagecan be found [here](https://github.com/lukethompsxn/TaskScheduler/wiki). Direct links to wiki pages: [Planning](https://github.com/lukethompsxn/TaskScheduler/wiki/Planning), [Project Structure](https://github.com/lukethompsxn/TaskScheduler/wiki/Project-Structure), [Basic Scheduler](https://github.com/lukethompsxn/TaskScheduler/wiki/Basic-Scheduler), [A* Implementation](https://github.com/lukethompsxn/TaskScheduler/wiki/A*-Implementation), [A* Scheduler](https://github.com/lukethompsxn/TaskScheduler/wiki/A*-Scheduler), [Parallelisation](https://github.com/lukethompsxn/TaskScheduler/wiki/Parallelisation), [Visualisation](https://github.com/lukethompsxn/TaskScheduler/wiki/Visualisation), [Libraries & Plugins](https://github.com/lukethompsxn/TaskScheduler/wiki/Libraries-&-Plugins), [Meetings & Minutes](https://github.com/lukethompsxn/TaskScheduler/wiki/Meetings-&-Minutes).
+
+A history of issues is located [here](https://github.com/lukethompsxn/TaskScheduler/issues?utf8=%E2%9C%93&q=).
+
 
 ### Acknowledgements
 - **Graph Parser**: [PayPal Graph Parser](https://github.com/paypal/digraph-parser)
