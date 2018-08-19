@@ -16,6 +16,9 @@
 ### About TaskScheduler
 TaskScheduler is a java command line application which takes an input graph and a number of processors. It then generates a schedule for executing these tasks which is the optimal scheduling allocation and order. The algorithm is implemented using an AStar algorithm using various pruning methods.
 
+### How To Build TaskScheduler
+- If you have Gradle installed, run `gradle jar` in the project root directory from command line.
+- If you want to use the wrapper, run `./gradlew jar` in the project root directory from command line.
 
 ### How To Run TaskScheduler
 There are two compulsary input arguments, a) input graph, b) number of processors. There are also optional arguments, please see TaskScheduler Interface below.
@@ -40,7 +43,7 @@ Optional :
 ```
 
 ### Project Information
-The project wiki home page can be found [here](https://github.com/lukethompsxn/TaskScheduler/wiki). Direct links to wiki pages: [Planning](https://github.com/lukethompsxn/TaskScheduler/wiki/Planning), [Project Structure](https://github.com/lukethompsxn/TaskScheduler/wiki/Project-Structure), [Basic Scheduler](https://github.com/lukethompsxn/TaskScheduler/wiki/Basic-Scheduler), [A* Implementation](https://github.com/lukethompsxn/TaskScheduler/wiki/A*-Implementation), [A* Scheduler](https://github.com/lukethompsxn/TaskScheduler/wiki/A*-Scheduler), [Parallelisation](https://github.com/lukethompsxn/TaskScheduler/wiki/Parallelisation), [Visualisation](https://github.com/lukethompsxn/TaskScheduler/wiki/Visualisation), [Libraries & Plugins](https://github.com/lukethompsxn/TaskScheduler/wiki/Libraries-&-Plugins), [Meetings & Minutes](https://github.com/lukethompsxn/TaskScheduler/wiki/Meetings-&-Minutes).
+The project wiki home page can be found [here](https://github.com/lukethompsxn/TaskScheduler/wiki). Direct links to wiki pages: [Planning](https://github.com/lukethompsxn/TaskScheduler/wiki/Planning), [Project Structure](https://github.com/lukethompsxn/TaskScheduler/wiki/Project-Structure), [Basic Scheduler](https://github.com/lukethompsxn/TaskScheduler/wiki/Basic-Scheduler), [A* Implementation](https://github.com/lukethompsxn/TaskScheduler/wiki/A*-Implementation), [Parallelisation](https://github.com/lukethompsxn/TaskScheduler/wiki/Parallelisation), [Visualisation](https://github.com/lukethompsxn/TaskScheduler/wiki/Visualisation), [Libraries & Plugins](https://github.com/lukethompsxn/TaskScheduler/wiki/Libraries-&-Plugins), [Meetings & Minutes](https://github.com/lukethompsxn/TaskScheduler/wiki/Meetings-&-Minutes).
 
 A history of issues is located [here](https://github.com/lukethompsxn/TaskScheduler/issues?utf8=%E2%9C%93&q=).
 
