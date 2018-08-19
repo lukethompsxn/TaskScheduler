@@ -126,7 +126,7 @@ public class TaskGraph implements Graph {
     }
 
     /**
-     * Helper method used to calculate the bottom levels for all nodes in the graph.
+     * Private helper method used to calculate the bottom levels for all nodes in the graph.
      */
     private void calculateBottomLevels() {
         Queue<Node> queue = new ArrayDeque<>();

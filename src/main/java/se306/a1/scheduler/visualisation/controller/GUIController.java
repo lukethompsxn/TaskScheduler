@@ -27,7 +27,7 @@ public class GUIController implements Initializable {
     private GraphicsContext gc;
 
     @FXML
-    public Label timeLabel;
+    private Label timeLabel;
 
     @FXML
     private Label threadsLabel;
@@ -53,9 +53,6 @@ public class GUIController implements Initializable {
     @FXML
     private JFXTabPane tabPane;
 
-    GUIController() {
-    }
-
     GUIController(GUILauncher launcher) {
     }
 
@@ -63,8 +60,8 @@ public class GUIController implements Initializable {
      * This method is automatically called when the GUI is launched, and creates
      * a thread for the main algorithm to run behind the scenes.
      *
-     * @param location
-     * @param resources
+     * @param location  root path
+     * @param resources root object
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
