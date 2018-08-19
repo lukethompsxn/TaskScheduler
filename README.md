@@ -53,4 +53,5 @@ A history of issues is located [here](https://github.com/lukethompsxn/TaskSchedu
 - **Command Line Arguments Parsing**: [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/)
 - **Unit Testing**: [JUnit](https://junit.org/)
 - **Logger**: [log4j](https://logging.apache.org/log4j/)
+- **Graphing** [GraphStream](http://graphstream-project.org/)
 - **Visualisation Components**: [JFoenix](http://www.jfoenix.com/)
