@@ -37,3 +37,4 @@ There are two compulsary input arguments, a) input graph, b) number of processor
 - **Command Line Arguments Parsing**: [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/)
 - **Unit Testing**: [JUnit](https://junit.org/)
 - **Logger**: [log4j](https://logging.apache.org/log4j/)
+- **Visualisation Components**: [JFoenix](http://www.jfoenix.com/)
