@@ -89,7 +89,11 @@ public class TaskGraph implements Graph {
 
     @Override
     public Integer getEdgeCount() {
-        return children.size();
+        List<Edge> edges = new ArrayList<>();
+        for (Node n : nodes.values()) {
+            edges.addAll(children.get(n));
+        }
+        return edges.size();
     }
 
     /**
