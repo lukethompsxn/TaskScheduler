@@ -7,8 +7,11 @@ import se306.a1.scheduler.manager.ByteStateManager;
 import se306.a1.scheduler.visualisation.controller.GUIController;
 import se306.a1.scheduler.visualisation.view.GraphWindow;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -18,7 +21,6 @@ public class Visualiser {
     private ByteStateManager manager;
     private ByteState currentState;
     private Graph graph;
-    private HashMap<String, String> stats;
 
     private GraphWindow graphWindow;
     private static GUIController controller;
@@ -55,26 +57,27 @@ public class Visualiser {
      */
     public void updateCurrentState(ByteState state) {
         this.currentState = state;
-        Platform.runLater(() -> {
-            controller.update(graphWindow, currentState, manager, currentState, WIDTH, HEIGHT, prepareStats());
-        });
+        Platform.runLater(() ->
+                controller.update(graphWindow, currentState, manager, currentState, WIDTH, HEIGHT, prepareStats()));
     }
 
     /**
-     * This method is used tp prepase the stats hashmap based on information from
+     * This method is used to prepare the stats HashMap based on information from
      * the graph and the manager.
      *
-     * @return hashmap representing the stats at the current state
+     * @return HashMap representing the stats at the current state
      */
     private HashMap<String, String> prepareStats() {
-        stats = new HashMap<>();
+        HashMap<String, String> stats = new HashMap<>();
+        NumberFormat formatter = NumberFormat.getInstance();
         stats.put("NODES", graph.getAllNodes().size() + "");
         stats.put("EDGES", graph.getEdgeCount() + "");
         stats.put("PROCESSORS", manager.getProcessors().size() + "");
         stats.put("THREADS", manager.getNumCores() + "");
-        stats.put("QUEUE LENGTH", manager.getQueueLength() + "");
-        stats.put("STATES SEEN", manager.getNumStatesSeen() + "");
-        stats.put("RUN TIME", Duration.between(startTime, Instant.now()).toString().replaceAll("PT", "").replaceAll("S", "").replaceAll("M", ":") + "s");
+        stats.put("QUEUE LENGTH", formatter.format(manager.getQueueLength()));
+        stats.put("STATES SEEN", formatter.format(manager.getNumStatesSeen()));
+        Date time = new Date(Duration.between(startTime, Instant.now()).toMillis());
+        stats.put("RUN TIME", (new SimpleDateFormat("mm:ss:SS").format(time)));
         return stats;
     }
 
