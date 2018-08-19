@@ -44,6 +44,7 @@ jar {
 
     into 'res', {
         from 'res'
+        exclude 'extlibs/'
     }
 
     into 'licenses', {

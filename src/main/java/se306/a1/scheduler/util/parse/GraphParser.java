@@ -43,6 +43,10 @@ public class GraphParser {
         Map<String, Node> nodes = new HashMap<>();
         List<Edge> edges = new ArrayList<>();
 
+        if (parsedNodes.values().isEmpty()) {
+            throw new GraphException("No nodes contained in the graph");
+        }
+
         for (GraphNode node : parsedNodes.values()) {
             String label = node.getId();
 

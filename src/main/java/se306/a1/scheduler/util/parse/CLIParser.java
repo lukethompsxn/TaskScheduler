@@ -91,6 +91,9 @@ public class CLIParser {
 
             if (isInteger(stringCores)) {
                 config.cores = Integer.parseInt(stringCores);
+                if (config.cores < 1) {
+                    throw new CLIException("Number of cores specified cannot be less than 1");
+                }
                 logger.info("Has specified parallel option: number of cores = " + config.cores);
             } else {
                 logger.error("Number of cores is not an integer");
